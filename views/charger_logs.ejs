@@ -1,0 +1,138 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <div class="content-header">
+    <div class="container-fluid">
+      <h2><%=texts.STATION%> <%= station.cb_name %>
+          <% if(station.online==1) { %>
+            <span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>
+          <% } else if(station.online==0) { %>
+            <span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>
+          <% } else { %>
+            <span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>
+          <% } %>
+      </h2>
+    </div>
+  </div>
+  <%- include('./partials/ocpperrors.ejs') %>
+  <div class="card">
+    <!-- CARD HEADER-->
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a class="nav-link" href="/station/<%= station.cb_id %>/"><%=texts.STATION%></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/station/<%= station.cb_id %>/manage"><%=texts.MANAGE%></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/station/<%= station.cb_id %>/logs" aria-current="page"><%=texts.LOGS%></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/station/<%= station.cb_id %>/ocppkeys"><%=texts.CONFIG_OCPP%></a>
+        </li>
+      </ul>
+    </div>
+    <!-- CARD HEADER-->
+    <!-- CARD BODY -->
+    <div class="card-body">
+      <div class="hstack gap-3" id="myToolbar">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="dateInput">
+          <label for="dateInput"><%=texts.DATE%></label>
+        </div>
+        <div class="form-floating">
+          <input type="text" class="form-control" id="mySearch">
+          <label for="mySearch"><%=texts.SEARCH%></label>
+        </div>
+      </div>
+      <table id="logstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
+        <thead>
+          <th data-field="timestamp" data-formatter="tsFormatter">
+            <%=texts.DATETIME%>
+          </th>
+          <th data-field="direction">
+            <%=texts.DIRECTION%>
+          </th>
+          <th data-field="type">
+            <%=texts.TYPE%>
+          </th>
+          <th data-field="method">
+            <%=texts.METHOD%>
+          </th>
+          <th data-field="message" class="text-break">
+            <%=texts.MESSAGE%>
+          </th>
+        </thead>
+      </table>
+    </div>
+    <!-- CARD BODY -->
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script src="/js/datepicker-full.min.js"></script>
+<script src="/js/datepicker-fr.js"></script>
+<script>
+  // DatePicker
+  const elem = document.querySelector('input[id="dateInput"]');
+  const datepicker = new Datepicker(elem, {
+    buttonClass: 'btn', autohide: true,
+    maxDate: 'today',
+    language: 'fr'
+  });
+  datepicker.setDate('today');
+  // BootstrapTable
+  $(function () {
+    $('#logstab').bootstrapTable('refreshOptions', {
+      ajax: "ajaxRequest",
+      search: true,
+      searchHighlight: true,
+      toolbar: '#myToolbar',
+      searchSelector: '#mySearch',
+      loadingTemplate: 'loadingTemplate',
+      pagination: true,
+      pageSize: 25,
+      pageList: [25, 50, 100, 250, 'All'],
+      queryParams: 'queryParams',
+      showRefresh: true
+    })
+  })
+  function loadingTemplate(message) {
+    return [
+      '<div class="d-flex justify-content-center bsloading"><strong class="me-3 mt-1">',
+      message,
+      '</strong><div class="spinner-border" role="status" aria-hidden="true"></div></div>'
+    ].join('')
+  }
+  function queryParams(params) {
+    params.start = Date.parse(datepicker.getDate('mm/dd/yyyy'))
+    return params
+  }
+  function ajaxRequest(params) {
+    $.ajax({
+      type: 'POST',
+      url: '/station/<%= station.cb_id %>/logs',
+      data: $.param(params.data),
+      dataType: 'json',
+      success: function (response) {
+        params.success(response)
+      },
+      error: function (er) {
+        params.error(er.statusText);
+      }
+    });
+  }
+  function tsFormatter(value) {
+    let jsdate = new Date(value)
+    return jsdate.toLocaleDateString() + ' ' + jsdate.toLocaleTimeString() + '.' + jsdate.getMilliseconds()
+  }
+  // Refresh on new date
+  const startElem = document.getElementById('dateInput');
+  startElem.addEventListener('changeDate', function (e) {
+      $('#logstab').bootstrapTable('refresh')
+  });
+  // Document
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+  });
+</script>
+<%- include('./partials/footer.ejs') %>

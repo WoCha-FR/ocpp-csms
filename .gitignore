@@ -128,3 +128,12 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# my files
+.vscode
+config.dev.json
+sessions.json
+pendings.json
+ocpp-csms*.db
+client.js
+zessais

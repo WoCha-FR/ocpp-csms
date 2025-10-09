@@ -1,0 +1,115 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <div class="content-header">
+    <div class="container-fluid">
+      <h2><%=texts.STATION%> <%= station.cb_name %>
+          <% if(station.online==1) { %>
+            <span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>
+          <% } else if(station.online==0) { %>
+            <span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>
+          <% } else { %>
+            <span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>
+          <% } %>
+      </h2>
+    </div>
+  </div>
+  <%- include('./partials/ocpperrors.ejs') %>
+  <% if (typeof infosui.ocppResult !=='undefined' ) { %>
+    <% if (infosui.ocppResult.status=='Rejected' ) { %>
+        <div id="ocppResponse" class="alert alert-danger" role="alert"><%=texts.REJECTEDM%></div>
+    <% } else if(infosui.ocppResult.status=='NotSupported' ) { %>
+      <div id="ocppResponse" class="alert alert-warning" role="alert"><%=texts.NOT_SUPPORTED%></div>
+    <% } else if(infosui.ocppResult.status=='RebootRequired' ) { %>
+      <div id="ocppResponse" class="alert alert-warning" role="alert"><%=texts.REBOOT_REQUIRED%></div>
+    <% } else if(infosui.ocppResult.status=='Accepted' ) { %>
+      <div id="ocppResponse" class="alert alert-success" role="alert"><%=texts.ACCEPTEDM%></div>
+    <% } else if(infosui.ocppResult.status=='Updated' ) { %>
+      <div id="ocppResponse" class="alert alert-success" role="alert"><%=texts.UPDATED%></div>
+    <% } else { %>
+      <div id="ocppResponse" class="alert alert-warning" role="alert"><%=infosui.ocppResult.status%></div>
+    <% } %>
+  <% } %>
+  <div class="card">
+    <!-- CARD HEADER-->
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a class="nav-link" href="/station/<%= station.cb_id %>/"><%=texts.STATION%></a>
+        </li>
+        <li>
+          <a class="nav-link" href="/station/<%= station.cb_id %>/manage"><%=texts.MANAGE%></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/station/<%= station.cb_id %>/logs"><%=texts.LOGS%></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/station/<%= station.cb_id %>/ocppkeys"><%=texts.CONFIG_OCPP%></a>
+        </li>
+      </ul>
+    </div>
+    <!-- CARD HEADER-->
+    <!-- CARD BODY -->
+    <div class="card-body">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title"><%=texts.PARAMSOCPP%></h3>
+          <div class="card-tools m-0">
+            <form class="form-inline" action="/station/<%= station.cb_id %>/getocppkeys" method="post">
+              <button type="submit" id="reqConfig" name="action" value="GetConfiguration" class="btn btn-info btn-sm">
+                <%=texts.UPDATE%>
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <table id="configkeytab" class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th><%=texts.PARAMETRE%></th>
+                <th><%=texts.VALUE%></th>
+                <th><%=texts.ACTION%></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if(configkeys.length> 0) { %>
+                <% configkeys.forEach(function(cfg) { %>
+                <form class="form" action="/station/<%= station.cb_id %>/setocppkey" method="post">
+                  <tr>
+                    <td>
+                      <%=cfg.key%><input type="hidden" name="key" value="<%=cfg.key%>">
+                    </td>
+                    <td>
+                      <input class="form-control" type="text" name="value" value="<%=cfg.value%>"<%=cfg.readonly===1 ? ' disabled' : '' %>>
+                    </td>
+                    <td>
+                      <button type="submit" class="btn btn-primary<%-cfg.readonly===1 ? '" disabled' : ' okonline"'%>>Set</button>
+                    </td>
+                  </tr>
+                </form>
+                <% }); %>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!-- CARD BODY -->
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script>
+$(document).ready(function () {
+  $('#ocppResponse').delay(3000).fadeOut('slow');
+  $('#inputErrors').delay(5000).fadeOut('slow');
+});
+</script>
+<% if(station.online!=1) { %>
+<script>
+  $(document).ready(function () {
+    $('#reqConfig').prop('disabled', true);
+    $('.okonline').prop('disabled', true);
+  });
+</script>
+<% } %>
+
+<%- include('./partials/footer.ejs') %>

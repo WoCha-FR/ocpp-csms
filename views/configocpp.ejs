@@ -1,0 +1,87 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <%- include('./partials/ocpperrors.ejs') %>
+  <div class="card mb-3">
+    <div class="card-header fs-5 fw-bold"><%=texts.PARAMSOCPP%></div>
+    <div class="card-body">
+      <h6 class="card-subtitle mb-2 text-body-secondary"><%=texts.PARAMSOCPP_DETAILS%></h6>
+      <div class="card">
+        <div class="card-body">
+          <table id="defaultconf" class="table table-striped" data-toggle="table" data-mobile-responsive="true" data-checkbox-header="false" data-url="/configocpp" data-method="post">
+            <thead>
+              <tr>
+                <th data-field="enabled" data-checkbox="true"><%=texts.ENABLED%></th>
+                <th data-field="key"><%=texts.PARAMETRE%></th>
+                <th data-field="value" data-formatter="valueFormatter" class="w-75"><%=texts.VALUE%></th>
+                <th data-formatter="operateFormatter" data-events="operateEvents"></th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <!-- FORM INVISIBLE -->
+      <form action="/configocpp/update" class="form-inline invisible" method="post" id="CfgChange">
+        <input type="text" name="newcfg_pk" value="">
+        <input type="text" name="newvalue" value="">
+        <input type="text" name="newenabled" value="">
+      </form>
+    </div>
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script>
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+    $('#defaultconf').removeClass('table-bordered');
+  });
+
+  function valueFormatter(value, row) {
+    // Boolean
+    if (row.type === 'b') {
+      return [
+        '<select class="form-select" id="new'+row.cfg_pk+'">',
+        '<option value=""></option>',
+        '<option value="0"', value == 0 ? ' selected' : '','><%=texts.NON%></option>',
+        '<option value="1"', value == 1 ? ' selected' : '' ,'><%=texts.YES%></option > ',
+        '</select>'
+      ].join('')
+    }
+    // Integer
+    if (row.type === 'i') {
+      if (value === null) { value = '' };
+      return [
+        '<div class="input-group">',
+        '<input type="number" class="form-control" id="new' + row.cfg_pk +'" value="' + value + '">',
+        '<span class="input-group-text">',
+        row.unit == 'SEC' ? '<%=texts.SECONDS%>' : '', row.unit == 'TIM' ? '<%=texts.TIMES%>' : '',
+        '</span>',
+        '</div>'
+      ].join('')
+    }
+    if (row.type === 's') {
+      if (value === null) { value = '' };
+      return [
+        '<input type="text" class="form-control" id="new' + row.cfg_pk +'" value="'+value+'" >'
+      ].join('')
+    }
+  }
+
+  function operateFormatter() {
+    return [
+      '<a class="btn btn-primary ocppsave" href="javascript:void(0)" title="Save">',
+      '<i class="bi bi-floppy"></i></a>'
+    ].join('')
+  }
+  window.operateEvents = {
+    'click .ocppsave': function (e, value, row, index) {
+      const form = document.getElementById('CfgChange');
+      form.elements['newcfg_pk'].value = row.cfg_pk;
+      form.elements['newenabled'].value = row.enabled;
+      form.elements['newvalue'].value = $('#new' + row.cfg_pk).val();
+      form.submit();
+    }
+  }
+</script>
+<%- include('./partials/footer.ejs') %>

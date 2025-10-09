@@ -1,0 +1,16 @@
+  <% if ((typeof infosui.ocppErrors !=='undefined') && ((typeof infosui.ocppErrors.ocppInput !=='undefined') || (typeof infosui.ocppErrors.sqlite !=='undefined'))) { %>
+    <div id="inputErrors" class="alert alert-danger" role="alert">
+      <ul class="list-group list-group-flush">
+        <% if (typeof infosui.ocppErrors.ocppInput !=='undefined') { infosui.ocppErrors.ocppInput.forEach(function(error) { %>
+          <li class="list-group-item list-group-item-danger">
+            <%=texts.VALUE%>&nbsp;'<%= error.value %>'&nbsp;<%=texts.INCORRECT_FOR_FIELD%>&nbsp;<%= error.path %>
+          </li>
+        <% });} %>
+        <% if (typeof infosui.ocppErrors.sqlite !=='undefined') { infosui.ocppErrors.sqlite.forEach(function(error) { %>
+        <li class="list-group-item list-group-item-danger">
+          <%= error.sqlerror %>
+          </li>
+        <% });} %>
+      </ul>
+    </div>
+  <% } %>

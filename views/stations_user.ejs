@@ -1,0 +1,64 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <%- include('./partials/ocpperrors.ejs') %>
+  <div class="card mb-3">
+    <div class="card-header fs-5 fw-bold"><%=texts.STATIONS%></div>
+    <div class="card-body">
+
+      <!-- TABLE -->
+      <div class="card p-3">
+        <table id="stationstable" class="table table-striped table-hover" data-toggle="table" data-search="true"
+          data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true" data-search-align="left" data-search-highlight="true"
+          data-show-search-button="true">
+          <thead>
+            <tr>
+              <th data-sortable="true" data-field="name"><%=texts.NOM%></th>
+              <th data-sortable="true" data-field="ocppid"><%=texts.OCPP_ID%></th>
+              <th data-sortable="true" data-field="regstatus"><%=texts.OCPP_STATUS%></th>
+              <th><%=texts.ONLINE%></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if(stations.length> 0) { %>
+            <% stations.forEach(function(station) { %>
+              <tr style="cursor: pointer;">
+                <td><%= station.cb_name %></td>
+                <td><%= station.cb_id %></td>
+                <% if(station.registration_status=='Rejected' ) { %>
+                <td data-searchable="false"><span class="badge text-bg-danger"><%=texts.REJECTEDF%></span></td>
+                <% } else if(station.registration_status=='Pending' ) { %>
+                <td data-searchable="false"><span class="badge text-bg-warning"><%=texts.PENDING%></span></td>
+                <% } else { %>
+                <td data-searchable="false"><span class="badge text-bg-success"><%=texts.ACCEPTEDF%></span></td>
+                <% } %>
+                <% if(station.online==1) { %>
+                <td data-searchable="false"><span class="badge text-bg-success"><%=texts.ONLINE%></span></td>
+                <% } else if(station.online==0) { %>
+                <td data-searchable="false"><span class="badge text-bg-danger"><%=texts.OFFLINE%></span></td>
+                <% } else { %>
+                <td data-searchable="false"><span class="badge text-bg-warning"><%=texts.PENDING%></span></td>
+                <% } %>
+              </tr>
+            <% }); %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+      <!-- TABLE -->
+    </div>
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+  <script>
+    $(document).ready(function () {
+      $('#inputErrors').delay(5000).fadeOut('slow');
+      $('#stationstable').removeClass('table-bordered');
+    });
+    // Click to Station page
+    $('#stationstable').on('click-row.bs.table', function (e, row) {
+      window.location.href = '/station/' + row.ocppid;
+    });
+    // Refresh Stations
+    // TODO : Ajax refresh function
+  </script>
+<%- include('./partials/footer.ejs') %>

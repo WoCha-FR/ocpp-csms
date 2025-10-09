@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="<%=texts.LANG%>" data-bs-theme="auto">
+  <head>
+    <script src="/js/color-modes.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OCPP CSMS</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body class="d-flex align-items-center py-4 bg-body-tertiary">
+    <main class="form-signin w-100 m-auto">
+      <form action="/login" method="post">
+        <% if(login_errors.length> 0) { %>
+          <div class="alert alert-danger" role="alert">
+            <% if(login_errors[0]=='USERNAME') { %> <%= texts.WRONGUSER %> <% } %>
+            <% if(login_errors[0]=='PASSWORD') { %> <%= texts.WRONGPASSWORD%> <% } %>
+          </div>
+        <% } %>
+        <div class="container">
+          <div class="row">
+            <div class="col text-end">
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="dropdownMenuButton" role="button" data-bs-toggle="dropdown"><i class="flag-<%=texts.LANG%> flag"></i></a>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <li><a class="dropdown-item" href="/language/en"><i class="flag-en flag"></i>English</a></li>
+                  <li><a class="dropdown-item" href="/language/fr"><i class="flag-fr flag"></i>Français</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-floating">
+          <div class="input-group mb-2">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-person"></i></span>
+            <input type="text" name="username" class="form-control" placeholder="<%=texts.USER%>" aria-describedby="basic-addon1" required>
+          </div>
+        </div>
+        <div class="form-floating">
+          <div class="input-group mb-2">
+            <span class="input-group-text" id="basic-addon2"><i class="bi bi-key"></i></span>
+            <input type="password" name="password" class="form-control" placeholder="<%=texts.PASSWORD%>" aria-describedby="basic-addon2" required>
+          </div>
+        </div>
+        <button class="btn btn-primary w-100 py-2" type="submit">
+          <span class="fas fa-sign-in-alt"></span>&nbsp;<%=texts.LOGIN%>
+        </button>
+        <p class="mt-5 mb-3 text-body-secondary text-center">&copy; 2024-2025</p>
+      </form>
+
+    </main>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

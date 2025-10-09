@@ -1,0 +1,75 @@
+.form-signin {
+  max-width: 330px;
+  padding: 1rem;
+}
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.bi {
+  vertical-align: -.125em;
+  fill: currentColor;
+}
+.bd-mode-toggle .dropdown-menu .active .bi {
+  display: block !important;
+}
+
+i.flag {
+  display: inline-block;
+  width: 16px;
+  height: 11px;
+  margin: 0 .5em 0 0;
+  line-height: 11px;
+  text-decoration: inherit;
+  vertical-align: baseline;
+  backface-visibility: hidden;
+}
+
+i.flag::before {
+  display: inline-block;
+  width: 16px;
+  height: 11px;
+  content: "";
+  background: url("/img/flags.png") no-repeat -108px -1976px;
+    background-position-x: -108px;
+    background-position-y: -1976px;
+}
+
+i.flag-en::before {
+  background-position: -36px -26px !important;
+}
+
+i.flag-fr::before {
+  background-position: 0 -1976px !important;
+}
+
+table#logstab th {
+  font-size: medium;
+}
+table#logstab td {
+  font-size: small;
+}
+
+.card-title {
+  float: left;
+  font-size: 1.1rem;
+  font-weight: 400;
+  margin: 0;
+}
+.card-header>.card-tools {
+  float: right;
+}
+
+div.card-view .card-view-value {
+  overflow: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.bsloading {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: var(--bs-secondary-bg);
+}

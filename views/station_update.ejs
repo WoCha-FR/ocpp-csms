@@ -1,0 +1,85 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <%- include('./partials/ocpperrors.ejs') %>
+  <div class="card mb-3">
+    <div class="card-header fs-5 fw-bold"><%=texts.STATION_INFOS%></div>
+    <form method="post" action="/station/edit">
+      <input type="hidden" name="cbpk" value="<%=charger.cb_pk%>">
+      <div class="card-body">
+        <!-- FORMULAIRE -->
+        <div class="row mb-3">
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-ev-station-fill"></i></span>
+              <div class="form-floating">
+                <input class="form-control" value="<%=charger.cb_name%>" type="text" name="cbname" id="unameInput" placeholder="" required>
+                <label for="unameInput"><%=texts.STATION_NAME%></label>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+              <div class="form-floating">
+                <select class="form-select" name="cbuser" id="cbuserInput">
+                  <option value=""><%=texts.CHOOSE%></option>
+                  <% users.forEach(function(user) { %>
+                  <option value="<%=user.user_pk%>"<% if(user.user_pk==charger.owner) { %> selected <% } %>><%=user.name%> (<%=user.username%>)</option>
+                  <% }) %>
+                </select>
+                <label for="cbuserInput"><%=texts.USER_OWNER%></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-fingerprint"></i></span>
+              <div class="form-floating">
+                <input class="form-control" value="<%=charger.cb_id%>" type="text" name="cbid" id="inputcbid" placeholder="" required>
+                <label for="inputcbid"><%=texts.OCPP_ID%></label>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+              <div class="form-floating">
+                <input class="form-control" value="<%=charger.cb_pwd%>" type="text" name="cbpwd" id="cbpwdInput" placeholder="">
+                <label for="cbpwdInput"><%=texts.PASSWORD_OCPP%></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-patch-question"></i></span>
+              <div class="form-floating">
+                <select class="form-select" name="regstatus" id="uRegStatusInput">
+                  <option value="Accepted"<% if(charger.registration_status=='Accepted') { %> selected <% } %>><%=texts.ACCEPTEDF%></option>
+                  <option value="Rejected"<% if(charger.registration_status=='Rejected') { %> selected <% } %>><%=texts.REJECTEDF%></option>
+                  <option value="Pending"<% if(charger.registration_status=='Pending') { %> selected <% } %>><%=texts.PENDING%></option>
+                </select>
+                <label for="uuRegStatusInput"><%=texts.OCPP_STATUS%></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- FORMULAIRE -->
+      </div>
+      <div class="card-footer">
+        <a class="btn btn-primary" role="button" href="/adminstations"><%=texts.BACK%></a>
+        <button class="btn btn-primary" type="submit"><%=texts.SAVE%></button>
+      </div>
+    </form>
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script>
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+  });
+</script>
+<%- include('./partials/footer.ejs') %>

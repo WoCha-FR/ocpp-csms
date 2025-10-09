@@ -1,0 +1,30 @@
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="/js/btable.min.js"></script>
+<script src="/js/btable-mobile.min.js"></script>
+<script src="/js/btable-<%=texts.LANG%>.min.js"></script>
+<% if (typeof pendings !== 'undefined') { %>
+  <script>
+    function reloadPendings() {
+      $.ajax({
+        url: '/refreshPendings',
+        type: 'POST',
+        dataType: 'json',
+        success: function (result) {
+          var html = result['html']
+          $('#pendingChargers').html(html)
+          if (result['nbpending'] > 0) {
+            $('#pendingChargers').addClass('visible').removeClass('invisible')
+          } else {
+            $('#pendingChargers').addClass('invisible').removeClass('visible')
+          }
+        },
+        error: function (jqXHR, textStatus, err) {
+          alert('Error: ' + textStatus + ', err ' + err)
+        }
+      });
+    }
+    setInterval(reloadPendings, 5000);
+    reloadPendings();
+  </script>
+  <% } %>

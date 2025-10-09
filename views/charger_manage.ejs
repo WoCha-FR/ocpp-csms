@@ -1,0 +1,216 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <div class="content-header">
+    <div class="container-fluid">
+      <h2><%=texts.STATION%> <%= station.cb_name %>
+        <% if(station.online==1) { %>
+          <span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>
+        <% } else if(station.online==0) { %>
+          <span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>
+        <% } else { %>
+          <span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>
+        <% } %>
+      </h2>
+    </div>
+  </div>
+  <%- include('./partials/ocpperrors.ejs') %>
+  <% if (typeof infosui.ocppResult !=='undefined' ) { %>
+    <% if (infosui.ocppResult.status=='Rejected' ) { %>
+        <div id="ocppResponse" class="alert alert-danger" role="alert"><%=texts.REJECTEDM%></div>
+    <% } else if(infosui.ocppResult.status=='NotSupported' ) { %>
+      <div id="ocppResponse" class="alert alert-warning" role="alert"><%=texts.NOT_SUPPORTED%></div>
+    <% } else if(infosui.ocppResult.status=='RebootRequired' ) { %>
+      <div id="ocppResponse" class="alert alert-warning" role="alert"><%=texts.REBOOT_REQUIRED%></div>
+    <% } else if(infosui.ocppResult.status=='Accepted' ) { %>
+      <div id="ocppResponse" class="alert alert-success" role="alert"><%=texts.ACCEPTEDM%></div>
+    <% } else if(infosui.ocppResult.status=='Updated' ) { %>
+      <div id="ocppResponse" class="alert alert-success" role="alert"><%=texts.UPDATED%></div>
+    <% } else { %>
+      <div id="ocppResponse" class="alert alert-warning" role="alert"><%=infosui.ocppResult.status%></div>
+    <% } %>
+  <% } %>
+  <div class="card">
+    <!-- CARD HEADER-->
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li class="nav-item">
+          <a class="nav-link" href="/station/<%= station.cb_id %>/"><%=texts.STATION%></a>
+        </li>
+        <li>
+          <a class="nav-link active" href="/station/<%= station.cb_id %>/manage"><%=texts.MANAGE%></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/station/<%= station.cb_id %>/logs"><%=texts.LOGS%></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/station/<%= station.cb_id %>/ocppkeys"><%=texts.CONFIG_OCPP%></a>
+        </li>
+      </ul>
+    </div>
+    <!-- CARD HEADER-->
+    <!-- CARD BODY -->
+    <div class="card-body">
+      <!-- FIRST LINE-->
+      <div class="row p-1">
+        <!-- STATION FORM -->
+        <div class="col-12 col-sm-6">
+          <div class="card h-100">
+            <div class="card-header fs-6 fw-bold"><%=texts.STATION_INFOS%></div>
+            <form method="post" action="/station/<%= station.cb_id %>/update">
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-sm-6">
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-ev-station-fill"></i></span>
+                      <div class="form-floating">
+                        <input class="form-control" type="text" name="cbname" id="unameInput" placeholder="" value="<%=station.cb_name%>" required>
+                        <label for="unameInput"><%=texts.STATION_NAME%></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                      <div class="form-floating">
+                        <select class="form-select" name="cbmode" id="cbmodeInput">
+                          <option value="0"<% if(station.cb_mode == 0) { %> selected<% } %>><%=texts.FREE_CHARGE%></option>
+                          <option value="1"<% if(station.cb_mode == 1) { %> selected<% } %>><%=texts.RESTRICTED_CHARGE%></option>
+                        </select>
+                        <label for="cbmodeInput"><%=texts.CHARGEAUTH_MODE%></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-fingerprint"></i></span>
+                      <div class="form-floating">
+                        <input class="form-control" type="text" name="cbid" value="<%=station.cb_id%>" id="inputcbid" placeholder="" readonly>
+                        <label for="inputcbid"><%=texts.OCPP_ID%></label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
+                      <div class="form-floating">
+                        <input class="form-control" type="text" name="cbpwd" value="<%=station.cb_pwd%>" id="cbpwdInput" placeholder="">
+                        <label for="cbpwdInput"><%=texts.PASSWORD_OCPP%></label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <button class="btn btn-primary btn-sm" type="submit"><%=texts.UPDATE%></button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <!-- STATION FORM -->
+        <!-- BOOT INFOS DATA -->
+        <div class="col-12 col-sm-6">
+          <div class="card h-100">
+            <div class="card-header fs-6 fw-bold"><%=texts.STATION_INFOS%></div>
+            <div class="card-body">
+              <% if(typeof cbinfos === 'undefined' || station.online==2) { %>
+                <div class="row p-2"><%=texts.PENDING%></div>
+              <% } else { %>
+              <div class="row p-2">
+                <div class="col"><span class="fw-bold">Fabricant:</span>&nbsp;<%=cbinfos.cp_vendor%></div>
+                <div class="col"><span class="fw-bold">Modèle:</span>&nbsp;<%=cbinfos.cp_model%></div>
+              </div>
+              <div class="row p-2">
+                <div class="col"><span class="fw-bold">N° de série:</span>&nbsp;<%=cbinfos.cp_serial_number%></div>
+                <div class="col"><span class="fw-bold">Firmware:</span>&nbsp;<%=cbinfos.fw_version%></div>
+              </div>
+              <div class="row p-2">
+                <div class="col"><span class="fw-bold">Meter type:</span>&nbsp;<%=cbinfos.meter_type%></div>
+                <div class="col"><span class="fw-bold">Meter index:</span>&nbsp;<%=cbinfos.fw_version%></div>
+              </div>
+              <% } %>
+            </div>
+            <div class="card-footer"></div>
+          </div>
+        </div>
+        <!-- BOOT INFOS DATA -->
+      </div>
+      <!-- FIRST LINE-->
+      <!-- SECOND LINE -->
+      <div class="row p-1">
+        <!-- ROW RESET STATION-->
+        <div class="col-12 col-sm-3">
+          <div class="card">
+            <div class="card-header fs-6 fw-bold"><%=texts.RESET%></div>
+            <div class="card-body text-center">
+              <form action="/station/<%= station.cb_id %>/reboot" method="post">
+                <button type="submit" id="softReset" name="ResetType" value="Soft" class="btn btn-success btn-sm"><%=texts.SOFT%></button>
+                <button type="submit" id="hardReset" name="ResetType" value="Hard" class="btn btn-danger btn-sm"><%=texts.HARD%></button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- ROW RESET STATION-->
+        <!-- ROW DISPO STATION-->
+        <div class="col-12 col-sm-3">
+          <div class="card">
+            <div class="card-header fs-6 fw-bold"><%=texts.AVAILABILITY%></div>
+            <div class="card-body text-center">
+              <form action="/station/<%= station.cb_id %>/dispo" method="post">
+                <input type="hidden" id="connectorId" name="connectorId" value="0">
+                <button type="submit" id="setOperative" name="AvailabilityType" value="Operative"
+                  class="btn btn-success btn-sm"><%=texts.OPERATIVE%></button>
+                <button type="submit" id="setInoperative" name="AvailabilityType" value="Inoperative"
+                  class="btn btn-danger btn-sm"><%=texts.INOPERATIVE%></button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- ROW DISPO STATION-->
+        <!-- ROW REQUEST STATION-->
+        <div class="col-12 col-sm-6">
+          <div class="card">
+            <div class="card-header fs-6 fw-bold"><%=texts.REQUEST_MESSAGE%></div>
+            <div class="card-body text-center">
+              <form action="/station/<%= station.cb_id %>/request" method="post">
+                <button type="submit" id="reqBoot" name="requestedMessage" value="BootNotification"
+                  class="btn btn-info btn-sm">BootNotification</button>
+                <button type="submit" id="reqBeat" name="requestedMessage" value="Heartbeat"
+                  class="btn btn-info btn-sm">Heartbeat</button>
+                <button type="submit" id="reqStatus" name="requestedMessage" value="StatusNotification"
+                  class="btn btn-info btn-sm">StatusNotification</button>
+                <button type="submit" id="reqMeter" name="requestedMessage" value="MeterValues"
+                  class="btn btn-info btn-sm">MeterValues</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- ROW REQUEST STATION-->
+      </div>
+    </div>
+    <!-- CARD BODY -->
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script>
+  $(document).ready(function () {
+    $('#ocppResponse').delay(3000).fadeOut('slow');
+    $('#inputErrors').delay(5000).fadeOut('slow');
+  });
+</script>
+<% if(station.online!=1) { %>
+<script>
+  $(document).ready(function () {
+    $('#softReset').prop('disabled', true);
+    $('#hardReset').prop('disabled', true);
+    $('#setOperative').prop('disabled', true);
+    $('#setInoperative').prop('disabled', true);
+    $('#reqBoot').prop('disabled', true);
+    $('#reqBeat').prop('disabled', true);
+    $('#reqStatus').prop('disabled', true);
+    $('#reqMeter').prop('disabled', true);
+  });
+</script>
+<% } %>
+<%- include('./partials/footer.ejs') %>
