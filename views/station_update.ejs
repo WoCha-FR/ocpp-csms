@@ -19,15 +19,14 @@
           </div>
           <div class="col-sm-6">
             <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+              <span class="input-group-text"><i class="bi bi-geo-fill"></i></span>
               <div class="form-floating">
-                <select class="form-select" name="cbuser" id="cbuserInput">
-                  <option value=""><%=texts.CHOOSE%></option>
-                  <% users.forEach(function(user) { %>
-                  <option value="<%=user.user_pk%>"<% if(user.user_pk==charger.owner) { %> selected <% } %>><%=user.name%> (<%=user.username%>)</option>
+                <select class="form-select" name="cbsite" id="cbsiteInput">
+                  <% sites.forEach(function(site) { %>
+                  <option value="<%=site.s_pk%>"<% if(site.s_pk==charger.site) { %> selected <% } %>><%=site.s_name%></option>
                   <% }) %>
                 </select>
-                <label for="cbuserInput"><%=texts.USER_OWNER%></label>
+                <label for="cbsiteInput"><%=texts.SITE%></label>
               </div>
             </div>
           </div>

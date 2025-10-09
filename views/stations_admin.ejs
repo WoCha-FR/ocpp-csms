@@ -36,7 +36,7 @@
             <table id="stationstable" class="table table-striped table-hover" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
               <thead>
                 <tr>
-                  <th data-sortable="true" data-field="owner"><%=texts.OWNER%></th>
+                  <th data-sortable="true" data-field="s_name"><%=texts.SITE%></th>
                   <th data-sortable="true" data-field="name"><%=texts.NOM%></th>
                   <th data-sortable="true" data-field="ocppid"><%=texts.OCPP_ID%></th>
                   <th data-sortable="true" data-field="regstatus"><%=texts.OCPP_STATUS%></th>
@@ -48,7 +48,7 @@
               <% if(stations.length> 0) { %>
                 <% stations.forEach(function(station) { %>
                 <tr style="cursor: pointer;">
-                  <td><%= station.name %></td>
+                  <td><%= station.s_name %></td>
                   <td><%= station.cb_name %></td>
                   <td><%= station.cb_id %></td>
                   <% if(station.registration_status=='Rejected' ) { %>
@@ -98,15 +98,14 @@
                   </div>
                   <div class="col-sm-6">
                     <div class="input-group">
-                      <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                      <span class="input-group-text"><i class="bi bi-geo-fill"></i></span>
                       <div class="form-floating">
-                        <select class="form-select" name="cbuser" id="cbuserInput">
-                          <option value=""><%=texts.CHOOSE%></option>
-                          <% users.forEach(function(user) { %>
-                          <option value="<%=user.user_pk%>"><%=user.name%> (<%=user.username%>)</option>
+                        <select class="form-select" name="cbsite" id="cbsiteInput">
+                          <% sites.forEach(function(site) { %>
+                          <option value="<%=site.s_pk%>"><%=site.s_name%></option>
                           <% }) %>
                         </select>
-                        <label for="cbuserInput"><%=texts.USER_OWNER%></label>
+                        <label for="cbsiteInput"><%=texts.SITE%></label>
                       </div>
                     </div>
                   </div>

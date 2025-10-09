@@ -94,5 +94,7 @@
   "RFID_CARD": "Cartes RFID",
   "CHARGER": "Chargeur",
   "NEW_CHARGER": "Nouveau chargeur",
-  "BACK": "Retour"
+  "BACK": "Retour",
+  "SITE": "Site",
+  "SITES": "Sites"
 }

@@ -94,5 +94,7 @@
   "RFID_CARD": "RFID Card",
   "CHARGER": "Charger",
   "NEW_CHARGER": "New Charger",
-  "BACK": "Back"
+  "BACK": "Back",
+  "SITE": "Site",
+  "SITES": "Sites"
 }
