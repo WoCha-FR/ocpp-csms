@@ -95,21 +95,14 @@ CREATE INDEX `connector_status_cpk_st_idx` ON `connector_status` (`cb_id`,`conne
 /* RFID Tags */
 CREATE TABLE IF NOT EXISTS `rfid_tags` (
 `rf_pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-`owner` INTEGER NOT NULL CONSTRAINT `FK_rfid_Owner` REFERENCES `users` (`user_pk`) ON DELETE CASCADE ON UPDATE NO ACTION,
+`site` INTEGER NOT NULL CONSTRAINT `FK_rfid_Site` REFERENCES `sites` (`s_pk`) ON DELETE CASCADE ON UPDATE NO ACTION,
 `idtag` TEXT(20) DEFAULT NULL COLLATE NOCASE,
 `infos` TEXT(50) DEFAULT NULL,
-`user` INTEGER DEFAULT NULL CONSTRAINT `FK_rfid_User` REFERENCES `users` (`user_pk`) ON DELETE SET NULL ON UPDATE NO ACTION
-);
-CREATE UNIQUE INDEX `owner_rfid_tags_UNIQUE` ON `rfid_tags` (`owner`,`idtag`);
-/* Charge Box RFIDS Status */
-CREATE TABLE IF NOT EXISTS `charge_box_rfids` (
-`cr_pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_connector_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE ON UPDATE NO ACTION COLLATE NOCASE,
-`rf_pk` INTEGER NOT NULL CONSTRAINT `FK_charge_box_rfid` REFERENCES `rfid_tags` (`rf_pk`) ON DELETE CASCADE ON UPDATE NO ACTION,
+`user` INTEGER DEFAULT NULL CONSTRAINT `FK_rfid_User` REFERENCES `users` (`user_pk`) ON DELETE SET NULL ON UPDATE NO ACTION,
 `expire` TIMESTAMP(11) NULL DEFAULT NULL,
 `blocked` INTEGER(1) DEFAULT(0) CHECK (`blocked` IN (0, 1))
 );
-CREATE UNIQUE INDEX `chargebox_rfid_tags_UNIQUE` ON `charge_box_rfids` (`cb_id`,`rf_pk`);
+CREATE UNIQUE INDEX `site_rfid_tags_UNIQUE` ON `rfid_tags` (`site`,`idtag` COLLATE NOCASE);
 /* TRANSACTIONS */
 CREATE TABLE IF NOT EXISTS `transactions` (
 `t_pk` INTEGER PRIMARY KEY NOT NULL,
