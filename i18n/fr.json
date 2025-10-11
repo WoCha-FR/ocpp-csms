@@ -96,5 +96,9 @@
   "NEW_CHARGER": "Nouveau chargeur",
   "BACK": "Retour",
   "SITE": "Site",
-  "SITES": "Sites"
+  "SITES": "Sites",
+  "ADDRESS": "Adresse",
+  "ZIPCODE": "Code Postal",
+  "VILLE": "Ville",
+  "SITE_INFOS": "Informations du site"
 }

@@ -1,0 +1,76 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <%- include('./partials/ocpperrors.ejs') %>
+  <div class="card mb-3">
+    <div class="card-header fs-5 fw-bold">
+      <%=texts.SITE_INFOS%>
+    </div>
+    <form method="post" action="/site/edit/">
+      <input type="hidden" name="sitepk" value="<%=site.s_pk%>">
+      <div class="card-body">
+        <!-- FORMULAIRE -->
+        <div class="row mb-3">
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-pin-map"></i></span>
+              <div class="form-floating">
+                <input class="form-control" type="text" name="sname" value="<%=site.s_name%>" id="snameInput" placeholder="" required>
+                <label for="snameInput">
+                  <%=texts.NOM%>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-signpost-2"></i></span>
+              <div class="form-floating">
+                <input class="form-control" type="text" name="saddr" value="<%=site.s_address%>" id="saddrInput" placeholder="">
+                <label for="saddrInput">
+                  <%=texts.ADDRESS%>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-123"></i></span>
+              <div class="form-floating">
+                <input class="form-control" type="text" name="scodp" value="<%=site.s_codp%>" id="scodpInput" placeholder="">
+                <label for="scodpInput">
+                  <%=texts.ZIPCODE%>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-houses"></i></span>
+              <div class="form-floating">
+                <input class="form-control" type="text" name="sville" value="<%=site.s_ville%>" id="svilleInput" placeholder="">
+                <label for="svilleInput">
+                  <%=texts.VILLE%>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- FORMULAIRE -->
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-primary" type="submit">
+          <%=texts.SAVE%>
+        </button>
+      </div>
+    </form>
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script>
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+  });
+</script>
+<%- include('./partials/footer.ejs') %>
