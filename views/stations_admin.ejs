@@ -41,17 +41,17 @@
                   <th data-sortable="true" data-field="name"><%=texts.NOM%></th>
                   <th data-sortable="true" data-field="ocppid"><%=texts.OCPP_ID%></th>
                   <th data-sortable="true" data-field="regstatus"><%=texts.OCPP_STATUS%></th>
-                  <th><%=texts.ONLINE%></th>
+                  <th data-sortable="true"><%=texts.ONLINE%></th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
               <% if(stations.length> 0) { %>
                 <% stations.forEach(function(station) { %>
-                <tr style="cursor: pointer;">
-                  <td><%= station.s_name %></td>
-                  <td><%= station.cb_name %></td>
-                  <td><%= station.cb_id %></td>
+                <tr>
+                  <td style="cursor: pointer;"><%= station.s_name %></td>
+                  <td style="cursor: pointer;"><%= station.cb_name %></td>
+                  <td style="cursor: pointer;"><%= station.cb_id %></td>
                   <% if(station.registration_status=='Rejected' ) { %>
                   <td data-searchable="false"><span class="badge text-bg-danger"><%=texts.REJECTEDF%></span></td>
                   <% } else if(station.registration_status=='Pending' ) { %>
@@ -133,9 +133,8 @@
                 </div>
                 <!-- FORMULAIRE -->
                 <br><!-- TODO Traduction + lien WS -->
-                <p>Use the URLs below to configure ocpp endpoint your charging station communicates with. Use the secure URL if
-                  it's
-                  supported by the station.</p>
+                <p>Use the URLs below to configure ocpp endpoint your charging station communicates with.
+                  Use the secure URL if it's supported by the station.</p>
               </div>
               <div class="card-footer">
                 <button class="btn btn-primary" type="submit"><%=texts.ADD%></button>
@@ -188,10 +187,12 @@
       $('#ModalFormDeleteId').attr('value', '');
     });
   });
-  // TODO : Empeche click sur effacer / modifier / Diag request
   // Click to Station page
-  $('#stationstable').on('click-row.bs.table', function (e, row) {
-    window.location.href = '/station/' + row.ocppid;
+  $('#stationstable').on('click-cell.bs.table', function (e, field, value, row, $element) {
+    cellIndex = $element[0].cellIndex;
+    if (cellIndex != 5) {
+      window.location.href = '/station/' + row.ocppid;
+    }
   });
   // Refresh Stations
   // TODO : Ajax refresh function
