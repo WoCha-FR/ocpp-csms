@@ -105,5 +105,6 @@
   "STATE": "Etat",
   "EXPIRE": "Expiration",
   "RFID_INFOS": "Informations de la carte RFID",
-  "CARD_NAME": "Nom de la carte RFID"
+  "CARD_NAME": "Nom de la carte RFID",
+  "WS_TEXT_ADD": "Utilisez l'URL ci-dessous pour configurer l'adressage WS. Utilisez l’URL sécurisée si la station la prend en charge."
 }

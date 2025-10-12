@@ -100,5 +100,11 @@
   "ADDRESS": "Address",
   "ZIPCODE": "Postcode",
   "VILLE": "City",
-  "SITE_INFOS": "Site information"
+  "SITE_INFOS": "Site information",
+  "IDTAG": "Tag ID",
+  "STATE": "Status",
+  "EXPIRE": "Expiration",
+  "RFID_INFOS": "RFID card information",
+  "CARD_NAME": "Name of the RFID card",
+  "WS_TEXT_ADD": "Use the URL below to configure WS addressing. Use the secure URL if the station supports it."
 }

@@ -132,9 +132,16 @@
                   </div>
                 </div>
                 <!-- FORMULAIRE -->
-                <br><!-- TODO Traduction + lien WS -->
-                <p>Use the URLs below to configure ocpp endpoint your charging station communicates with.
-                  Use the secure URL if it's supported by the station.</p>
+                <br>
+                <p><%=texts.WS_TEXT_ADD%></p>
+                <table class="table table-valign-middle">
+                  <tbody>
+                    <tr>
+                      <th>URL</th>
+                      <td id="ocppWs" data-value="<%=wsinfo.wsfqdn%>">ws://<%=wsinfo.wsfqdn%>/</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
               <div class="card-footer">
                 <button class="btn btn-primary" type="submit"><%=texts.ADD%></button>
@@ -193,6 +200,10 @@
     if (cellIndex != 5) {
       window.location.href = '/station/' + row.ocppid;
     }
+  });
+  // Update ocpp identifier in URL
+  $('#inputcbid').on('input', function(e){
+    $('#ocppWs').html('ws://' + $('#ocppWs').attr('data-value') + '/' + $('#inputcbid').val());
   });
   // Refresh Stations
   // TODO : Ajax refresh function
