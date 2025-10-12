@@ -5,7 +5,7 @@
     <div class="card-header fs-5 fw-bold">
       <%=texts.SITE_INFOS%>
     </div>
-    <form method="post" action="/site/edit/">
+    <form method="post" action="/admin/site/edit/">
       <input type="hidden" name="sitepk" value="<%=site.s_pk%>">
       <div class="card-body">
         <!-- FORMULAIRE -->
@@ -60,7 +60,7 @@
         <!-- FORMULAIRE -->
       </div>
       <div class="card-footer">
-        <a class="btn btn-primary" role="button" href="/sites">
+        <a class="btn btn-primary" role="button" href="/admin/sites">
           <%=texts.BACK%>
         </a>
         <button class="btn btn-primary" type="submit">
