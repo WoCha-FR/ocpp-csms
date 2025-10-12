@@ -44,11 +44,11 @@
                   <td><%=user.name%></td>
                   <td><%=user.username%></td>
                   <td>
-                    <% if (user.level === 1 ) { %>
-                      <i class="bi bi-gear-wide-connected"></i>
+                    <% if (user.isAdmin) { %>
+                      <i class="bi bi-gear-wide-connected"></i>&nbsp;<%=texts.USER_ADMIN%>
                     <% } %>
-                    <% if (user.level===2 ) { %>
-                      <i class="bi bi-ev-station"></i>
+                    <% if (user.ownedSite) { %>
+                      <i class="bi bi-ev-station"></i>&nbsp;<%=texts.USER_OWNER%>
                     <% } %>
                   </td>
                   <td>

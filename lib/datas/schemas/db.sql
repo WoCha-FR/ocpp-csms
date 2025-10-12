@@ -1,11 +1,11 @@
 /* Users */
 CREATE TABLE IF NOT EXISTS `users` (
 `user_pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-`username` TEXT(50) UNIQUE NOT NULL COLLATE NOCASE,
+`usermail` TEXT(320) UNIQUE NOT NULL COLLATE NOCASE,
 `password` TEXT(60) NOT NULL,
 `name` TEXT(50) DEFAULT NULL COLLATE NOCASE,
-`email` TEXT UNIQUE NOT NULL,
-`level` INTEGER(1) DEFAULT(3) CHECK (`level` IN (1, 2, 3))
+`isAdmin` INTEGER(1) DEFAULT(3) CHECK (`level` IN (0, 1)),
+`ownedSite` INTEGER DEFAULT NULL CONSTRAINT `FK_Owned_Site` REFERENCES `sites` (`s_pk`) ON DELETE SET NULL,
 );
 /* Sites */
 CREATE TABLE IF NOT EXISTS `sites` (
@@ -25,12 +25,12 @@ CREATE TABLE IF NOT EXISTS `charge_box` (
 `last_heartbeat_ts` TIMESTAMP(11) NULL DEFAULT NULL,
 `last_bootnotif_ts` TIMESTAMP(11) NULL DEFAULT NULL,
 `online` INTEGER(1) DEFAULT(2) NOT NULL CHECK (`online` IN (0, 1, 2)),
-`site` INTEGER DEFAULT NULL CONSTRAINT `FK_Site_ChargeBox` REFERENCES `sites` (`s_pk`) ON DELETE SET DEFAULT ON UPDATE NO ACTION,
+`site` INTEGER DEFAULT NULL CONSTRAINT `FK_Site_ChargeBox` REFERENCES `sites` (`s_pk`) ON DELETE SET NULL,
 `cb_mode` INTEGER(1) DEFAULT(1) NOT NULL CHECK (`cb_mode` IN (0, 1))
 );
 /* Charge_Box_Infos */
 CREATE TABLE IF NOT EXISTS `charge_box_infos` (
-`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_conf_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE ON UPDATE NO ACTION COLLATE NOCASE,
+`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_conf_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE COLLATE NOCASE,
 `cp_vendor` TEXT(20) DEFAULT NULL COLLATE NOCASE,
 `cp_model` TEXT(20) DEFAULT NULL COLLATE NOCASE,
 `cp_serial_number` TEXT(25) DEFAULT NULL COLLATE NOCASE,
@@ -46,7 +46,7 @@ PRIMARY KEY (`cb_id`)
 );
 /* Charge_Box_Conf */
 CREATE TABLE IF NOT EXISTS `charge_box_conf` (
-`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_conf_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE ON UPDATE NO ACTION COLLATE NOCASE,
+`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_conf_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE COLLATE NOCASE,
 `key` TEXT(50) NOT NULL,
 `value` TEXT(255) DEFAULT NULL,
 `readonly` INTEGER(1) DEFAULT(1) CHECK (`readonly` IN (0, 1)),
@@ -65,7 +65,7 @@ CREATE INDEX `defconf_enabled` ON `ocpp_default_conf` (`enabled` ASC);
 /* Charge_Box_Log */
 CREATE TABLE IF NOT EXISTS `charge_box_log` (
 `log_pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_logs_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE ON UPDATE NO ACTION COLLATE NOCASE,
+`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_logs_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE COLLATE NOCASE,
 `timestamp` TIMESTAMP(14) NOT NULL,
 `direction` TEXT(3) NOT NULL CHECK (`direction` IN ('IN', 'OUT')),
 `type` TEXT(10) DEFAULT NULL CHECK (`type` IN ('REQUEST', 'RESPONSE','CALLERROR')),
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `schema_version` (
 );
 /* Connector_Status */
 CREATE TABLE IF NOT EXISTS `connector_status` (
-`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_connector_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE ON UPDATE NO ACTION COLLATE NOCASE,
+`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_connector_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE COLLATE NOCASE,
 `connector_id` INTEGER(1) NOT NULL CHECK (`connector_id` < 10),
 `status_ts` TIMESTAMP(11) NULL DEFAULT NULL,
 `status` TEXT(25) DEFAULT NULL,
@@ -95,10 +95,10 @@ CREATE INDEX `connector_status_cpk_st_idx` ON `connector_status` (`cb_id`,`conne
 /* RFID Tags */
 CREATE TABLE IF NOT EXISTS `rfid_tags` (
 `rf_pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-`site` INTEGER DEFAULT NULL CONSTRAINT `FK_rfid_Site` REFERENCES `sites` (`s_pk`) ON DELETE CASCADE ON UPDATE NO ACTION,
+`site` INTEGER DEFAULT NULL CONSTRAINT `FK_rfid_Site` REFERENCES `sites` (`s_pk`) ON DELETE CASCADE,
 `idtag` TEXT(20) NOT NULL COLLATE NOCASE,
 `rf_name` TEXT(50) NOT NULL,
-`user` INTEGER DEFAULT NULL CONSTRAINT `FK_rfid_User` REFERENCES `users` (`user_pk`) ON DELETE SET NULL ON UPDATE NO ACTION,
+`user` INTEGER DEFAULT NULL CONSTRAINT `FK_rfid_User` REFERENCES `users` (`user_pk`) ON DELETE SET NULL,
 `blocked` INTEGER(1) DEFAULT(0) CHECK (`blocked` IN (0, 1)),
 `expire` TIMESTAMP(11) NULL DEFAULT NULL
 );
@@ -106,7 +106,7 @@ CREATE UNIQUE INDEX `site_rfid_tags_UNIQUE` ON `rfid_tags` (`site`,`idtag` COLLA
 /* TRANSACTIONS */
 CREATE TABLE IF NOT EXISTS `transactions` (
 `t_pk` INTEGER PRIMARY KEY NOT NULL,
-`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_transaction_charge_box_id` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE ON UPDATE NO ACTION COLLATE NOCASE,
+`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_transaction_charge_box_id` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE COLLATE NOCASE,
 `con_id` INTEGER(1) NOT NULL CHECK (`con_id` > 0 AND `con_id` < 10),
 `IdToken` TEXT(20) NOT NULL COLLATE NOCASE,
 `meterStart` INTEGER NOT NULL,
@@ -122,7 +122,7 @@ CREATE INDEX `charge_box_connector_idx` ON `transactions` (`cb_id`,`con_id`);
 /* Initial Values */
 BEGIN TRANSACTION;
 INSERT INTO `schema_version` (`version`) VALUES ('0.1.0');
-INSERT INTO `users` (`username`,`password`,`name`,`level`,`email`) VALUES ('admin','$2b$10$FTdLTiTsGV81/PcjArPmB.izN7RPXT3t93O0LoIGXZDovyOf178cy','Admin',1,'admin@admin.eu');
+INSERT INTO `users` (`usermail`,`password`,`name`,`isAdmin`) VALUES ('admin@admin.eu','$2b$10$FTdLTiTsGV81/PcjArPmB.izN7RPXT3t93O0LoIGXZDovyOf178cy','Admin',1);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('AllowOfflineTxForUnknownId', NULL, 0, 'b', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('AuthorizeRemoteTxRequests', '', 0, 'b', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('ClockAlignedDataInterval', NULL, 0, 'i', 'SEC');
