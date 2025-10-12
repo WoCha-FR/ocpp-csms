@@ -96,11 +96,11 @@ CREATE INDEX `connector_status_cpk_st_idx` ON `connector_status` (`cb_id`,`conne
 CREATE TABLE IF NOT EXISTS `rfid_tags` (
 `rf_pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 `site` INTEGER NOT NULL CONSTRAINT `FK_rfid_Site` REFERENCES `sites` (`s_pk`) ON DELETE CASCADE ON UPDATE NO ACTION,
-`idtag` TEXT(20) DEFAULT NULL COLLATE NOCASE,
-`infos` TEXT(50) DEFAULT NULL,
+`idtag` TEXT(20) NOT NULL COLLATE NOCASE,
+`rf_name` TEXT(50) NOT NULL,
 `user` INTEGER DEFAULT NULL CONSTRAINT `FK_rfid_User` REFERENCES `users` (`user_pk`) ON DELETE SET NULL ON UPDATE NO ACTION,
-`expire` TIMESTAMP(11) NULL DEFAULT NULL,
-`blocked` INTEGER(1) DEFAULT(0) CHECK (`blocked` IN (0, 1))
+`blocked` INTEGER(1) DEFAULT(0) CHECK (`blocked` IN (0, 1)),
+`expire` TIMESTAMP(11) NULL DEFAULT NULL
 );
 CREATE UNIQUE INDEX `site_rfid_tags_UNIQUE` ON `rfid_tags` (`site`,`idtag` COLLATE NOCASE);
 /* TRANSACTIONS */

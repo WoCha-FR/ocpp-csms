@@ -137,3 +137,4 @@ pendings.json
 ocpp-csms*.db
 client.js
 zessais
+data/*.gz

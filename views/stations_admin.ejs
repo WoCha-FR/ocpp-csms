@@ -69,7 +69,7 @@
                   <td>
                     <a class="btn btn-sm btn-warning" href="/station/edit/<%=station.cb_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
                     <a class="btn btn-sm btn-primary" href="/station/<%=station.cb_id%>/diagnostic" title="Diagnostics"><i class="bi bi-heart-pulse"></i></a>
-                    <a class="btn btn-sm btn-danger btn-delete-charger" data-form-chargerid="<%=station.cb_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
+                    <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=station.cb_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
                   </td>
                 </tr>
                 <% }); %>
@@ -80,7 +80,7 @@
         </div>
         <!-- ALL STATIONS TAB -->
         <!-- ADD STATION TAB -->
-        <div class="tab-pane fade" id="stations-tabs-add" role="tabpanel" aria-labelledby="stations-tabs-add-tab" tabindex="0">
+        <div id="stations-tabs-add" class="tab-pane fade" role="tabpanel" aria-labelledby="stations-tabs-add-tab" tabindex="0">
           <div class="card">
             <div class="card-header"><%=texts.STATION_INFOS%></div>
             <form method="post" action="/stations/add">
@@ -177,9 +177,9 @@
     $('#inputErrors').delay(5000).fadeOut('slow');
     $('#stationstable').removeClass('table-bordered');
 
-    $('.btn-delete-charger').click(function (e) {
+    $('.btn-delete-elem').click(function (e) {
       e.preventDefault();
-      var id = $(this).attr('data-form-chargerid');
+      var id = $(this).attr('data-form-elemid');
       $('#ModalFormDeleteId').attr('value', id)
     });
 

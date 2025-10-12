@@ -91,7 +91,7 @@
   "UNLOCKFAILED": "Échec du déverrouillage",
   "NOT_SUPPORTED": "Non pris en charge",
   "CHOOSE": "Choisissez",
-  "RFID_CARD": "Cartes RFID",
+  "RFID_CARDS": "Cartes RFID",
   "CHARGER": "Chargeur",
   "NEW_CHARGER": "Nouveau chargeur",
   "BACK": "Retour",
@@ -100,5 +100,10 @@
   "ADDRESS": "Adresse",
   "ZIPCODE": "Code Postal",
   "VILLE": "Ville",
-  "SITE_INFOS": "Informations du site"
+  "SITE_INFOS": "Informations du site",
+  "IDTAG": "Tag ID",
+  "STATE": "Etat",
+  "EXPIRE": "Expiration",
+  "RFID_INFOS": "Informations de la carte RFID",
+  "CARD_NAME": "Nom de la carte RFID"
 }
