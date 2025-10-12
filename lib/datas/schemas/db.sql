@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `charge_box` (
 `last_heartbeat_ts` TIMESTAMP(11) NULL DEFAULT NULL,
 `last_bootnotif_ts` TIMESTAMP(11) NULL DEFAULT NULL,
 `online` INTEGER(1) DEFAULT(2) NOT NULL CHECK (`online` IN (0, 1, 2)),
-`site` INTEGER DEFAULT(1) CONSTRAINT `FK_Site_ChargeBox` REFERENCES `sites` (`s_pk`) ON DELETE SET DEFAULT ON UPDATE NO ACTION,
+`site` INTEGER DEFAULT NULL CONSTRAINT `FK_Site_ChargeBox` REFERENCES `sites` (`s_pk`) ON DELETE SET DEFAULT ON UPDATE NO ACTION,
 `cb_mode` INTEGER(1) DEFAULT(1) NOT NULL CHECK (`cb_mode` IN (0, 1))
 );
 /* Charge_Box_Infos */
@@ -95,7 +95,7 @@ CREATE INDEX `connector_status_cpk_st_idx` ON `connector_status` (`cb_id`,`conne
 /* RFID Tags */
 CREATE TABLE IF NOT EXISTS `rfid_tags` (
 `rf_pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-`site` INTEGER NOT NULL CONSTRAINT `FK_rfid_Site` REFERENCES `sites` (`s_pk`) ON DELETE CASCADE ON UPDATE NO ACTION,
+`site` INTEGER DEFAULT NULL CONSTRAINT `FK_rfid_Site` REFERENCES `sites` (`s_pk`) ON DELETE CASCADE ON UPDATE NO ACTION,
 `idtag` TEXT(20) NOT NULL COLLATE NOCASE,
 `rf_name` TEXT(50) NOT NULL,
 `user` INTEGER DEFAULT NULL CONSTRAINT `FK_rfid_User` REFERENCES `users` (`user_pk`) ON DELETE SET NULL ON UPDATE NO ACTION,
@@ -123,7 +123,6 @@ CREATE INDEX `charge_box_connector_idx` ON `transactions` (`cb_id`,`con_id`);
 BEGIN TRANSACTION;
 INSERT INTO `schema_version` (`version`) VALUES ('0.1.0');
 INSERT INTO `users` (`username`,`password`,`name`,`level`,`email`) VALUES ('admin','$2b$10$FTdLTiTsGV81/PcjArPmB.izN7RPXT3t93O0LoIGXZDovyOf178cy','Admin',1,'admin@admin.eu');
-INSERT INTO `sites` (`s_pk`,`s_name`) VALUES (1,`Parking`);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('AllowOfflineTxForUnknownId', NULL, 0, 'b', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('AuthorizeRemoteTxRequests', '', 0, 'b', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('ClockAlignedDataInterval', NULL, 0, 'i', 'SEC');
