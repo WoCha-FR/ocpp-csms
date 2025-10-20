@@ -1,0 +1,102 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <%- include('./partials/ocpperrors.ejs') %>
+  <div class="card mb-3">
+    <div class="card-header fs-5 fw-bold"><%=texts.USER_INFOS%></div>
+    <form method="post" action="/admin/users/edit/">
+      <input type="hidden" name="userpk" value="<%=user.user_pk%>">
+      <div class="card-body">
+        <!-- FORMULAIRE -->
+        <div class="row mb-3">
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
+              <div class="form-floating">
+                <input class="form-control" type="email" name="usermail" value="<%=user.usermail%>" id="usermailInput" aria-describedby="usermailHelpBlock" placeholder="" required>
+                <label for="usermailInput"><%=texts.EMAIL_ADDR%></label>
+              </div>
+            </div>
+            <div id="usermailHelpBlock" class="form-text"><%=texts.USERMAIL_INFOS%></div>
+          </div>
+          <div class="col-sm-6">
+            <div class="input-group" id="show_hide_password">
+              <span class="input-group-text"><i class="bi bi-key"></i></span>
+              <div class="form-floating">
+                <input class="form-control" type="password" name="password" id="upassInput" aria-describedby="upassHelpBlock" placeholder="">
+                <label for="upassInput"><%=texts.PASSWORD%></label>
+              </div>
+              <span class="input-group-text"><a href="" class="nav-link"><i class="bi bi-eye-slash"></i></a></span>
+            </div>
+            <div id="upassHelpBlock" class="form-text"><%=texts.USERPASS_INFOS%></div>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <div class="form-floating">
+                <input class="form-control" type="text" name="uname" value="<%=user.name%>" id="unameInput" aria-describedby="unameHelpBlock" placeholder="" required>
+                <label for="unameInput"><%=texts.USER%></label>
+              </div>
+            </div>
+            <div id="unameHelpBlock" class="form-text">
+              <%=texts.USERNAME_INFOS%>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person-lock"></i></span>
+              <div class="form-floating">
+                <select class="form-select" name="ulevel" id="ulevelInput">
+                  <% if(!user.isAdmin && !user.ownedSite) { %>
+                    <option value="" selected><%=texts.USER%></option>
+                  <% } else { %>
+                    <option value=""><%=texts.USER%></option>
+                  <% } %>
+                  <% if(sites.length> 0) { %>
+                    <% sites.forEach(function(site) { %>
+                      <option value="<%=site.s_pk%>"<% if(user.ownedSite==site.s_pk) { %> selected<% } %>><%=texts.USER_OWNER%> : <%=site.s_name%></option>
+                    <% }) %>
+                  <% } %>
+                  <option value="0"<% if(user.isAdmin == 1) { %> selected<% } %>>
+                    <%=texts.USER_ADMIN%>
+                  </option>
+                </select>
+                <label for="ulevelInput"><%=texts.USER_RIGHTS%></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- FORMULAIRE -->
+      </div>
+      <div class="card-footer">
+        <a class="btn btn-primary" role="button" href="/admin/users">
+          <%=texts.BACK%>
+        </a>
+        <button class="btn btn-primary" type="submit">
+          <%=texts.SAVE%>
+        </button>
+      </div>
+    </form>
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script>
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+
+    $("#show_hide_password a").on('click', function (event) {
+      event.preventDefault();
+      if ($('#show_hide_password input').attr("type") == "text") {
+        $('#show_hide_password input').attr('type', 'password');
+        $('#show_hide_password i').addClass("bi-eye-slash");
+        $('#show_hide_password i').removeClass("bi-eye");
+      } else {
+        $('#show_hide_password input').attr('type', 'text');
+        $('#show_hide_password i').removeClass("bi-eye-slash");
+        $('#show_hide_password i').addClass("bi-eye");
+      }
+    });
+  });
+</script>
+<%- include('./partials/footer.ejs') %>
