@@ -48,6 +48,9 @@
               <span class="input-group-text"><i class="bi bi-person-lock"></i></span>
               <div class="form-floating">
                 <select class="form-select" name="ulevel" id="ulevelInput">
+                <% if(user.isAdmin && nbAdmin < 2) {%>
+                  <option value="0" selected><%=texts.USER_ADMIN%></option>
+                <% } else { %>
                   <% if(!user.isAdmin && !user.ownedSite) { %>
                     <option value="" selected><%=texts.USER%></option>
                   <% } else { %>
@@ -58,9 +61,8 @@
                       <option value="<%=site.s_pk%>"<% if(user.ownedSite==site.s_pk) { %> selected<% } %>><%=texts.USER_OWNER%> : <%=site.s_name%></option>
                     <% }) %>
                   <% } %>
-                  <option value="0"<% if(user.isAdmin == 1) { %> selected<% } %>>
-                    <%=texts.USER_ADMIN%>
-                  </option>
+                  <option value="0"<% if(user.isAdmin == 1) { %> selected<% } %>><%=texts.USER_ADMIN%></option>
+                <% } %>
                 </select>
                 <label for="ulevelInput"><%=texts.USER_RIGHTS%></label>
               </div>

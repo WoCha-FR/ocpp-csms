@@ -15,6 +15,24 @@ CREATE TABLE IF NOT EXISTS `sites` (
 `s_codp`    INTEGER(5),
 `s_ville`   TEXT(150)
 );
+/* Users of Sites */
+CREATE TABLE IF NOT EXISTS `sites_users` (
+`pk` INTEGER PRIMARY KEY AUTOINCREMENT,
+`spk` INTEGER NOT NULL REFERENCES `sites` (`s_pk`) ON DELETE CASCADE,
+`upk` INTEGER NOT NULL REFERENCES `users` (`user_pk`) ON DELETE CASCADE
+);
+CREATE UNIQUE INDEX `site_user_UNIQUE` ON `sites_users` (`spk`,`upk`);
+/* RFID Tags */
+CREATE TABLE IF NOT EXISTS `rfid_tags` (
+`rf_pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+`site` INTEGER DEFAULT NULL CONSTRAINT `FK_rfid_Site` REFERENCES `sites` (`s_pk`) ON DELETE CASCADE,
+`idtag` TEXT(20) NOT NULL COLLATE NOCASE,
+`rf_name` TEXT(50) NOT NULL,
+`user` INTEGER DEFAULT NULL CONSTRAINT `FK_rfid_User` REFERENCES `users` (`user_pk`) ON DELETE SET NULL,
+`blocked` INTEGER(1) DEFAULT(0) CHECK (`blocked` IN (0, 1)),
+`expire` TIMESTAMP(11) NULL DEFAULT NULL
+);
+CREATE UNIQUE INDEX `site_rfid_tags_UNIQUE` ON `rfid_tags` (`site`,`idtag` COLLATE NOCASE);
 /* Charge_Box */
 CREATE TABLE IF NOT EXISTS `charge_box` (
 `cb_pk` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -92,17 +110,6 @@ CREATE TABLE IF NOT EXISTS `connector_status` (
 PRIMARY KEY (`cb_id`,`connector_id`)
 );
 CREATE INDEX `connector_status_cpk_st_idx` ON `connector_status` (`cb_id`,`connector_id`,`status_ts`);
-/* RFID Tags */
-CREATE TABLE IF NOT EXISTS `rfid_tags` (
-`rf_pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-`site` INTEGER DEFAULT NULL CONSTRAINT `FK_rfid_Site` REFERENCES `sites` (`s_pk`) ON DELETE CASCADE,
-`idtag` TEXT(20) NOT NULL COLLATE NOCASE,
-`rf_name` TEXT(50) NOT NULL,
-`user` INTEGER DEFAULT NULL CONSTRAINT `FK_rfid_User` REFERENCES `users` (`user_pk`) ON DELETE SET NULL,
-`blocked` INTEGER(1) DEFAULT(0) CHECK (`blocked` IN (0, 1)),
-`expire` TIMESTAMP(11) NULL DEFAULT NULL
-);
-CREATE UNIQUE INDEX `site_rfid_tags_UNIQUE` ON `rfid_tags` (`site`,`idtag` COLLATE NOCASE);
 /* TRANSACTIONS */
 CREATE TABLE IF NOT EXISTS `transactions` (
 `t_pk` INTEGER PRIMARY KEY NOT NULL,
