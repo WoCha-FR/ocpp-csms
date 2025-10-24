@@ -44,9 +44,9 @@
             <% if(rfids.length> 0) { %>
               <% rfids.forEach(function(rfid) { %>
               <tr>
-                <td><%= rfid.s_name %></td>
+                <td><%- rfid.s_name ? rfid.s_name : texts.ALL %></td>
                 <td><%= rfid.idtag %></td>
-                <td><%= rfid.rfname %></td>
+                <td><%= rfid.rf_name %></td>
                 <% if(rfid.blocked==1) { %>
                 <td data-searchable="false"><span class="badge text-bg-danger"><%=texts.REJECTEDF%></span></td>
                 <% } else { %>
@@ -54,7 +54,7 @@
                 <% } %>
                 <td><%= rfid.expire %></td>
                 <td>
-                  <a class="btn btn-sm btn-warning" href="/rfid/edit/<%=rfid.rf_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
+                  <a class="btn btn-sm btn-warning" href="/admin/rfid/edit/<%=rfid.rf_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
                   <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=rfid.rf_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
                 </td>
               </tr>
@@ -68,7 +68,7 @@
         <div id="rfids-tabs-add" class="tab-pane fade" role="tabpanel" aria-labelledby="rfids-tabs-add-tab" tabindex="0">
           <div class="card">
             <div class="card-header"><%=texts.RFID_INFOS%></div>
-            <form method="post" action="/rfid/add">
+            <form method="post" action="/admin/rfid/add">
               <input type="hidden" name="blocked" value="0">
               <input type="hidden" name="expire" value="">
               <div class="card-body">
@@ -93,6 +93,7 @@
                           <% sites.forEach(function(site) { %>
                             <option value="<%=site.s_pk%>"><%=site.s_name%></option>
                           <% }) %>
+                          <option value=""><%=texts.ALL%></option>
                         </select>
                         <label for="rfsiteInput"><%=texts.SITE%></label>
                       </div>
@@ -128,7 +129,7 @@
           <%=texts.CONFIRM_DELETE%>
         </div>
         <div class="modal-footer">
-          <form action="/rfid/delete" method="post" id="ModalFormDelete">
+          <form action="/admin/rfid/delete" method="post" id="ModalFormDelete">
             <input type="hidden" name="elemId" id="ModalFormDeleteId" value="">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               <%=texts.NON%>

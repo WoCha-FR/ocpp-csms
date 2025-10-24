@@ -105,5 +105,6 @@
   "EXPIRE": "Expiration",
   "RFID_INFOS": "RFID card information",
   "CARD_NAME": "Name of the RFID card",
-  "WS_TEXT_ADD": "Use the URL below to configure WS addressing. Use the secure URL if the station supports it."
+  "WS_TEXT_ADD": "Use the URL below to configure WS addressing. Use the secure URL if the station supports it.",
+  "ALL": "All"
 }

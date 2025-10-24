@@ -1,0 +1,80 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <%- include('./partials/ocpperrors.ejs') %>
+  <div class="card mb-3">
+    <div class="card-header fs-5 fw-bold"><%=texts.RFID_INFOS%></div>
+    <form method="post" action="">
+      <input type="hidden" name="rfpk" value="<%=rfid.rf_pk%>">
+      <div class="card-body">
+        <div class="row mb-3">
+          <!-- Ligne 1 - Colonne 1 -->
+          <div class="col-sm-4">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
+              <div class="form-floating">
+                <input class="form-control" type="text" name="rftag" value="<%=rfid.idtag%>" id="rftagInput" placeholder="" maxlength="20" required>
+                <label for="rftagInput"><%=texts.IDTAG%></label>
+              </div>
+            </div>
+          </div>
+          <!-- Ligne 1 - Colonne 2 -->
+          <div class="col-sm-4">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-geo-fill"></i></span>
+              <div class="form-floating">
+                <select class="form-select" name="rfsite" id="rfsiteInput">
+                <% sites.forEach(function(site) { %>
+                  <option value="<%=site.s_pk%>"<% if(rfid.site==site.s_pk) { %> selected<% } %>><%=site.s_name%></option>
+                <% }) %>
+                  <option value=""<% if(!rfid.site) { %> selected<% } %>><%=texts.ALL%></option>
+                </select>
+                <label for="rfsiteInput"><%=texts.SITE%></label>
+              </div>
+            </div>
+          </div>
+          <!-- Ligne 1 - Colonne 3 -->
+          <div class="col-sm-4">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-info-lg"></i></span>
+              <div class="form-floating">
+                <input class="form-control" type="text" name="rfname" value="<%=rfid.rf_name%>" id="rfnameInput" placeholder="" maxlength="50" required>
+                <label for="rfnameInput"><%=texts.CARD_NAME%></label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-gear"></i></span>
+                <input type="radio" class="btn-check" name="rfblock" id="rfActive"<% if(!rfid.blocked) { %> checked<% } %>>
+                <label class="btn btn-outline-success form-control" for="rfActive"><%=texts.ACCEPTEDF%></label>
+                <input type="radio" class="btn-check" name="rfblock" id="rfInactive"<% if(rfid.blocked) { %> checked<% } %>>
+                <label class="btn btn-outline-danger form-control" for="rfInactive"><%=texts.REJECTEDF%></label>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="input-group date">
+              <span class="input-group-append">
+                <span class="input-group-text bg-light d-block">
+                  <i class="bi bi-gear"></i>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a class="btn btn-primary" role="button" href="/admin/rfids"><%=texts.BACK%></a>
+        <button class="btn btn-primary" type="submit"><%=texts.SAVE%></button>
+      </div>
+    </form>
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script>
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+  });
+</script>
+<%- include('./partials/footer.ejs') %>
