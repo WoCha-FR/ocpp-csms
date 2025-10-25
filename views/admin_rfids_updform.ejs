@@ -3,7 +3,7 @@
   <%- include('./partials/ocpperrors.ejs') %>
   <div class="card mb-3">
     <div class="card-header fs-5 fw-bold"><%=texts.RFID_INFOS%></div>
-    <form method="post" action="">
+    <form method="post" action="/admin/rfid/edit">
       <input type="hidden" name="rfpk" value="<%=rfid.rf_pk%>">
       <div class="card-body">
         <div class="row mb-3">
@@ -45,21 +45,36 @@
         </div>
         <div class="row">
           <div class="col-sm-4">
-            <div class="input-group">
+            <div class="input-group pt-2">
               <span class="input-group-text"><i class="bi bi-gear"></i></span>
-                <input type="radio" class="btn-check" name="rfblock" id="rfActive"<% if(!rfid.blocked) { %> checked<% } %>>
-                <label class="btn btn-outline-success form-control" for="rfActive"><%=texts.ACCEPTEDF%></label>
-                <input type="radio" class="btn-check" name="rfblock" id="rfInactive"<% if(rfid.blocked) { %> checked<% } %>>
-                <label class="btn btn-outline-danger form-control" for="rfInactive"><%=texts.REJECTEDF%></label>
+              <input type="radio" class="btn-check" name="rfblocked" value="0" id="rfActive"<% if(!rfid.blocked) { %> checked<% } %>>
+              <label class="btn btn-outline-success form-control" for="rfActive"><%=texts.ACCEPTEDF%></label>
+              <input type="radio" class="btn-check" name="rfblocked" value="1" id="rfInactive"<% if(rfid.blocked) { %> checked<% } %>>
+              <label class="btn btn-outline-danger form-control" for="rfInactive"><%=texts.REJECTEDF%></label>
             </div>
           </div>
           <div class="col-sm-4">
-            <div class="input-group date">
-              <span class="input-group-append">
-                <span class="input-group-text bg-light d-block">
-                  <i class="bi bi-gear"></i>
-                </span>
-              </span>
+            <div class="input-group flatpickr">
+              <span class="input-group-text"><i class="bi bi-hourglass-split"></i></span>
+              <div class="form-floating">
+                <input class="form-control" type="text" name="rfexpire" readonly="readonly" id="rfdateInput" data-input>
+                <label for="rfdateInput"><%=texts.EXPIRE%></label>
+              </div>
+              <span class="input-group-text" data-clear><i class="bi bi-calendar2-x"></i></span>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <div class="form-floating">
+                <select class="form-select" name="rfuser" id="rfuserInput">
+                  <%users.forEach(function(user) { %>
+                  <option value="<%=user.user_pk%>" <% if(rfid.user==user.user_pk) { %> selected<% } %>><%=user.usermail%> (<%=user.name%>)</option>
+                  <% }) %>
+                  <option value="" <% if(!rfid.user) { %> selected<% } %>><%=texts.NONAFFECTE%></option>
+                </select>
+                <label for="rfuserInput"><%=texts.USER%></label>
+              </div>
             </div>
           </div>
         </div>
@@ -77,4 +92,28 @@
     $('#inputErrors').delay(5000).fadeOut('slow');
   });
 </script>
+<script src="/js/flatpickr.min.js"></script>
+<% if (texts.LANG == 'fr') { %>
+<script src="/js/flatpickr-fr.min.js"></script>
+<script>flatpickr.localize(flatpickr.l10ns.fr);</script>
+<% } %>
+<script>
+  let expire = '<%-rfid.expire%>';
+  const elem = document.querySelector('div[class="input-group flatpickr"]');
+  const picker = flatpickr(elem, {
+    minDate: new Date().fp_incr(1),
+    maxDate: new Date().fp_incr(366),
+    altInput: true,
+    altFormat: "l, d F Y G:i K",
+    dateFormat: "U",
+    enableTime: true,
+    defaultDate: expire,
+    wrap: true
+  });
+</script>
+<% if (texts.LANG=='fr') { %>
+<script>
+  picker.set("altFormat", "l d F Y H:i");
+</script>
+<% } %>
 <%- include('./partials/footer.ejs') %>

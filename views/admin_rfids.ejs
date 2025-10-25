@@ -36,7 +36,7 @@
                 <th data-sortable="true" data-field="idtag"><%=texts.IDTAG%></th>
                 <th data-sortable="true" data-field="rf_name"><%=texts.CARD_NAME%></th>
                 <th data-sortable="true" data-field="blocked"><%=texts.STATE%></th>
-                <th data-sortable="true" data-field="expire"><%=texts.EXPIRE%></th>
+                <th data-sortable="true" data-field="expire" data-formatter="tsFormatter"><%=texts.EXPIRE%></th>
                 <th></th>
               </tr>
             </thead>
@@ -69,8 +69,7 @@
           <div class="card">
             <div class="card-header"><%=texts.RFID_INFOS%></div>
             <form method="post" action="/admin/rfid/add">
-              <input type="hidden" name="blocked" value="0">
-              <input type="hidden" name="expire" value="">
+              <input type="hidden" name="rfblocked" value="0">
               <div class="card-body">
                 <!-- FORMULAIRE Ligne 1 -->
                 <div class="row">
@@ -146,19 +145,25 @@
 </main>
 <%- include('./partials/footerjs.ejs') %>
 <script>
-    $(document).ready(function () {
-      $('#inputErrors').delay(5000).fadeOut('slow');
-      $('#rfidstable').removeClass('table-bordered');
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+    $('#rfidstable').removeClass('table-bordered');
 
-      $('.btn-delete-elem').click(function (e) {
-        e.preventDefault();
-        var id = $(this).attr('data-form-elemid');
-        $('#ModalFormDeleteId').attr('value', id)
-      });
-
-      $('#deleteMod').on('hidden.bs.modal', function (e) {
-        $('#ModalFormDeleteId').attr('value', '');
-      });
+    $('.btn-delete-elem').click(function (e) {
+      e.preventDefault();
+      var id = $(this).attr('data-form-elemid');
+      $('#ModalFormDeleteId').attr('value', id)
     });
+
+    $('#deleteMod').on('hidden.bs.modal', function (e) {
+      $('#ModalFormDeleteId').attr('value', '');
+    });
+  });
+  function tsFormatter(value) {
+    if (value) {
+      let jsdate = new Date(value * 1000)
+      return jsdate.toLocaleString()
+    }
+  }
 </script>
 <%- include('./partials/footer.ejs') %>

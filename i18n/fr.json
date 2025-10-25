@@ -68,7 +68,7 @@
   "USERMAIL_INFOS": "Adresse e-mail valide",
   "USERNAME_INFOS": "Minimum 5 charactères alphanumériques",
   "USERPASS_INFOS": "Minimum 8 charactères, dont au moins une minuscule, une majuscule, un chiffre et un charactère spécial",
-  "PARAMSOCPP_DETAILS": "TEXTE A DEFINIR",
+  "PARAMSOCPP_DETAILS": "TEXTE A DEFINIR: PARAMSOCPP_DETAILS",
   "ENABLED": "Activé",
   "YES": "Oui",
   "NON": "Non",
@@ -106,5 +106,6 @@
   "RFID_INFOS": "Informations de la carte RFID",
   "CARD_NAME": "Nom de la carte RFID",
   "WS_TEXT_ADD": "Utilisez l'URL ci-dessous pour configurer l'adressage WS. Utilisez l’URL sécurisée si la station la prend en charge.",
-  "ALL": "Tous"
+  "ALL": "Tous",
+  "NONAFFECTE": "Non affecté"
 }
