@@ -3,12 +3,11 @@
   <%- include('./partials/ocpperrors.ejs') %>
   <div class="card mb-3">
     <div class="card-header fs-5 fw-bold"><%=texts.RFID_INFOS%></div>
-    <form method="post" action="/admin/rfid/edit">
+    <form method="post" action="/site/rfid/edit">
       <input type="hidden" name="rfpk" value="<%=rfid.rf_pk%>">
       <div class="card-body">
         <div class="row mb-3">
-          <!-- Ligne 1 - Colonne 1 -->
-          <div class="col-sm-4">
+          <div class="col-sm-6">
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-credit-card"></i></span>
               <div class="form-floating">
@@ -17,23 +16,7 @@
               </div>
             </div>
           </div>
-          <!-- Ligne 1 - Colonne 2 -->
-          <div class="col-sm-4">
-            <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-geo-fill"></i></span>
-              <div class="form-floating">
-                <select class="form-select" name="rfsite" id="rfsiteInput">
-                <% sites.forEach(function(site) { %>
-                  <option value="<%=site.s_pk%>"<% if(rfid.site==site.s_pk) { %> selected<% } %>><%=site.s_name%></option>
-                <% }) %>
-                  <option value=""<% if(!rfid.site) { %> selected<% } %>><%=texts.ALL%></option>
-                </select>
-                <label for="rfsiteInput"><%=texts.SITE%></label>
-              </div>
-            </div>
-          </div>
-          <!-- Ligne 1 - Colonne 3 -->
-          <div class="col-sm-4">
+          <div class="col-sm-6">
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-info-lg"></i></span>
               <div class="form-floating">
@@ -68,10 +51,10 @@
               <span class="input-group-text"><i class="bi bi-person"></i></span>
               <div class="form-floating">
                 <select class="form-select" name="rfuser" id="rfuserInput">
-                  <%users.forEach(function(user) { %>
-                  <option value="<%=user.user_pk%>" <% if(rfid.user==user.user_pk) { %> selected<% } %>><%=user.usermail%> (<%=user.name%>)</option>
-                  <% }) %>
                   <option value=""<% if(!rfid.user) { %> selected<% } %>><%=texts.NONAFFECTE%></option>
+                  <%users.forEach(function(user) { %>
+                  <option value="<%=user.upk%>"<% if(rfid.user==user.user_pk) { %> selected<% } %>><%=user.uname%> (<%=user.usermail%>)</option>
+                  <% }) %>
                 </select>
                 <label for="rfuserInput"><%=texts.USER%></label>
               </div>
@@ -80,7 +63,7 @@
         </div>
       </div>
       <div class="card-footer">
-        <a class="btn btn-primary" role="button" href="/admin/rfids"><%=texts.BACK%></a>
+        <a class="btn btn-primary" role="button" href="/site/rfids"><%=texts.BACK%></a>
         <button class="btn btn-primary" type="submit"><%=texts.SAVE%></button>
       </div>
     </form>
@@ -93,7 +76,7 @@
   });
 </script>
 <script src="/js/flatpickr.min.js"></script>
-<% if (texts.LANG == 'fr') { %>
+<% if (texts.LANG=='fr' ) { %>
 <script src="/js/flatpickr-fr.min.js"></script>
 <script>flatpickr.localize(flatpickr.l10ns.fr);</script>
 <% } %>
@@ -111,7 +94,7 @@
     wrap: true
   });
 </script>
-<% if (texts.LANG=='fr') { %>
+<% if (texts.LANG=='fr' ) { %>
 <script>
   picker.set("altFormat", "l d F Y H:i");
 </script>
