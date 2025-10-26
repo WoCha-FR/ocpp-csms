@@ -7,7 +7,7 @@
       <h6 class="card-subtitle mb-2 text-body-secondary"><%=texts.PARAMSOCPP_DETAILS%></h6>
       <div class="card">
         <div class="card-body">
-          <table id="defaultconf" class="table table-striped" data-toggle="table" data-mobile-responsive="true" data-checkbox-header="false" data-url="/configocpp" data-method="post">
+          <table id="defaultconf" class="table table-striped" data-toggle="table" data-mobile-responsive="true" data-checkbox-header="false" data-url="/admin/ocppdefault" data-method="post">
             <thead>
               <tr>
                 <th data-field="enabled" data-checkbox="true"><%=texts.ENABLED%></th>
@@ -22,7 +22,7 @@
     </div>
     <div class="card-footer">
       <!-- FORM INVISIBLE -->
-      <form action="/configocpp/update" class="form-inline invisible" method="post" id="CfgChange">
+      <form action="/admin/ocppdefault/edit" class="form-inline invisible" method="post" id="CfgChange">
         <input type="text" name="newcfg_pk" value="">
         <input type="text" name="newvalue" value="">
         <input type="text" name="newenabled" value="">
@@ -74,6 +74,7 @@
       '<i class="bi bi-floppy"></i></a>'
     ].join('')
   }
+
   window.operateEvents = {
     'click .ocppsave': function (e, value, row, index) {
       const form = document.getElementById('CfgChange');
