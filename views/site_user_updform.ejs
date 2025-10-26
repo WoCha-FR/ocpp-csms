@@ -1,0 +1,44 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <%- include('./partials/ocpperrors.ejs') %>
+  <div class="card">
+    <div class="card-header fs-5 fw-bold"><%=texts.USER_INFOS%></div>
+    <form method="post" action="/site/user/edit/">
+      <input type="hidden" name="pk" value="<%=user.pk%>">
+      <div class="card-body">
+        <div class="row mb-3">
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
+              <div class="form-floating">
+                <input class="form-control" type="email" value="<%=user.usermail%>" name="usermail" id="usermailInput" aria-describedby="usermailHelpBlock" placeholder="" disabled>
+                <label for="usermailInput"><%=texts.EMAIL_ADDR%></label>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person-vcard"></i></span>
+              <div class="form-floating">
+                <input class="form-control" type="text" value="<%=user.uname%>" name="uname" id="unameInput" aria-describedby="unameHelpBlock" placeholder="" required>
+                <label for="unameInput"><%=texts.USER%></label>
+              </div>
+            </div>
+            <div id="unameHelpBlock" class="form-text"><%=texts.USERNOM_INFOS%></div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a class="btn btn-primary" role="button" href="/site/users"><%=texts.BACK%></a>
+        <button class="btn btn-primary" type="submit"><%=texts.SAVE%></button>
+      </div>
+    </form>
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script>
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+  });
+</script>
+<%- include('./partials/footer.ejs') %>

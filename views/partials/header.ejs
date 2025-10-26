@@ -55,14 +55,9 @@
             <li class="nav-item">
               <a class="nav-link<%=typeof onRfids !== 'undefined' ? ' active' : '' %>" href="/rfids"><%=texts.RFID_CARDS%></a>
             </li>
-            <% if (userInfo.isAdmin==1) { %>
+            <% if (userInfo.isAdmin==1 || userInfo.ownedSite) { %>
             <li class="nav-item">
-              <a class="nav-link<%=typeof onUsers !== 'undefined' ? ' active' : '' %>" href="/admin/users"><%=texts.USERS%></a>
-            </li>
-            <% } %>
-            <% if (userInfo.ownedSite) { %>
-            <li class="nav-item">
-              <a class="nav-link<%=typeof onUsers !== 'undefined' ? ' active' : '' %>" href="/admin/users"><%=texts.USERS%></a>
+              <a class="nav-link<%=typeof onUsers !== 'undefined' ? ' active' : '' %>" href="/users"><%=texts.USERS%></a>
             </li>
             <% } %>
             <li class="nav-item dropdown">

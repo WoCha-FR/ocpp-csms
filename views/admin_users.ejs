@@ -53,7 +53,7 @@
                     <% } %>
                   </td>
                   <td>
-                    <a class="btn btn-sm btn-warning" href="/admin/users/edit/<%=user.user_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
+                    <a class="btn btn-sm btn-warning" href="/admin/user/edit/<%=user.user_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
                     <% if ((user.isAdmin && nbAdmin> 1) || !user.isAdmin) { %>
                     <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=user.user_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
                     <% } %>
@@ -70,7 +70,7 @@
         <div class="tab-pane fade" id="users-tabs-add" role="tabpanel" aria-labelledby="users-tabs-add-tab" tabindex="0">
           <div class="card">
             <div class="card-header"><%=texts.USER_INFOS%></div>
-            <form method="post" action="/admin/users/add">
+            <form method="post" action="/admin/user/add">
               <div class="card-body">
                 <!-- FORMULAIRE -->
                 <div class="row mb-3">
@@ -128,9 +128,7 @@
                 <!-- FORMULAIRE -->
               </div>
               <div class="card-footer">
-                <button class="btn btn-primary" type="submit">
-                  <%=texts.ADD%>
-                </button>
+                <button class="btn btn-primary" type="submit"><%=texts.ADD%></button>
               </div>
             </form>
           </div>
@@ -148,7 +146,7 @@
       <div class="modal-content">
         <div class="modal-body"><%=texts.CONFIRM_DELETE%></div>
         <div class="modal-footer">
-          <form action="/admin/users/delete" method="post" id="ModalFormDelete">
+          <form action="/admin/user/delete" method="post" id="ModalFormDelete">
             <input type="hidden" name="elemId" id="ModalFormDeleteId" value="">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><%=texts.NON%></button>
             <button type="submit" class="btn btn-danger"><%=texts.YES%></button>

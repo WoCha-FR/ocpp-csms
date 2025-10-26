@@ -1,0 +1,135 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <%- include('./partials/ocpperrors.ejs') %>
+  <div class="card">
+    <!-- CARD HEADER-->
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs" id="users-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" id="users-tabs-list-tab" data-bs-target="#users-tabs-list"
+            aria-controls="users-tabs-list" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">
+            <%=texts.USERS%>
+          </a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="users-tabs-add-tab" data-bs-target="#users-tabs-add" aria-controls="users-tabs-add"
+            data-bs-toggle="tab" type="button" role="tab" aria-selected="false">
+            <%=texts.ADD%>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <!-- CARD HEADER-->
+    <!-- CARD BODY -->
+    <div class="card-body">
+      <!-- TABS CONTENT -->
+      <div id="users-tabs-conteneur" class="tab-content">
+        <!-- ALL USERS TAB -->
+        <div id="users-tabs-list" class="tab-pane fade active show" role="tabpanel" aria-labelledby="users-tabs-list-tab">
+          <div class="card p-3">
+            <table id="users-table" class="table table-hover table-striped" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
+              <thead>
+                <tr>
+                  <th data-sortable="true" data-field="name"><%=texts.NOM%></th>
+                  <th data-sortable="true" data-field="usermail"><%=texts.EMAIL_ADDR%></th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% siteusers.forEach(function(siteuser) { %>
+                <tr>
+                  <td><%=siteuser.uname%></td>
+                  <td><%=siteuser.usermail%></td>
+                  <td>
+                    <a class="btn btn-sm btn-warning" href="/site/user/edit/<%=siteuser.pk%>" title="Update"><i class="bi bi-pencil"></i></a>
+                    <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=siteuser.pk%>" data-bs-toggle="modal"
+                      data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
+                  </td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- ALL USERS TAB -->
+      <!-- ADD USER TAB -->
+      <div class="tab-pane fade" id="users-tabs-add" role="tabpanel" aria-labelledby="users-tabs-add-tab" tabindex="0">
+        <div class="card">
+          <div class="card-header"><%=texts.USER_INFOS%></div>
+          <form method="post" action="/site/user/add">
+            <div class="card-body">
+              <div class="row mb-3">
+                <div class="col-sm-6">
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
+                    <div class="form-floating">
+                      <input class="form-control" type="email" name="usermail" id="usermailInput" aria-describedby="usermailHelpBlock" placeholder="" required>
+                      <label for="usermailInput"><%=texts.EMAIL_ADDR%></label>
+                    </div>
+                  </div>
+                  <div id="usermailHelpBlock" class="form-text"><%=texts.USERMAIL_INFOS%></div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-person-vcard"></i></span>
+                    <div class="form-floating">
+                      <input class="form-control" type="text" name="uname" id="unameInput" aria-describedby="unameHelpBlock"
+                        placeholder="" required>
+                      <label for="unameInput"><%=texts.USER%></label>
+                    </div>
+                  </div>
+                  <div id="unameHelpBlock" class="form-text"><%=texts.USERNOM_INFOS%></div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-primary" type="submit"><%=texts.ADD%></button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- ADD USER TAB -->
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="deleteMod" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <%=texts.CONFIRM_DELETE%>
+        </div>
+        <div class="modal-footer">
+          <form action="/site/user/delete" method="post" id="ModalFormDelete">
+            <input type="hidden" name="elemId" id="ModalFormDeleteId" value="">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <%=texts.NON%>
+            </button>
+            <button type="submit" class="btn btn-danger">
+              <%=texts.YES%>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script>
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+
+    $('.btn-delete-elem').click(function (e) {
+      e.preventDefault();
+      var id = $(this).attr('data-form-elemid');
+      $('#ModalFormDeleteId').attr('value', id)
+    });
+
+    $('#deleteMod').on('hidden.bs.modal', function (e) {
+      $('#ModalFormDeleteId').attr('value', '');
+    });
+  });
+</script>
+<%- include('./partials/footer.ejs') %>
