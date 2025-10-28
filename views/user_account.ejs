@@ -1,0 +1,80 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <%- include('./partials/ocpperrors.ejs') %>
+  <div class="card">
+    <div class="card-header fs-5 fw-bold"><%=userInfo.usermail%></div>
+    <form method="post" action="/compte">
+      <div class="card-body">
+        <div class="row justify-content-start mb-2">
+          <div class="col-sm-5">
+            <label for="unameInput" class="form-label fw-bold"><%=texts.USER%></label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input class="form-control" type="text" name="uname" value="<%=userInfo.name%>" id="unameInput"
+                aria-describedby="unameHelpBlock" required>
+            </div>
+            <div id="unameHelpBlock" class="form-text"><%=texts.USERNAME_INFOS%></div>
+          </div>
+        </div>
+        <div class="row justify-content-start mb-2">
+          <div class="col-sm-5">
+            <label for="upassInput1" class="form-label fw-bold"><%=texts.NEWPASSWORD%></label>
+            <div class="input-group" id="show_hide_password1">
+              <span class="input-group-text"><i class="bi bi-key"></i></span>
+              <input class="form-control" type="password" name="password" id="upassInput1" aria-describedby="upassHelpBlock"
+                placeholder="">
+              <span class="input-group-text"><a href="" class="nav-link"><i class="bi bi-eye-slash"></i></a></span>
+            </div>
+            <div id="upassHelpBlock" class="form-text"><%=texts.USERPASS_INFOS%></div>
+          </div>
+        </div>
+        <div class="row justify-content-start">
+          <div class="col-sm-5">
+            <label for="upassInput2" class="form-label fw-bold"><%=texts.CONFIRMPASSWORD%></label>
+            <div class="input-group" id="show_hide_password2">
+              <span class="input-group-text"><i class="bi bi-key"></i></span>
+              <input class="form-control" type="password" name="password2" id="upassInput2" placeholder="">
+              <span class="input-group-text"><a href="" class="nav-link"><i class="bi bi-eye-slash"></i></a></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-primary" type="submit"><%=texts.SAVE%></button>
+      </div>
+    </form>
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script>
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+
+    $("#show_hide_password1 a").on('click', function (event) {
+      event.preventDefault();
+      if ($('#show_hide_password1 input').attr("type") == "text") {
+        $('#show_hide_password1 input').attr('type', 'password');
+        $('#show_hide_password1 i').addClass("bi-eye-slash");
+        $('#show_hide_password1 i').removeClass("bi-eye");
+      } else {
+        $('#show_hide_password1 input').attr('type', 'text');
+        $('#show_hide_password1 i').removeClass("bi-eye-slash");
+        $('#show_hide_password1 i').addClass("bi-eye");
+      }
+    });
+
+    $("#show_hide_password2 a").on('click', function (event) {
+      event.preventDefault();
+      if ($('#show_hide_password2 input').attr("type") == "text") {
+        $('#show_hide_password2 input').attr('type', 'password');
+        $('#show_hide_password2 i').addClass("bi-eye-slash");
+        $('#show_hide_password2 i').removeClass("bi-eye");
+      } else {
+        $('#show_hide_password2 input').attr('type', 'text');
+        $('#show_hide_password2 i').removeClass("bi-eye-slash");
+        $('#show_hide_password2 i').addClass("bi-eye");
+      }
+    });
+  });
+</script>
+<%- include('./partials/footer.ejs') %>

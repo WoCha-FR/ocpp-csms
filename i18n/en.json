@@ -107,5 +107,8 @@
   "CARD_NAME": "Name of the RFID card",
   "WS_TEXT_ADD": "Use the URL below to configure WS addressing. Use the secure URL if the station supports it.",
   "ALL": "All",
-  "NONAFFECTE": "Unallocated"
+  "NONAFFECTE": "Unallocated",
+  "NBSITEOK": "Number of authorised sites",
+  "NEWPASSWORD": "New password",
+  "CONFIRMPASSWORD": "Confirm new password"
 }
