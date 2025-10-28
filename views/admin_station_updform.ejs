@@ -3,7 +3,7 @@
   <%- include('./partials/ocpperrors.ejs') %>
   <div class="card mb-3">
     <div class="card-header fs-5 fw-bold"><%=texts.STATION_INFOS%></div>
-    <form method="post" action="/station/edit">
+    <form method="post" action="/admin/station/edit">
       <input type="hidden" name="cbpk" value="<%=charger.cb_pk%>">
       <div class="card-body">
         <!-- FORMULAIRE -->
@@ -69,7 +69,7 @@
         <!-- FORMULAIRE -->
       </div>
       <div class="card-footer">
-        <a class="btn btn-primary" role="button" href="/adminstations"><%=texts.BACK%></a>
+        <a class="btn btn-primary" role="button" href="/admin/stations"><%=texts.BACK%></a>
         <button class="btn btn-primary" type="submit"><%=texts.SAVE%></button>
       </div>
     </form>

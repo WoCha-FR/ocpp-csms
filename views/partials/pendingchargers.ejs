@@ -2,44 +2,28 @@
     <%=texts.PENDING_CHARGERS%>
   </h5>
   <div class="card-body table-responsive p-0">
-    <table class="table table-striped table-valign-middle">
+    <table class="table table-sm table-striped align-middle">
       <thead>
         <tr>
-          <th>
-            <%=texts.OCPP_ID%>
-          </th>
-          <th>
-            <%=texts.NB_ATTEMPT%>
-          </th>
-          <th>
-            <%=texts.LAST_ATTEMPT%>
-          </th>
-          <th>
-            <%=texts.ACTIONS%>
-          </th>
+          <th><%=texts.OCPP_ID%></th>
+          <th><%=texts.NB_ATTEMPT%></th>
+          <th><%=texts.LAST_ATTEMPT%></th>
+          <th><%=texts.ACTIONS%></th>
         </tr>
       </thead>
       <tbody>
         <% pendings.forEach(function(pending) { %>
           <tr>
-            <td>
-              <%= pending.id %>
-            </td>
-            <td>
-              <%= pending.try %>
-            </td>
+            <td><%= pending.id %></td>
+            <td><%= pending.try %></td>
             <td>
               <% let date=new Date(pending.last * 1000) %>
-                <%= date.toLocaleDateString() %>&nbsp;<%= date.toLocaleTimeString() %>
+              <%= date.toLocaleDateString() %>&nbsp;<%= date.toLocaleTimeString() %>
             </td>
             <td>
-              <form class="form-inline" action="/station/<%= pending.id %>/register" method="post">
-                <button type="submit" name="action" value="Accepted" class="btn btn-success btn-sm">
-                  <%=texts.ACCEPT%>
-                </button>
-                <button type="submit" name="action" value="Rejected" class="btn btn-danger btn-sm">
-                  <%=texts.REJECT%>
-                </button>
+              <form class="form-inline" action="/registerPending/<%= pending.id %>" method="post">
+                <button type="submit" name="action" value="Accepted" class="btn btn-success btn-sm"><%=texts.ACCEPT%></button>
+                <button type="submit" name="action" value="Rejected" class="btn btn-danger btn-sm"><%=texts.REJECT%></button>
               </form>
             </td>
           </tr>

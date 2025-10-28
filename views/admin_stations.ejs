@@ -12,15 +12,11 @@
       <ul class="nav nav-tabs card-header-tabs" id="stations-tabs" role="tablist">
         <li class="nav-item" role="presentation">
           <a class="nav-link active" id="stations-tabs-list-tab" data-bs-target="#stations-tabs-list"
-            aria-controls="stations-tabs-list" data-bs-toggle="tab" type="button" role="tab" aria-selected="true">
-            <%=texts.STATIONS%>
-          </a>
+            aria-controls="stations-tabs-list" data-bs-toggle="tab" type="button" role="tab" aria-selected="true"><%=texts.STATIONS%></a>
         </li>
         <li class="nav-item" role="presentation">
           <a class="nav-link" id="stations-tabs-add-tab" data-bs-target="#stations-tabs-add"
-            aria-controls="stations-tabs-add" data-bs-toggle="tab" type="button" role="tab" aria-selected="false">
-            <%=texts.ADD%>
-          </a>
+            aria-controls="stations-tabs-add" data-bs-toggle="tab" type="button" role="tab" aria-selected="false"><%=texts.ADD%></a>
         </li>
       </ul>
     </div>
@@ -46,34 +42,36 @@
                 </tr>
               </thead>
               <tbody>
-              <% if(stations.length> 0) { %>
-                <% stations.forEach(function(station) { %>
-                <tr>
-                  <td style="cursor: pointer;"><%= station.s_name %></td>
-                  <td style="cursor: pointer;"><%= station.cb_name %></td>
-                  <td style="cursor: pointer;"><%= station.cb_id %></td>
-                  <% if(station.registration_status=='Rejected' ) { %>
-                  <td data-searchable="false"><span class="badge text-bg-danger"><%=texts.REJECTEDF%></span></td>
-                  <% } else if(station.registration_status=='Pending' ) { %>
-                  <td data-searchable="false"><span class="badge text-bg-warning"><%=texts.PENDING%></span></td>
-                  <% } else { %>
-                  <td data-searchable="false"><span class="badge text-bg-success"><%=texts.ACCEPTEDF%></span></td>
-                  <% } %>
+              <% stations.forEach(function(station) { %>
+              <tr>
+                <td style="cursor: pointer;"><%- station.s_name ? station.s_name : texts.NONAFFECTE %></td>
+                <td style="cursor: pointer;"><%= station.cb_name %></td>
+                <td style="cursor: pointer;"><%= station.cb_id %></td>
+                <% if(station.registration_status=='Rejected' ) { %>
+                <td data-searchable="false"><span class="badge text-bg-danger"><%=texts.REJECTEDF%></span></td>
+                <% } else if(station.registration_status=='Pending' ) { %>
+                <td data-searchable="false"><span class="badge text-bg-warning"><%=texts.PENDING%></span></td>
+                <% } else { %>
+                <td data-searchable="false"><span class="badge text-bg-success"><%=texts.ACCEPTEDF%></span></td>
+                <% } %>
+                <td data-searchable="false" id="online<%=station.cb_pk%>">
                   <% if(station.online==1) { %>
-                  <td data-searchable="false"><span class="badge text-bg-success"><%=texts.ONLINE%></span></td>
+                  <span class="badge text-bg-success"><%=texts.ONLINE%></span>
                   <% } else if(station.online==0) { %>
-                  <td data-searchable="false"><span class="badge text-bg-danger"><%=texts.OFFLINE%></span></td>
+                  <span class="badge text-bg-danger"><%=texts.OFFLINE%></span>
                   <% } else { %>
-                  <td data-searchable="false"><span class="badge text-bg-warning"><%=texts.PENDING%></span></td>
+                  <span class="badge text-bg-warning"><%=texts.PENDING%></span>
                   <% } %>
-                  <td>
-                    <a class="btn btn-sm btn-warning" href="/station/edit/<%=station.cb_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
-                    <a class="btn btn-sm btn-primary" href="/station/<%=station.cb_id%>/diagnostic" title="Diagnostics"><i class="bi bi-heart-pulse"></i></a>
-                    <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=station.cb_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
-                  </td>
-                </tr>
-                <% }); %>
-              <% } %>
+                </td>
+                <td>
+                  <a class="btn btn-sm btn-warning" href="/admin/station/edit/<%=station.cb_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
+                  <% if(station.online==1) { %>
+                  <a class="btn btn-sm btn-primary" href="/admin/station/<%=station.cb_id%>/diagnostic" id="diag<%=station.cb_pk%>" title="Diagnostics"><i class="bi bi-heart-pulse"></i></a>
+                  <% } %>
+                  <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=station.cb_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
+                </td>
+              </tr>
+              <% }); %>
               </tbody>
             </table>
           </div>
@@ -83,7 +81,7 @@
         <div id="stations-tabs-add" class="tab-pane fade" role="tabpanel" aria-labelledby="stations-tabs-add-tab" tabindex="0">
           <div class="card">
             <div class="card-header"><%=texts.STATION_INFOS%></div>
-            <form method="post" action="/stations/add">
+            <form method="post" action="/admin/station/add">
               <input type="hidden" name="regstatus" value="Accepted">
               <div class="card-body">
                 <!-- FORMULAIRE -->
@@ -159,18 +157,12 @@
   <div class="modal fade" id="deleteMod" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-body">
-          <%=texts.CONFIRM_DELETE%>
-        </div>
+        <div class="modal-body"><%=texts.CONFIRM_DELETE%></div>
         <div class="modal-footer">
-          <form action="/station/delete" method="post" id="ModalFormDelete">
-            <input type="hidden" name="chargerId" id="ModalFormDeleteId" value="">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-              <%=texts.NON%>
-            </button>
-            <button type="submit" class="btn btn-danger">
-              <%=texts.YES%>
-            </button>
+          <form action="/admin/station/delete" method="post" id="ModalFormDelete">
+            <input type="hidden" name="elemId" id="ModalFormDeleteId" value="">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><%=texts.NON%></button>
+            <button type="submit" class="btn btn-danger"><%=texts.YES%></button>
           </form>
         </div>
       </div>
@@ -205,7 +197,34 @@
   $('#inputcbid').on('input', function(e){
     $('#ocppWs').html('ws://' + $('#ocppWs').attr('data-value') + '/' + $('#inputcbid').val());
   });
-  // Refresh Stations
-  // TODO : Ajax refresh function
+  // Refresh Stations Online Status
+  var interval = setInterval(reloadConnStatus, 2500);
+  function reloadConnStatus() {
+    $.ajax({
+      url: '/ajax/stations_status',
+      type: 'POST',
+      dataType: 'json',
+      success: function (result) {
+        for (const elem of result.data) {
+          var online = '#online' + elem.cb_pk
+          var diag = '#diag' + elem.cb_pk
+          if (elem.online == 1) {
+            $(online).html('<span class="badge text-bg-success"><%=texts.ONLINE%></span>')
+            $(diag).removeClass('d-none')
+          } else if (elem.online == 0) {
+            $(online).html('<span class="badge text-bg-danger"><%=texts.OFFLINE%></span>')
+            $(diag).addClass('d-none')
+          } else {
+            $(online).html('<span class="badge text-bg-warning"><%=texts.PENDING%></span>')
+            $(diag).addClass('d-none')
+          }
+        }
+      },
+      error: function (jqXHR, textStatus, err) {
+        alert(jqXHR.responseText)
+        clearInterval(interval)
+      }
+    });
+  }
 </script>
 <%- include('./partials/footer.ejs') %>

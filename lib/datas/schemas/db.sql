@@ -135,10 +135,10 @@ INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALU
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('AuthorizeRemoteTxRequests', '', 0, 'b', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('ClockAlignedDataInterval', NULL, 0, 'i', 'SEC');
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('ConnectionTimeOut', NULL, 0, 'i', 'SEC');
-INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('HeartbeatInterval', '21600', 1, 'i', 'SEC');
+INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('HeartbeatInterval', '3600', 1, 'i', 'SEC');
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('LocalAuthorizeOffline', NULL, 0, 'b', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('LocalPreAuthorize', NULL, 0, 'b', NULL);
-INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('MeterValueSampleInterval', NULL, 0, 'i', 'SEC');
+INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('MeterValueSampleInterval', '300', 0, 'i', 'SEC');
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('MeterValuesAlignedData', NULL, 0, 's', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('MeterValuesSampledData', 'Energy.Active.Import.Register', 0, 's', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('ResetRetries', NULL, 0, 'i', 'TIM');

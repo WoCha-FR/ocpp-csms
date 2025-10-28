@@ -45,13 +45,11 @@
               <a class="nav-link<%=typeof onSites !== 'undefined' ? ' active' : '' %>" href="/admin/sites"><%=texts.SITES%></a>
             </li>
             <% } %>
+            <% if (userInfo.isAdmin==1 || userInfo.ownedSite) { %>
             <li class="nav-item">
-              <% if (userInfo.isAdmin == 1) { %>
-              <a class="nav-link<%=typeof onStations !== 'undefined' ? ' active' : '' %>" href="/adminstations"><%=texts.STATIONS%></a>
-              <% } else { %>
-              <a class="nav-link<%=typeof onStations !== 'undefined' ? ' active' : '' %>" href="/userstations"><%=texts.STATIONS%></a>
-              <% } %>
+              <a class="nav-link<%=typeof onStations !== 'undefined' ? ' active' : '' %>" href="/stations"><%=texts.STATIONS%></a>
             </li>
+            <% } %>
             <li class="nav-item">
               <a class="nav-link<%=typeof onRfids !== 'undefined' ? ' active' : '' %>" href="/rfids"><%=texts.RFID_CARDS%></a>
             </li>
@@ -127,7 +125,7 @@
     <div class="m-4">&nbsp;</div>
     <% if (typeof pendings !== 'undefined') { %>
     <!-- Pending Chargers if ADMIN -->
-    <div id="pendingChargers" class="card invisible mx-4">
+    <div id="pendingChargers" class="card mx-1 mb-2 bg-warning text-dark d-none">
       <%- include('./pendingchargers.ejs') %>
     </div>
     <!-- Pending Charger if ADMIN -->

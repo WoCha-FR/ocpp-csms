@@ -41,25 +41,23 @@
               </tr>
             </thead>
             <tbody>
-            <% if(rfids.length> 0) { %>
-              <% rfids.forEach(function(rfid) { %>
-              <tr>
-                <td><%- rfid.s_name ? rfid.s_name : texts.ALL %></td>
-                <td><%= rfid.idtag %></td>
-                <td><%= rfid.rf_name %></td>
-                <% if(rfid.blocked==1) { %>
-                <td data-searchable="false"><span class="badge text-bg-danger"><%=texts.REJECTEDF%></span></td>
-                <% } else { %>
-                <td data-searchable="false"><span class="badge text-bg-success"><%=texts.ACCEPTEDF%></span></td>
-                <% } %>
-                <td><%= rfid.expire %></td>
-                <td>
-                  <a class="btn btn-sm btn-warning" href="/admin/rfid/edit/<%=rfid.rf_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
-                  <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=rfid.rf_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
-                </td>
-              </tr>
-              <% }); %>
-            <% } %>
+            <% rfids.forEach(function(rfid) { %>
+            <tr>
+              <td><%- rfid.s_name ? rfid.s_name : texts.ALL %></td>
+              <td><%= rfid.idtag %></td>
+              <td><%= rfid.rf_name %></td>
+              <% if(rfid.blocked==1) { %>
+              <td data-searchable="false"><span class="badge text-bg-danger"><%=texts.REJECTEDF%></span></td>
+              <% } else { %>
+              <td data-searchable="false"><span class="badge text-bg-success"><%=texts.ACCEPTEDF%></span></td>
+              <% } %>
+              <td><%= rfid.expire %></td>
+              <td>
+                <a class="btn btn-sm btn-warning" href="/admin/rfid/edit/<%=rfid.rf_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
+                <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=rfid.rf_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
+              </td>
+            </tr>
+            <% }); %>
             </tbody>
             </table>
           </div>
