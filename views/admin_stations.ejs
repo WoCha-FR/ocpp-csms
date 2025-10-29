@@ -36,12 +36,14 @@
                   <th data-sortable="true" data-field="s_name"><%=texts.SITE%></th>
                   <th data-sortable="true" data-field="name"><%=texts.NOM%></th>
                   <th data-sortable="true" data-field="ocppid"><%=texts.OCPP_ID%></th>
-                  <th data-sortable="true" data-field="regstatus"><%=texts.OCPP_STATUS%></th>
-                  <th data-sortable="true"><%=texts.ONLINE%></th>
+                  <th data-sortable="true" data-field="registration_status"><%=texts.OCPP_STATUS%></th>
+                  <th data-sortable="true" data-field="online"><%=texts.ONLINE%></th>
+                  <th data-sortable="true" data-field="status"><%=texts.AVAILABILITY%></th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
+              <% if (stations.length> 0) { %>
               <% stations.forEach(function(station) { %>
               <tr>
                 <td style="cursor: pointer;"><%- station.s_name ? station.s_name : texts.NONAFFECTE %></td>
@@ -63,6 +65,17 @@
                   <span class="badge text-bg-warning"><%=texts.PENDING%></span>
                   <% } %>
                 </td>
+                <td data-searchable="false" id="constatus<%=station.cb_pk%>">
+                  <% if(station.status=='Unavailable') { %>
+                  <span class="badge text-bg-warning"><%=texts.INOPERATIVE%></span>
+                  <% } else if(station.status=='Faulted') { %>
+                  <span class="badge text-bg-danger"><%=texts.FAULTY%></span>
+                  <% } else if(station.status=='Available') { %>
+                  <span class="badge text-bg-success"><%=texts.OPERATIVE%></span>
+                  <% } else { %>
+                  <span class="badge text-bg-secondary"><%=texts.PENDING%></span>
+                  <% } %>
+                </td>
                 <td>
                   <a class="btn btn-sm btn-warning" href="/admin/station/edit/<%=station.cb_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
                   <% if(station.online==1) { %>
@@ -72,6 +85,7 @@
                 </td>
               </tr>
               <% }); %>
+              <% } %>
               </tbody>
             </table>
           </div>
@@ -191,7 +205,7 @@
   $('#stationstable').on('click-cell.bs.table', function (e, field, value, row, $element) {
     cellIndex = $element[0].cellIndex;
     if (cellIndex != 5) {
-      window.location.href = '/station/' + row.ocppid;
+      window.location.href = '/charger/' + row.ocppid;
     }
   });
   // Update ocpp identifier in URL
@@ -218,6 +232,16 @@
           } else {
             $(online).html('<span class="badge text-bg-warning"><%=texts.PENDING%></span>')
             $(diag).addClass('d-none')
+          }
+          var constatus = '#constatus' + elem.cb_pk
+          if (elem.status == 'Faulty') {
+            $(constatus).html('<span class="badge text-bg-danger"><%=texts.FAULTY%></span>')
+          } else if (elem.status == 'Unavailable') {
+            $(constatus).html('<span class="badge text-bg-warning"><%=texts.INOPERATIVE%></span>')
+          } else if (elem.status == 'Available') {
+            $(constatus).html('<span class="badge text-bg-success"><%=texts.OPERATIVE%></span>')
+          } else {
+            $(constatus).html('<span class="badge text-bg-secondary"><%=texts.PENDING%></span>')
           }
         }
       },

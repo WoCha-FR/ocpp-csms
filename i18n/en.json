@@ -44,6 +44,7 @@
   "AVAILABILITY": "Availability",
   "OPERATIVE": "Operative",
   "INOPERATIVE": "Inoperative",
+  "FAULTY": "Faulty",
   "REQUEST_MESSAGE" : "Trigger message",
   "UPDATED" : "Updated",
   "DATETIME": "Date / Time",
@@ -83,6 +84,7 @@
   "FREE_CHARGE": "Free charging",
   "RESTRICTED_CHARGE": "RFID / Web",
   "CONNECTOR": "Connector",
+  "CONNECTORS": "Connectors",
   "START_CHARGING": "Start Charging",
   "STOP_CHARGING": "Stop Charging",
   "UNLOCK_CONN": "Unlock Connector",
@@ -110,5 +112,16 @@
   "NONAFFECTE": "Unallocated",
   "NBSITEOK": "Number of authorised sites",
   "NEWPASSWORD": "New password",
-  "CONFIRMPASSWORD": "Confirm new password"
+  "CONFIRMPASSWORD": "Confirm new password",
+  "FABRICANT": "Vendor",
+  "MODELE": "Model",
+  "SERIAL": "Serial number",
+  "FIRMWARE": "Firmware",
+  "METERTYPE": "Meter type",
+  "LASTBOOT": "Booted",
+  "LASTHEART": "Last Heartbeat",
+  "ENDPOINT": "IP Address",
+  "STATION_PERSO" : "Customising the charger",
+  "ICCID": "ICCID",
+  "IMSI": "IMSI"
 }

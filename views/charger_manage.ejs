@@ -81,26 +81,6 @@
                     </div>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="bi bi-fingerprint"></i></span>
-                      <div class="form-floating">
-                        <input class="form-control" type="text" name="cbid" value="<%=station.cb_id%>" id="inputcbid" placeholder="" readonly>
-                        <label for="inputcbid"><%=texts.OCPP_ID%></label>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <div class="input-group">
-                      <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
-                      <div class="form-floating">
-                        <input class="form-control" type="text" name="cbpwd" value="<%=station.cb_pwd%>" id="cbpwdInput" placeholder="">
-                        <label for="cbpwdInput"><%=texts.PASSWORD_OCPP%></label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
               <div class="card-footer">
                 <button class="btn btn-primary btn-sm" type="submit"><%=texts.UPDATE%></button>
@@ -127,7 +107,6 @@
               </div>
               <div class="row p-2">
                 <div class="col"><span class="fw-bold">Meter type:</span>&nbsp;<%=cbinfos.meter_type%></div>
-                <div class="col"><span class="fw-bold">Meter index:</span>&nbsp;<%=cbinfos.fw_version%></div>
               </div>
               <% } %>
             </div>

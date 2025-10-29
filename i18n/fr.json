@@ -44,6 +44,7 @@
   "AVAILABILITY": "Disponibilité",
   "OPERATIVE": "Opérationelle",
   "INOPERATIVE": "Inopérante",
+  "FAULTY": "Défaut",
   "REQUEST_MESSAGE": "Demande d'information",
   "UPDATED": "Mis à jour",
   "DATETIME": "Date & Heure",
@@ -83,6 +84,7 @@
   "FREE_CHARGE": "Charge libre",
   "RESTRICTED_CHARGE": "RFID / Web",
   "CONNECTOR": "Connecteur",
+  "CONNECTORS": "Connecteurs",
   "START_CHARGING": "Démarrage de la charge",
   "STOP_CHARGING": "Arrêt de la charge",
   "UNLOCK_CONN": "Déverrouiller le connecteur",
@@ -110,5 +112,16 @@
   "NONAFFECTE": "Non affecté",
   "NBSITEOK": "Nombre de sites autorisés",
   "NEWPASSWORD": "Nouveau mot de passe",
-  "CONFIRMPASSWORD": "Confirmer le nouveau mot de passe"
+  "CONFIRMPASSWORD": "Confirmer le nouveau mot de passe",
+  "FABRICANT": "Fabricant",
+  "MODELE": "Modèle",
+  "SERIAL": "Numéro de série",
+  "FIRMWARE": "Logiciel",
+  "METERTYPE": "Type de compteur",
+  "LASTBOOT": "Démarré",
+  "LASTHEART": "Dernier battement",
+  "ENDPOINT": "Adresse IP",
+  "STATION_PERSO" : "Personnalisation du chargeur",
+  "ICCID": "ICCID",
+  "IMSI": "IMSI"
 }

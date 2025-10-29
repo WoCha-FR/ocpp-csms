@@ -11,17 +11,21 @@
           data-show-search-button="true">
           <thead>
             <tr>
+              <th data-sortable="true" data-field="ocppid" data-visible="false"><%=texts.OCPP_ID%></th>
               <th data-sortable="true" data-field="name"><%=texts.NOM%></th>
-              <th data-sortable="true" data-field="regstatus"><%=texts.OCPP_STATUS%></th>
-              <th><%=texts.ONLINE%></th>
+              <th data-sortable="true" data-field="registration_status"><%=texts.OCPP_STATUS%></th>
+              <th data-sortable="true" data-field="online"><%=texts.ONLINE%></th>
+              <th data-sortable="true" data-field="status"><%=texts.AVAILABILITY%></th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             <% if(stations.length> 0) { %>
             <% stations.forEach(function(station) { %>
               <tr style="cursor: pointer;">
+                <td data-visible="false"><%= station.cb_id %></td>
                 <td><%= station.cb_name %></td>
-                <td data-searchable="false" id="status<%=station.cb_pk%>">
+                <td data-searchable="false" id="regstatus<%=station.cb_pk%>">
                   <% if(station.registration_status=='Rejected') { %>
                   <span class="badge text-bg-danger"><%=texts.REJECTEDF%></span>
                   <% } else if(station.registration_status=='Pending') { %>
@@ -39,6 +43,18 @@
                   <span class="badge text-bg-warning"><%=texts.PENDING%></span>
                   <% } %>
                 </td>
+                <td data-searchable="false" id="constatus<%=station.cb_pk%>">
+                  <% if(station.status=='Unavailable') { %>
+                  <span class="badge text-bg-warning"><%=texts.INOPERATIVE%></span>
+                  <% } else if(station.status=='Faulted') { %>
+                  <span class="badge text-bg-danger"><%=texts.FAULTY%></span>
+                  <% } else if(station.status=='Available') { %>
+                  <span class="badge text-bg-success"><%=texts.OPERATIVE%></span>
+                  <% } else { %>
+                  <span class="badge text-bg-disabled"><%=texts.PENDING%></span>
+                  <% } %>
+                </td>
+                <td></td>
               </tr>
             <% }); %>
             <% } %>
@@ -68,6 +84,14 @@
       dataType: 'json',
       success: function (result) {
         for (const elem of result.data) {
+          var regstatus = '#regstatus' + elem.cb_pk
+          if (elem.registration_status == 'Rejected') {
+            $(regstatus).html('<span class="badge text-bg-danger"><%=texts.REJECTEDF%></span>')
+          } else if (elem.registration_status == 'Pending') {
+            $(regstatus).html('<span class="badge text-bg-warning"><%=texts.PENDING%></span>')
+          } else {
+            $(regstatus).html('<span class="badge text-bg-success"><%=texts.ACCEPTEDF%></span>')
+          }
           var online = '#online' + elem.cb_pk
           if (elem.online == 1) {
             $(online).html('<span class="badge text-bg-success"><%=texts.ONLINE%></span>')
@@ -76,13 +100,15 @@
           } else {
             $(online).html('<span class="badge text-bg-warning"><%=texts.PENDING%></span>')
           }
-          var status = '#status' + elem.cb_pk
-          if (elem.registration_status == 'Rejected') {
-            $(status).html('<span class="badge text-bg-danger"><%=texts.REJECTEDF%></span>')
-          } else if (elem.registration_status == 'Pending') {
-            $(status).html('<span class="badge text-bg-warning"><%=texts.PENDING%></span>')
+          var constatus = '#constatus' + elem.cb_pk
+          if (elem.status == 'Faulty') {
+            $(constatus).html('<span class="badge text-bg-danger"><%=texts.FAULTY%></span>')
+          } else if (elem.status == 'Unavailable') {
+            $(constatus).html('<span class="badge text-bg-warning"><%=texts.INOPERATIVE%></span>')
+          } else if (elem.status == 'Available') {
+            $(constatus).html('<span class="badge text-bg-success"><%=texts.OPERATIVE%></span>')
           } else {
-            $(status).html('<span class="badge text-bg-success"><%=texts.ACCEPTEDF%></span>')
+            $(constatus).html('<span class="badge text-bg-secondary"><%=texts.PENDING%></span>')
           }
         }
       },
