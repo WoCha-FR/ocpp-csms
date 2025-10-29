@@ -2,15 +2,18 @@
 <main class="container-fluid">
   <div class="content-header">
     <div class="container-fluid">
-      <h2><%=texts.STATION%> <%= station.cb_name %>
-          <% if(station.online==1) { %>
-            <span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>
-          <% } else if(station.online==0) { %>
-            <span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>
-          <% } else { %>
-            <span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>
-          <% } %>
-      </h2>
+      <div class="row justify-content-md-center">
+        <div class="col-md-auto fs-2"><%=texts.STATION%>&nbsp;<%= station.cb_name %></div>
+        <div class="col fs-3">
+        <% if(station.online==1) { %>
+          <span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>
+        <% } else if(station.online==0) { %>
+          <span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>
+        <% } else { %>
+          <span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>
+        <% } %>
+        </div>
+      </div>
     </div>
   </div>
   <%- include('./partials/ocpperrors.ejs') %>
@@ -34,16 +37,16 @@
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
         <li class="nav-item">
-          <a class="nav-link" href="/station/<%= station.cb_id %>/"><%=texts.STATION%></a>
+          <a class="nav-link" href="/charger/<%= station.cb_id %>/"><%=texts.STATION%></a>
         </li>
         <li>
-          <a class="nav-link" href="/station/<%= station.cb_id %>/manage"><%=texts.MANAGE%></a>
+          <a class="nav-link" href="/charger/<%= station.cb_id %>/connectors"><%=texts.CONNECTORS%></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/station/<%= station.cb_id %>/logs"><%=texts.LOGS%></a>
+          <a class="nav-link" href="/charger/<%= station.cb_id %>/logs"><%=texts.LOGS%></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/station/<%= station.cb_id %>/ocppkeys"><%=texts.CONFIG_OCPP%></a>
+          <a class="nav-link active" href="/charger/<%= station.cb_id %>/ocppconfig"><%=texts.CONFIG_OCPP%></a>
         </li>
       </ul>
     </div>
@@ -54,7 +57,7 @@
         <div class="card-header">
           <h3 class="card-title"><%=texts.PARAMSOCPP%></h3>
           <div class="card-tools m-0">
-            <form class="form-inline" action="/station/<%= station.cb_id %>/getocppkeys" method="post">
+            <form class="form-inline" action="/charger/<%= station.cb_id %>/reqocppkeys" method="post">
               <button type="submit" id="reqConfig" name="action" value="GetConfiguration" class="btn btn-info btn-sm">
                 <%=texts.UPDATE%>
               </button>
@@ -73,7 +76,7 @@
             <tbody>
               <% if(configkeys.length> 0) { %>
                 <% configkeys.forEach(function(cfg) { %>
-                <form class="form" action="/station/<%= station.cb_id %>/setocppkey" method="post">
+                <form class="form" action="/charger/<%= station.cb_id %>/updocppkey" method="post">
                   <tr>
                     <td>
                       <%=cfg.key%><input type="hidden" name="key" value="<%=cfg.key%>">
@@ -111,5 +114,4 @@ $(document).ready(function () {
   });
 </script>
 <% } %>
-
 <%- include('./partials/footer.ejs') %>

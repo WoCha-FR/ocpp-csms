@@ -2,15 +2,18 @@
 <main class="container-fluid">
   <div class="content-header">
     <div class="container-fluid">
-      <h2><%=texts.STATION%> <%= station.cb_name %>
+      <div class="row justify-content-md-center">
+        <div class="col-md-auto fs-2"><%=texts.STATION%>&nbsp;<%= station.cb_name %></div>
+        <div class="col fs-3">
           <% if(station.online==1) { %>
-            <span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>
+          <span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>
           <% } else if(station.online==0) { %>
-            <span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>
+          <span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>
           <% } else { %>
-            <span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>
+          <span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>
           <% } %>
-      </h2>
+        </div>
+      </div>
     </div>
   </div>
   <%- include('./partials/ocpperrors.ejs') %>
@@ -19,23 +22,23 @@
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
         <li class="nav-item">
-          <a class="nav-link" href="/station/<%= station.cb_id %>/"><%=texts.STATION%></a>
+          <a class="nav-link" href="/charger/<%= station.cb_id %>/"><%=texts.STATION%></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/station/<%= station.cb_id %>/manage"><%=texts.MANAGE%></a>
+          <a class="nav-link" href="/charger/<%= station.cb_id %>/manage"><%=texts.CONNECTORS%></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/station/<%= station.cb_id %>/logs" aria-current="page"><%=texts.LOGS%></a>
+          <a class="nav-link active" href="/charger/<%= station.cb_id %>/logs" aria-current="page"><%=texts.LOGS%></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/station/<%= station.cb_id %>/ocppkeys"><%=texts.CONFIG_OCPP%></a>
+          <a class="nav-link" href="/charger/<%= station.cb_id %>/ocppconfig"><%=texts.CONFIG_OCPP%></a>
         </li>
       </ul>
     </div>
     <!-- CARD HEADER-->
     <!-- CARD BODY -->
     <div class="card-body">
-      <div class="hstack gap-3" id="myToolbar">
+      <div class="hstack gap-3 mb-2" id="myToolbar">
         <div class="form-floating">
           <input type="text" class="form-control" id="dateInput">
           <label for="dateInput"><%=texts.DATE%></label>
@@ -45,23 +48,13 @@
           <label for="mySearch"><%=texts.SEARCH%></label>
         </div>
       </div>
-      <table id="logstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
+      <table class="table table-sm" id="logstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
         <thead>
-          <th data-field="timestamp" data-formatter="tsFormatter">
-            <%=texts.DATETIME%>
-          </th>
-          <th data-field="direction">
-            <%=texts.DIRECTION%>
-          </th>
-          <th data-field="type">
-            <%=texts.TYPE%>
-          </th>
-          <th data-field="method">
-            <%=texts.METHOD%>
-          </th>
-          <th data-field="message" class="text-break">
-            <%=texts.MESSAGE%>
-          </th>
+          <th data-field="timestamp" data-formatter="tsFormatter"><%=texts.DATETIME%></th>
+          <th data-field="direction"><%=texts.DIRECTION%></th>
+          <th data-field="type"><%=texts.TYPE%></th>
+          <th data-field="method"><%=texts.METHOD%></th>
+          <th data-field="message" class="text-break"><%=texts.MESSAGE%></th>
         </thead>
       </table>
     </div>
@@ -69,10 +62,10 @@
   </div>
 </main>
 <%- include('./partials/footerjs.ejs') %>
+<!--TODO: Change DatePicker to DateTimePicker-->
 <script src="/js/datepicker-full.min.js"></script>
 <script src="/js/datepicker-fr.js"></script>
 <script>
-  // TODO: Change DatePicker to DateTimePicker
   const elem = document.querySelector('input[id="dateInput"]');
   const datepicker = new Datepicker(elem, {
     buttonClass: 'btn', autohide: true,
@@ -80,6 +73,18 @@
     language: 'fr'
   });
   datepicker.setDate('today');
+</script>
+
+<script>
+  // Document
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+  });
+  // BSTable - data-formater
+  function tsFormatter(value) {
+    let jsdate = new Date(value)
+    return jsdate.toLocaleDateString() + ' ' + jsdate.toLocaleTimeString() + '.' + jsdate.getMilliseconds()
+  }
   // BootstrapTable
   $(function () {
     $('#logstab').bootstrapTable('refreshOptions', {
@@ -96,6 +101,7 @@
       showRefresh: true
     })
   })
+  // BSTable - Loading Template
   function loadingTemplate(message) {
     return [
       '<div class="d-flex justify-content-center bsloading"><strong class="me-3 mt-1">',
@@ -103,14 +109,17 @@
       '</strong><div class="spinner-border" role="status" aria-hidden="true"></div></div>'
     ].join('')
   }
+  // BSTable - Ajax Query Params
   function queryParams(params) {
     params.start = Date.parse(datepicker.getDate('mm/dd/yyyy'))
+    params.ocppName = '<%= station.cb_id %>'
     return params
   }
+  // BSTable - Ajax Query
   function ajaxRequest(params) {
     $.ajax({
       type: 'POST',
-      url: '/station/<%= station.cb_id %>/logs',
+      url: '/ajax/charger_logs',
       data: $.param(params.data),
       dataType: 'json',
       success: function (response) {
@@ -121,18 +130,10 @@
       }
     });
   }
-  function tsFormatter(value) {
-    let jsdate = new Date(value)
-    return jsdate.toLocaleDateString() + ' ' + jsdate.toLocaleTimeString() + '.' + jsdate.getMilliseconds()
-  }
   // Refresh on new date
   const startElem = document.getElementById('dateInput');
   startElem.addEventListener('changeDate', function (e) {
       $('#logstab').bootstrapTable('refresh')
-  });
-  // Document
-  $(document).ready(function () {
-    $('#inputErrors').delay(5000).fadeOut('slow');
   });
 </script>
 <%- include('./partials/footer.ejs') %>

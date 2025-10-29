@@ -2,7 +2,9 @@
 <main class="container-fluid">
   <div class="content-header">
     <div class="container-fluid">
-      <h2><%=texts.STATION%>&nbsp;<%= station.cb_name %></h2>
+      <div class="row justify-content-md-left">
+        <div class="col-md-auto fs-2"><%=texts.STATION%>&nbsp;<%= station.cb_name %></div>
+      </div>
     </div>
   </div>
   <%- include('./partials/ocpperrors.ejs') %>
@@ -170,7 +172,7 @@
               <div class="card">
                 <div class="card-header fs-6 fw-bold"><%=texts.AVAILABILITY%></div>
                 <div class="card-body text-center">
-                  <form action="/charger/<%= station.cb_id %>/dispo" method="post">
+                  <form action="/charger/<%= station.cb_id %>/available" method="post">
                     <input type="hidden" id="connectorId" name="connectorId" value="0">
                     <button type="submit" id="setOperative" name="AvailabilityType" value="Operative"
                       class="btn btn-success btn-sm">
@@ -195,7 +197,7 @@
           <div class="card">
             <div class="card-header fs-6 fw-bold"><%=texts.REQUEST_MESSAGE%></div>
             <div class="card-body text-center">
-              <form action="/station/<%= station.cb_id %>/request" method="post">
+              <form action="/charger/<%= station.cb_id %>/request" method="post">
                 <button type="submit" id="reqBoot" name="requestedMessage" value="BootNotification"
                   class="btn btn-info btn-sm">BootNotification</button>
                 <button type="submit" id="reqBeat" name="requestedMessage" value="Heartbeat"
@@ -219,20 +221,47 @@
     $('#ocppResponse').delay(3000).fadeOut('slow');
     $('#inputErrors').delay(5000).fadeOut('slow');
   });
+  // Refresh Charger Data
+  var interval = setInterval(reloadChargerStatus, 2500);
+  function reloadChargerStatus() {
+    $.ajax({
+      url: '/ajax/charger_status',
+      type: 'POST',
+      data: { ocppName: '<%= station.cb_id %>'},
+      dataType: 'json',
+      success: function (result) {
+        if (result.data.online === 1) {
+          $('#online').html('<span class="fw-bold"><%=texts.ONLINE%>:</span>&nbsp;<span class="badge text-bg-success"><%=texts.ONLINE%></span>')
+          $('#softReset').prop('disabled', false);
+          $('#hardReset').prop('disabled', false);
+          $('#setOperative').prop('disabled', false);
+          $('#setInoperative').prop('disabled', false);
+          $('#reqBoot').prop('disabled', false);
+          $('#reqBeat').prop('disabled', false);
+          $('#reqStatus').prop('disabled', false);
+          $('#reqMeter').prop('disabled', false);
+        } else {
+          $('#softReset').prop('disabled', true);
+          $('#hardReset').prop('disabled', true);
+          $('#setOperative').prop('disabled', true);
+          $('#setInoperative').prop('disabled', true);
+          $('#reqBoot').prop('disabled', true);
+          $('#reqBeat').prop('disabled', true);
+          $('#reqStatus').prop('disabled', true);
+          $('#reqMeter').prop('disabled', true);
+          if (result.data.online === 0) {
+            $('#online').html('<span class="fw-bold"><%=texts.ONLINE%>:</span>&nbsp;<span class="badge text-bg-danger"><%=texts.OFFLINE%></span>')
+          } else {
+            $('#online').html('<span class="fw-bold"><%=texts.ONLINE%>:</span>&nbsp;<span class="badge text-bg-warning"><%=texts.PENDING%></span>')
+          }
+        }
+      },
+      error: function (jqXHR, textStatus, err) {
+        alert(jqXHR.responseText)
+        clearInterval(interval)
+      }
+    });
+  }
+  reloadChargerStatus();
 </script>
-<% if(station.online!=1) { %>
-<script>
-  // TODO : Ajax
-  $(document).ready(function () {
-    $('#softReset').prop('disabled', true);
-    $('#hardReset').prop('disabled', true);
-    $('#setOperative').prop('disabled', true);
-    $('#setInoperative').prop('disabled', true);
-    $('#reqBoot').prop('disabled', true);
-    $('#reqBeat').prop('disabled', true);
-    $('#reqStatus').prop('disabled', true);
-    $('#reqMeter').prop('disabled', true);
-  });
-</script>
-<% } %>
 <%- include('./partials/footer.ejs') %>
