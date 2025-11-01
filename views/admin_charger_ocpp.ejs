@@ -2,9 +2,9 @@
 <main class="container-fluid">
   <div class="content-header">
     <div class="container-fluid">
-      <div class="row justify-content-md-center">
+      <div class="row  align-items-center">
         <div class="col-md-auto fs-2"><%=texts.STATION%>&nbsp;<%= station.cb_name %></div>
-        <div class="col fs-3">
+        <div class="col">
         <% if(station.online==1) { %>
           <span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>
         <% } else if(station.online==0) { %>

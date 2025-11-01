@@ -2,9 +2,9 @@
 <main class="container-fluid">
   <div class="content-header">
     <div class="container-fluid">
-      <div class="row justify-content-md-center">
+      <div class="row align-items-center">
         <div class="col-md-auto fs-2"><%=texts.STATION%>&nbsp;<%= station.cb_name %></div>
-        <div class="col fs-3">
+        <div class="col">
           <% if(station.online==1) { %>
           <span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>
           <% } else if(station.online==0) { %>
@@ -17,7 +17,7 @@
     </div>
   </div>
   <%- include('./partials/ocpperrors.ejs') %>
-  <div class="card">
+  <div class="card mb-3">
     <!-- CARD HEADER-->
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
@@ -38,17 +38,25 @@
     <!-- CARD HEADER-->
     <!-- CARD BODY -->
     <div class="card-body">
-      <div class="hstack gap-3 mb-2" id="myToolbar">
-        <div class="form-floating">
-          <input type="text" class="form-control" id="dateInput">
-          <label for="dateInput"><%=texts.DATE%></label>
+      <div class="row mb-2">
+        <div class="col-md-2">
+          <div class="input-group input-group-sm">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+            <input type="text" class="form-control" aria-label="<%=texts.SEARCH%>" aria-describedby="basic-addon1" id="mySearch">
+          </div>
         </div>
-        <div class="form-floating">
-          <input type="text" class="form-control" id="mySearch">
-          <label for="mySearch"><%=texts.SEARCH%></label>
+        <div class="col-md-3">
+          <div class="input-group input-group-sm flatpickr">
+            <div class="input-group-text"><%=texts.DATE%></div>
+            <input type="text" class="form-control" id="dateInput" readonly="readonly" data-input>
+            <span class="input-group-text" data-clear><i class="bi bi-calendar2-x"></i></span>
+          </div>
+        </div>
+        <div class="col-md-2 offset-md-5 text-end">
+          <button type="button" class="btn btn-secondary btn-sm"><i class="bi bi-download"></i></button>
         </div>
       </div>
-      <table class="table table-sm" id="logstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
+      <table class="table table-sm" id="logstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true" data-show-export="true">
         <thead>
           <th data-field="timestamp" data-formatter="tsFormatter"><%=texts.DATETIME%></th>
           <th data-field="direction"><%=texts.DIRECTION%></th>
@@ -62,45 +70,60 @@
   </div>
 </main>
 <%- include('./partials/footerjs.ejs') %>
-<!--TODO: Change DatePicker to DateTimePicker-->
-<script src="/js/datepicker-full.min.js"></script>
-<script src="/js/datepicker-fr.js"></script>
-<script>
-  const elem = document.querySelector('input[id="dateInput"]');
-  const datepicker = new Datepicker(elem, {
-    buttonClass: 'btn', autohide: true,
-    maxDate: 'today',
-    language: 'fr'
-  });
-  datepicker.setDate('today');
-</script>
-
+<script src="/js/btable-export.min.js"></script>
+<script src="/js/flatpickr.min.js"></script>
+<% if (texts.LANG=='fr' ) { %>
+<script src="/js/flatpickr-fr.min.js"></script>
+<script>flatpickr.localize(flatpickr.l10ns.fr);</script>
+<% } %>
 <script>
   // Document
   $(document).ready(function () {
     $('#inputErrors').delay(5000).fadeOut('slow');
   });
+  // Flatpickr
+  const elem = document.querySelector('div[class$="flatpickr"]');
+  const picker = flatpickr(elem, {
+    mode: "range",
+    maxDate: "today",
+    dateFormat: "D Y-m-d",
+    wrap: true,
+    onClose: function (selectedDates, dateStr, instance) {
+      $('#logstab').bootstrapTable('refresh')
+    },
+    onChange: function (selectedDates, dateStr, instance) {
+      if (dateStr == '') {
+        $('#logstab').bootstrapTable('refresh')
+      }
+    },
+  });
+  // BootstrapTable
+  $(function () {
+    $('#logstab').bootstrapTable('refreshOptions', {
+      search: true,
+      searchHighlight: true,
+      searchSelector: '#mySearch',
+      loadingTemplate: 'loadingTemplate',
+      pagination: true,
+      paginationVAlign: 'top',
+      pageSize: 50,
+      pageList: [50, 100, 250, 'All'],
+      ajax: "ajaxRequest",
+      queryParams: 'queryParams'
+    })
+  })
+  //TODO : Table Export
+  /*
+  $('#logstab').tableExport({
+    type: 'csv' ,
+    csvSeparator: ';'
+  });
+  */
   // BSTable - data-formater
   function tsFormatter(value) {
     let jsdate = new Date(value)
     return jsdate.toLocaleDateString() + ' ' + jsdate.toLocaleTimeString() + '.' + jsdate.getMilliseconds()
   }
-  // BootstrapTable
-  $(function () {
-    $('#logstab').bootstrapTable('refreshOptions', {
-      ajax: "ajaxRequest",
-      search: true,
-      searchHighlight: true,
-      toolbar: '#myToolbar',
-      searchSelector: '#mySearch',
-      loadingTemplate: 'loadingTemplate',
-      pagination: true,
-      pageSize: 25,
-      pageList: [25, 50, 100, 250, 'All'],
-      queryParams: 'queryParams',
-      showRefresh: true
-    })
-  })
   // BSTable - Loading Template
   function loadingTemplate(message) {
     return [
@@ -108,12 +131,6 @@
       message,
       '</strong><div class="spinner-border" role="status" aria-hidden="true"></div></div>'
     ].join('')
-  }
-  // BSTable - Ajax Query Params
-  function queryParams(params) {
-    params.start = Date.parse(datepicker.getDate('mm/dd/yyyy'))
-    params.ocppName = '<%= station.cb_id %>'
-    return params
   }
   // BSTable - Ajax Query
   function ajaxRequest(params) {
@@ -126,14 +143,31 @@
         params.success(response)
       },
       error: function (er) {
-        params.error(er.statusText);
+        params.error(er.statusText)
       }
     });
   }
-  // Refresh on new date
-  const startElem = document.getElementById('dateInput');
-  startElem.addEventListener('changeDate', function (e) {
-      $('#logstab').bootstrapTable('refresh')
-  });
+  // BSTable - Ajax Query Params
+  function queryParams(params) {
+    if (picker.selectedDates.length == 2) {
+      params.start = picker.selectedDates[0].getTime()
+      params.stop = (picker.selectedDates[1].getTime() + 86399000)
+    } else if (picker.selectedDates.length == 1) {
+      params.start = picker.selectedDates[0].getTime()
+      params.stop = params.start + 86399000
+    } else {
+      var d = new Date()
+      d.setHours(0, 0, 0, 0)
+      params.start = d.getTime()
+      params.stop = params.start + 86399000
+    }
+    params.ocppName = '<%= station.cb_id %>'
+    return params
+  }
 </script>
+<% if (texts.LANG=='fr') { %>
+<script>
+  picker.set("dateFormat", "D d/m/Y")
+</script>
+<% } %>
 <%- include('./partials/footer.ejs') %>
