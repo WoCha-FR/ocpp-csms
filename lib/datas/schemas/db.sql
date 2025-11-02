@@ -108,6 +108,10 @@ CREATE TABLE IF NOT EXISTS `connector_status` (
 `vendor_id` TEXT(25) DEFAULT NULL COLLATE NOCASE,
 `vendor_error_code` TEXT(50) DEFAULT NULL COLLATE NOCASE,
 `energy` INTEGER DEFAULT NULL,
+`cname` TEXT(50) DEFAULT NULL,
+`maxPower` INTEGER(3) DEFAULT NULL,
+`format` INTEGER(1) DEFAULT(1) CHECK(`format` IN (1, 2)),
+`type` INTEGER(1) DEFAULT(1)
 PRIMARY KEY (`cb_id`,`connector_id`)
 );
 CREATE INDEX `connector_status_cpk_st_idx` ON `connector_status` (`cb_id`,`connector_id`,`status_ts`);
@@ -119,12 +123,12 @@ CREATE TABLE IF NOT EXISTS `transactions` (
 `IdToken` TEXT(20) NOT NULL COLLATE NOCASE,
 `meterStart` INTEGER NOT NULL,
 `tsStart` TIMESTAMP(11) NOT NULL,
-`status` TEXT(10) NOT NULL COLLATE NOCASE,
+`tsStatus` TEXT(10) NOT NULL COLLATE NOCASE,
 `meterStop` INTEGER DEFAULT NULL,
 `tsStop` TIMESTAMP(11) DEFAULT NULL,
-`reason` TEXT(20) DEFAULT NULL,
-`energy` INTEGER DEFAULT NULL,
-`power` INTEGER DEFAULT NULL
+`tsReason` TEXT(20) DEFAULT NULL,
+`tsEnergy` INTEGER DEFAULT NULL,
+`tsPower` INTEGER DEFAULT NULL
 );
 CREATE INDEX `charge_box_connector_idx` ON `transactions` (`cb_id`,`con_id`);
 /* Initial Values */

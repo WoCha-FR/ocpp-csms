@@ -118,6 +118,7 @@
   "SERIAL": "Serial number",
   "FIRMWARE": "Firmware",
   "METERTYPE": "Meter type",
+  "METERINDEX": "Meter index",
   "LASTBOOT": "Booted",
   "LASTHEART": "Last Heartbeat",
   "ENDPOINT": "IP Address",

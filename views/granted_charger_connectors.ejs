@@ -1,0 +1,211 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row align-items-center">
+        <div class="col-md-auto fs-2"><%=texts.STATION%>&nbsp;<%= station.cb_name %></div>
+        <div class="col">
+        <% if(station.online==1) { %>
+          <span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>
+        <% } else if(station.online==0) { %>
+          <span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>
+        <% } else { %>
+          <span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>
+        <% } %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include('./partials/ocpperrors.ejs') %>
+  <% if (typeof infosui.ocppResult !=='undefined' ) { %>
+    <% if (infosui.ocppResult.status=='Rejected' ) { %>
+      <div id="ocppResponse" class="alert alert-danger" role="alert"><%=texts.REJECTEDM%></div>
+    <% } else if(infosui.ocppResult.status=='NotSupported' ) { %>
+      <div id="ocppResponse" class="alert alert-warning" role="alert"><%=texts.NOT_SUPPORTED%></div>
+    <% } else if(infosui.ocppResult.status=='RebootRequired' ) { %>
+      <div id="ocppResponse" class="alert alert-warning" role="alert"><%=texts.REBOOT_REQUIRED%></div>
+    <% } else if(infosui.ocppResult.status=='Accepted' ) { %>
+      <div id="ocppResponse" class="alert alert-success" role="alert"><%=texts.ACCEPTEDM%></div>
+    <% } else if(infosui.ocppResult.status=='Updated' ) { %>
+      <div id="ocppResponse" class="alert alert-success" role="alert"><%=texts.UPDATED%></div>
+    <% } else { %>
+      <div id="ocppResponse" class="alert alert-warning" role="alert"><%=infosui.ocppResult.status%></div>
+    <% } %>
+  <% } %>
+  <div class="card">
+    <!-- CARD HEADER-->
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs">
+        <li>
+          <a class="nav-link" href="/charger/<%= station.cb_id %>"><%=texts.STATION%></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/charger/<%= station.cb_id %>/connectors"><%=texts.CONNECTORS%></a>
+        </li>
+        <% if (userInfo.isAdmin == 1) { %>
+        <li class="nav-item">
+          <a class="nav-link" href="/charger/<%= station.cb_id %>/logs"><%=texts.LOGS%></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/charger/<%= station.cb_id %>/ocppconfig"><%=texts.CONFIG_OCPP%></a>
+        </li>
+        <% } %>
+      </ul>
+    </div><!-- CARD HEADER-->
+    <!-- CARD BODY -->
+    <div class="card-body">
+      <!-- CONNECTORS ARRAY -->
+      <% conns.forEach(function(conn) { %>
+      <div class="card h-100">
+        <!-- HEADER : STATUS -->
+        <div class="card-header">
+          <span class="badge text-bg-secondary fs-6">
+            <i class="bi bi-ev-station"></i>&nbsp;<%=texts.CONNECTOR%>&nbsp;<%= conn.connector_id %>
+          </span>
+          <% if (conn.status=='Unavailable' || conn.status=='Faulted' ) { %>
+          <div class="float-end badge text-bg-secondary fs-6"><%= conn.status %></div>
+          <% } else if (conn.status=='Available' ) { %>
+          <div class="float-end badge text-bg-success fs-6"><%= conn.status %></div>
+          <% } else if (conn.status=='Charging' ) { %>
+          <div class="float-end badge text-bg-danger fs-6"><%= conn.status %></div>
+          <% } else { %>
+          <div class="float-end badge text-bg-warning fs-6"><%= conn.status %></div>
+          <% } %>
+        </div>
+        <!-- BODY -->
+        <div class="card-body">
+          <div class="row p-0">
+            <div class="col-12 col-sm-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <!-- Ligne 1 -->
+                  <div class="row p-0">
+                    <div class="col" id="status<%= conn.connector_id %>">
+                      <span class="fw-bold"><%=texts.AVAILABILITY%>:</span>
+                      <% if(conn.status=='Unavailable') { %>
+                      <span class="badge text-bg-warning"><%=texts.INOPERATIVE%></span>
+                      <% } else if(conn.status=='Faulted') { %>
+                      <span class="badge text-bg-danger"><%=texts.FAULTY%></span>
+                      <% } else { %>
+                      <span class="badge text-bg-success"><%=texts.OPERATIVE%></span>
+                      <% } %>
+                    </div>
+                    <div class="col">
+                      <form action="/charger/<%= station.cb_id %>/available" method="post">
+                        <input type="hidden" id="connectorId<%= conn.connector_id %>" name="connectorId" value="<%= conn.connector_id %>">
+                        <button type="submit" id="setOperative" name="AvailabilityType" value="Operative" class="btn btn-success btn-sm">
+                          <%=texts.OPERATIVE%>
+                        </button>
+                        <button type="submit" id="setInoperative" name="AvailabilityType" value="Inoperative" class="btn btn-danger btn-sm">
+                          <%=texts.INOPERATIVE%>
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                  <!-- Ligne 2 -->
+                  <div class="row p-0">
+                    <div class="col">
+                      <span class="fw-bold"><%=texts.METERINDEX%>:</span>&nbsp;<%= conn.energy %>
+                    </div>
+                    <div class="col">
+                      <form action="/charger/<%= station.cb_id %>/request" method="post">
+                        <input type="hidden" name="connectorId" value="<%= conn.connector_id %>">
+                        <button type="submit" id="reqMeter" name="requestedMessage" value="MeterValues" class="btn btn-sm">MeterValues</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- OLD
+          <div class="container-fluid text-center">
+            <div class="row">
+              <div class="col-sm-2">
+                <% if (conn.status=='Preparing') { %>
+                <form action="/station/<%= station.cb_id %>/remotestart" method="post">
+                  <input type="hidden" id="connectorId<%= conn.connector_id %>" name="connectorId"
+                    value="<%= conn.connector_id %>">
+                  <button type="submit" id="remoteStart<%= conn.connector_id %>" class="btn btn-info btn-sm mb-2 w-100">
+                    <%=texts.START_CHARGING%>
+                  </button>
+                </form>
+                <% } %>
+                <% if (conn.status=='SuspendedEVSE' ) { %>
+                <form action="/station/<%= station.cb_id %>/remotestop" method="post">
+                  <input type="hidden" id="transId<%= conn.connector_id %>" name="transId" value="<%= conn.connector_id %>">
+                  <button type="submit" id="remoteStop<%= conn.connector_id %>" class="btn btn-info btn-sm mb-2 w-100">
+                    <%=texts.STOP_CHARGING%>
+                  </button>
+                </form>
+                <% } %>
+                <form action="/station/<%= station.cb_id %>/unlockconnector" method="post">
+                  <input type="hidden" id="connectorId<%= conn.connector_id %>" name="connectorId"
+                    value="<%= conn.connector_id %>">
+                  <button type="submit" id="UnlockConn<%= conn.connector_id %>" class="btn btn-info btn-sm w-100">
+                    <%=texts.UNLOCK_CONN%>
+                  </button>
+                </form>
+              </div>
+              <div class="col text-bg-warning">COL</div>
+            </div>
+          </div>
+          -->
+        </div><!-- BODY -->
+      </div>
+      <% }); %>
+    </div><!-- CARD BODY -->
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script>
+  $(document).ready(function () {
+    $('#ocppResponse').delay(3000).fadeOut('slow');
+    $('#inputErrors').delay(5000).fadeOut('slow');
+  });
+  // Refresh Charger Data
+  /*
+  var interval = setInterval(reloadChargerStatus, 2500);
+  function reloadChargerStatus() {
+    $.ajax({
+      url: '/ajax/charger_status',
+      type: 'POST',
+      data: { ocppName: '<%= station.cb_id %>'},
+      dataType: 'json',
+      success: function (result) {
+        if (result.data.online === 1) {
+          $('#online').html('<span class="fw-bold"><%=texts.ONLINE%>:</span>&nbsp;<span class="badge text-bg-success"><%=texts.ONLINE%></span>')
+          $('#softReset').prop('disabled', false);
+          $('#hardReset').prop('disabled', false);
+          $('#setOperative').prop('disabled', false);
+          $('#setInoperative').prop('disabled', false);
+          $('#reqBoot').prop('disabled', false);
+          $('#reqBeat').prop('disabled', false);
+          $('#reqStatus').prop('disabled', false);
+          $('#reqMeter').prop('disabled', false);
+        } else {
+          $('#softReset').prop('disabled', true);
+          $('#hardReset').prop('disabled', true);
+          $('#setOperative').prop('disabled', true);
+          $('#setInoperative').prop('disabled', true);
+          $('#reqBoot').prop('disabled', true);
+          $('#reqBeat').prop('disabled', true);
+          $('#reqStatus').prop('disabled', true);
+          $('#reqMeter').prop('disabled', true);
+          if (result.data.online === 0) {
+            $('#online').html('<span class="fw-bold"><%=texts.ONLINE%>:</span>&nbsp;<span class="badge text-bg-danger"><%=texts.OFFLINE%></span>')
+          } else {
+            $('#online').html('<span class="fw-bold"><%=texts.ONLINE%>:</span>&nbsp;<span class="badge text-bg-warning"><%=texts.PENDING%></span>')
+          }
+        }
+      },
+      error: function (jqXHR, textStatus, err) {
+        alert(jqXHR.responseText)
+        clearInterval(interval)
+      }
+    });
+  }
+  reloadChargerStatus();
+  */
+</script>
+<%- include('./partials/footer.ejs') %>

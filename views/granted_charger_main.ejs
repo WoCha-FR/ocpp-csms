@@ -71,11 +71,11 @@
                     <% } %>
                   </div>
                   <div class="col" id="status"><span class="fw-bold"><%=texts.AVAILABILITY%>:</span>
-                    <% if(station.status=='Unavailable' ) { %>
+                    <% if(station.status=='Unavailable') { %>
                     <span class="badge text-bg-warning"><%=texts.INOPERATIVE%></span>
-                    <% } else if(station.status=='Faulted' ) { %>
+                    <% } else if(station.status=='Faulted') { %>
                     <span class="badge text-bg-danger"><%=texts.FAULTY%></span>
-                    <% } else if(station.status=='Available' ) { %>
+                    <% } else if(station.status=='Available') { %>
                     <span class="badge text-bg-success"><%=texts.OPERATIVE%></span>
                     <% } else { %>
                     <span class="badge text-bg-secondary"><%=texts.PENDING%></span>
@@ -254,6 +254,15 @@
           } else {
             $('#online').html('<span class="fw-bold"><%=texts.ONLINE%>:</span>&nbsp;<span class="badge text-bg-warning"><%=texts.PENDING%></span>')
           }
+        }
+        if (result.data.status == 'Unavailable') {
+          $('#status').html('<span class="fw-bold"><%=texts.AVAILABILITY%>:</span>&nbsp;<span class="badge text-bg-warning"><%=texts.INOPERATIVE%></span>')
+        }
+        if (result.data.status == 'Faulty') {
+          $('#status').html('<span class="fw-bold"><%=texts.AVAILABILITY%>:</span>&nbsp;<span class="badge text-bg-danger"><%=texts.FAULTY%></span>')
+        }
+        if (result.data.status == 'Available') {
+          $('#status').html('<span class="fw-bold"><%=texts.AVAILABILITY%>:</span>&nbsp;<span class="badge text-bg-success"><%=texts.OPERATIVE%></span>')
         }
       },
       error: function (jqXHR, textStatus, err) {

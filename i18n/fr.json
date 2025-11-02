@@ -118,6 +118,7 @@
   "SERIAL": "Numéro de série",
   "FIRMWARE": "Logiciel",
   "METERTYPE": "Type de compteur",
+  "METERINDEX": "Index du compteur",
   "LASTBOOT": "Démarré",
   "LASTHEART": "Dernier battement",
   "ENDPOINT": "Adresse IP",
