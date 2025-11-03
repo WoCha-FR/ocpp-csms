@@ -56,7 +56,7 @@
           <button type="button" class="btn btn-secondary btn-sm"><i class="bi bi-download"></i></button>
         </div>
       </div>
-      <table class="table table-sm" id="logstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true" data-show-export="true">
+      <table class="table table-sm" id="logstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
         <thead>
           <th data-field="timestamp" data-formatter="tsFormatter"><%=texts.DATETIME%></th>
           <th data-field="direction"><%=texts.DIRECTION%></th>
@@ -113,12 +113,6 @@
     })
   })
   //TODO : Table Export
-  /*
-  $('#logstab').tableExport({
-    type: 'csv' ,
-    csvSeparator: ';'
-  });
-  */
   // BSTable - data-formater
   function tsFormatter(value) {
     let jsdate = new Date(value)

@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS `sites` (
 `s_pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 `s_name` TEXT(50) UNIQUE NOT NULL COLLATE NOCASE,
 `s_address` TEXT(255),
-`s_codp`    INTEGER(5),
-`s_ville`   TEXT(150)
+`s_codp` INTEGER(5),
+`s_ville` TEXT(150)
 );
 /* Users of Sites */
 CREATE TABLE IF NOT EXISTS `sites_users` (
@@ -45,11 +45,11 @@ CREATE TABLE IF NOT EXISTS `charge_box` (
 `last_bootnotif_ts` TIMESTAMP(11) NULL DEFAULT NULL,
 `online` INTEGER(1) DEFAULT(2) NOT NULL CHECK (`online` IN (0, 1, 2)),
 `site` INTEGER DEFAULT NULL CONSTRAINT `FK_Site_ChargeBox` REFERENCES `sites` (`s_pk`) ON DELETE SET NULL,
-`cb_mode` INTEGER(1) DEFAULT(1) NOT NULL CHECK (`cb_mode` IN (0, 1))
+`cb_mode` INTEGER(1) DEFAULT(1) NOT NULL CHECK (`cb_mode` IN (0, 1, 2))
 );
 /* Charge_Box_Infos */
 CREATE TABLE IF NOT EXISTS `charge_box_infos` (
-`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_conf_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE COLLATE NOCASE,
+`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_conf_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON UPDATE CASCADE ON DELETE CASCADE COLLATE NOCASE,
 `cp_vendor` TEXT(20) DEFAULT NULL COLLATE NOCASE,
 `cp_model` TEXT(20) DEFAULT NULL COLLATE NOCASE,
 `cp_serial_number` TEXT(25) DEFAULT NULL COLLATE NOCASE,
@@ -65,7 +65,7 @@ PRIMARY KEY (`cb_id`)
 );
 /* Charge_Box_Conf */
 CREATE TABLE IF NOT EXISTS `charge_box_conf` (
-`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_conf_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE COLLATE NOCASE,
+`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_conf_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON UPDATE CASCADE ON DELETE CASCADE COLLATE NOCASE,
 `key` TEXT(50) NOT NULL,
 `value` TEXT(255) DEFAULT NULL,
 `readonly` INTEGER(1) DEFAULT(1) CHECK (`readonly` IN (0, 1)),
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `schema_version` (
 );
 /* Connector_Status */
 CREATE TABLE IF NOT EXISTS `connector_status` (
-`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_connector_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE COLLATE NOCASE,
+`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_connector_charge_box_cbid` REFERENCES `charge_box` (`cb_id`) ON UPDATE CASCADE ON DELETE CASCADE COLLATE NOCASE,
 `connector_id` INTEGER(1) NOT NULL CHECK (`connector_id` < 10),
 `status_ts` TIMESTAMP(11) NULL DEFAULT NULL,
 `status` TEXT(25) DEFAULT NULL,
@@ -118,7 +118,7 @@ CREATE INDEX `connector_status_cpk_st_idx` ON `connector_status` (`cb_id`,`conne
 /* TRANSACTIONS */
 CREATE TABLE IF NOT EXISTS `transactions` (
 `t_pk` INTEGER PRIMARY KEY NOT NULL,
-`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_transaction_charge_box_id` REFERENCES `charge_box` (`cb_id`) ON DELETE CASCADE COLLATE NOCASE,
+`cb_id` TEXT(75) NOT NULL CONSTRAINT `FK_transaction_charge_box_id` REFERENCES `charge_box` (`cb_id`) ON UPDATE CASCADE ON DELETE CASCADE COLLATE NOCASE,
 `con_id` INTEGER(1) NOT NULL CHECK (`con_id` > 0 AND `con_id` < 10),
 `IdToken` TEXT(20) NOT NULL COLLATE NOCASE,
 `meterStart` INTEGER NOT NULL,

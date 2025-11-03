@@ -81,30 +81,28 @@
         </div>
         <!-- BODY -->
         <div class="card-body">
-          <!-- OLD
           <div class="container-fluid text-center">
             <div class="row">
               <div class="col-sm-2">
-                <% if (conn.status=='Preparing') { %>
-                <form action="/station/<%= station.cb_id %>/remotestart" method="post">
-                  <input type="hidden" id="connectorId<%= conn.connector_id %>" name="connectorId"
-                    value="<%= conn.connector_id %>">
+                <!-- Available & Preparing -->
+                <form action="/charger/<%= station.cb_id %>/remotestart" method="post">
+                  <input type="hidden" id="connectorId<%= conn.connector_id %>" name="connectorId" value="<%= conn.connector_id %>">
                   <button type="submit" id="remoteStart<%= conn.connector_id %>" class="btn btn-info btn-sm mb-2 w-100">
                     <%=texts.START_CHARGING%>
                   </button>
                 </form>
-                <% } %>
-                <% if (conn.status=='SuspendedEVSE' ) { %>
-                <form action="/station/<%= station.cb_id %>/remotestop" method="post">
-                  <input type="hidden" id="transId<%= conn.connector_id %>" name="transId" value="<%= conn.connector_id %>">
+
+                <!-- pas quand Available / Prepairing / Finishing -->
+                <form action="/charger/<%= station.cb_id %>/remotestop" method="post">
+                  <input type="hidden" id="transId<%= conn.connector_id %>" name="transId" value="">
                   <button type="submit" id="remoteStop<%= conn.connector_id %>" class="btn btn-info btn-sm mb-2 w-100">
                     <%=texts.STOP_CHARGING%>
                   </button>
                 </form>
-                <% } %>
-                <form action="/station/<%= station.cb_id %>/unlockconnector" method="post">
-                  <input type="hidden" id="connectorId<%= conn.connector_id %>" name="connectorId"
-                    value="<%= conn.connector_id %>">
+
+                <!-- TOUS -->
+                <form action="/charger/<%= station.cb_id %>/unlockcon" method="post">
+                  <input type="hidden" id="connectorId<%= conn.connector_id %>" name="connectorId" value="<%= conn.connector_id %>">
                   <button type="submit" id="UnlockConn<%= conn.connector_id %>" class="btn btn-info btn-sm w-100">
                     <%=texts.UNLOCK_CONN%>
                   </button>
@@ -113,7 +111,6 @@
               <div class="col text-bg-warning">COL</div>
             </div>
           </div>
-          -->
         </div><!-- BODY -->
       </div>
       <% }); %>
@@ -126,5 +123,11 @@
     $('#ocppResponse').delay(3000).fadeOut('slow');
     $('#inputErrors').delay(5000).fadeOut('slow');
   });
+  // Affect transactions Data
+  const transactions = JSON.parse('<%- JSON.stringify(transactions)%>');
+  for (const elem of transactions) {
+    let transId = '#transId' + elem.con_id;
+    $(transId).val(elem.t_pk);
+  }
 </script>
 <%- include('./partials/footer.ejs') %>

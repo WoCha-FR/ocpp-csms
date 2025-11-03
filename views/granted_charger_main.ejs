@@ -132,7 +132,9 @@
                           <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
                           <div class="form-floating">
                             <select class="form-select" name="cbmode" id="cbmodeInput">
-                              <option value="0" <% if(station.cb_mode==0) { %> selected<% } %>><%=texts.FREE_CHARGE%>
+                              <option value="0" <% if(station.cb_mode==0) { %> selected<% } %>><%=texts.FREE_CHARGE_OCPP%>
+                              </option>
+                              <option value="2" <% if(station.cb_mode==2) { %> selected<% } %>><%=texts.FREE_CHARGE_BORNE%>
                               </option>
                               <option value="1" <% if(station.cb_mode==1) { %> selected<% } %>><%=texts.RESTRICTED_CHARGE%>
                               </option>
@@ -198,6 +200,7 @@
             <div class="card-header fs-6 fw-bold"><%=texts.REQUEST_MESSAGE%></div>
             <div class="card-body text-center">
               <form action="/charger/<%= station.cb_id %>/request" method="post">
+                <input type="hidden" id="connectorId" name="connectorId" value="0">
                 <button type="submit" name="requestedMessage" value="BootNotification"
                   class="btn btn-secondary btn-sm ocppReq">BootNotification</button>
                 <button type="submit" name="requestedMessage" value="Heartbeat"
