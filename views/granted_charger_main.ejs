@@ -55,13 +55,13 @@
               <% if(typeof cbinfos==='undefined' || station.online==2) { %>
                 <div class="row p-1">
                   <div class="col" id="online">
-                    <span class="fw-bold"><%=texts.ONLINE%>:</span>
+                    <span class="fw-bold"><%=texts.ONLINE%>:&nbsp;</span>
                     <span class="badge text-bg-warning"><%=texts.PENDING%></span>
                   </div>
                 </div>
               <% } else { %>
                 <div class="row p-1">
-                  <div class="col" id="online"><span class="fw-bold"><%=texts.ONLINE%>:</span>
+                  <div class="col" id="online"><span class="fw-bold"><%=texts.ONLINE%>:&nbsp;</span>
                     <% if(station.online==1) { %>
                     <span class="badge text-bg-success"><%=texts.ONLINE%></span>
                     <% } else if(station.online==0) { %>
@@ -70,7 +70,7 @@
                     <span class="badge text-bg-warning"><%=texts.PENDING%></span>
                     <% } %>
                   </div>
-                  <div class="col" id="status"><span class="fw-bold"><%=texts.AVAILABILITY%>:</span>
+                  <div class="col" id="status"><span class="fw-bold"><%=texts.AVAILABILITY%>:&nbsp;</span>
                     <% if(station.status=='Unavailable') { %>
                     <span class="badge text-bg-warning"><%=texts.INOPERATIVE%></span>
                     <% } else if(station.status=='Faulted') { %>
@@ -83,26 +83,26 @@
                   </div>
                 </div>
                 <div class="row p-1">
-                  <div class="col"><span class="fw-bold"><%=texts.FABRICANT%>:</span>&nbsp;<%=cbinfos.cp_vendor%></div>
+                  <div class="col"><span class="fw-bold"><%=texts.FABRICANT%>:&nbsp;</span><%=cbinfos.cp_vendor%></div>
                   <% let date=new Date(station.last_bootnotif_ts * 1000) %>
-                  <div class="col"><span class="fw-bold"><%=texts.LASTBOOT%>:</span>&nbsp;<%= date.toLocaleDateString() %>&nbsp;<%= date.toLocaleTimeString() %></div>
+                  <div class="col"><span class="fw-bold"><%=texts.LASTBOOT%>:&nbsp;</span><%= date.toLocaleDateString() %>&nbsp;<%= date.toLocaleTimeString() %></div>
                 </div>
                 <div class="row p-1">
-                  <div class="col"><span class="fw-bold"><%=texts.MODELE%>:</span>&nbsp;<%=cbinfos.cp_model%></div>
+                  <div class="col"><span class="fw-bold"><%=texts.MODELE%>:&nbsp;</span><%=cbinfos.cp_model%></div>
                   <% let date2=new Date(station.last_heartbeat_ts * 1000) %>
-                  <div class="col"><span class="fw-bold"><%=texts.LASTHEART%>:</span>&nbsp;<%= date2.toLocaleDateString() %>&nbsp;<%= date2.toLocaleTimeString() %></div>
+                  <div class="col"><span class="fw-bold"><%=texts.LASTHEART%>:&nbsp;</span><%= date2.toLocaleDateString() %>&nbsp;<%= date2.toLocaleTimeString() %></div>
                 </div>
                 <div class="row p-1">
-                  <div class="col"><span class="fw-bold"><%=texts.SERIAL%>:</span>&nbsp;<%=cbinfos.cp_serial_number%></div>
-                  <div class="col"><span class="fw-bold"><%=texts.ENDPOINT%>:</span>&nbsp;<%=cbinfos.endpoint_address%></div>
+                  <div class="col"><span class="fw-bold"><%=texts.SERIAL%>:&nbsp;</span><%=cbinfos.cp_serial_number%></div>
+                  <div class="col"><span class="fw-bold"><%=texts.ENDPOINT%>:&nbsp;</span><%=cbinfos.endpoint_address%></div>
                 </div>
                 <div class="row p-1">
-                  <div class="col"><span class="fw-bold"><%=texts.FIRMWARE%>:</span>&nbsp;<%=cbinfos.fw_version%></div>
-                  <div class="col"><span class="fw-bold"><%=texts.ICCID%>:</span>&nbsp;<%=cbinfos.iccid%></div>
+                  <div class="col"><span class="fw-bold"><%=texts.FIRMWARE%>:&nbsp;</span><%=cbinfos.fw_version%></div>
+                  <div class="col"><span class="fw-bold"><%=texts.ICCID%>:&nbsp;</span><%=cbinfos.iccid%></div>
                 </div>
                 <div class="row p-1">
-                  <div class="col"><span class="fw-bold"><%=texts.METERTYPE%>:</span>&nbsp;<%=cbinfos.meter_type%></div>
-                  <div class="col"><span class="fw-bold"><%=texts.IMSI%>:</span>&nbsp;<%=cbinfos.imsi%></div>
+                  <div class="col"><span class="fw-bold"><%=texts.METERTYPE%>:&nbsp;</span><%=cbinfos.meter_type%></div>
+                  <div class="col"><span class="fw-bold"><%=texts.IMSI%>:&nbsp;</span><%=cbinfos.imsi%></div>
                 </div>
               <% } %>
             </div>
@@ -157,10 +157,10 @@
                 <div class="card-header fs-6 fw-bold"><%=texts.RESET%></div>
                 <div class="card-body text-center">
                   <form action="/charger/<%= station.cb_id %>/reboot" method="post">
-                    <button type="submit" id="softReset" name="ResetType" value="Soft" class="btn btn-success btn-sm">
+                    <button type="submit" name="ResetType" value="Soft" class="btn btn-success btn-sm ocppReq">
                       <%=texts.SOFT%>
                     </button>
-                    <button type="submit" id="hardReset" name="ResetType" value="Hard" class="btn btn-danger btn-sm">
+                    <button type="submit" name="ResetType" value="Hard" class="btn btn-danger btn-sm ocppReq">
                       <%=texts.HARD%>
                     </button>
                   </form>
@@ -174,12 +174,12 @@
                 <div class="card-body text-center">
                   <form action="/charger/<%= station.cb_id %>/available" method="post">
                     <input type="hidden" id="connectorId" name="connectorId" value="0">
-                    <button type="submit" id="setOperative" name="AvailabilityType" value="Operative"
-                      class="btn btn-success btn-sm">
+                    <button type="submit" name="AvailabilityType" value="Operative"
+                      class="btn btn-success btn-sm ocppReq">
                       <%=texts.OPERATIVE%>
                     </button>
-                    <button type="submit" id="setInoperative" name="AvailabilityType" value="Inoperative"
-                      class="btn btn-danger btn-sm">
+                    <button type="submit" name="AvailabilityType" value="Inoperative"
+                      class="btn btn-danger btn-sm ocppReq">
                       <%=texts.INOPERATIVE%>
                     </button>
                   </form>
@@ -198,20 +198,157 @@
             <div class="card-header fs-6 fw-bold"><%=texts.REQUEST_MESSAGE%></div>
             <div class="card-body text-center">
               <form action="/charger/<%= station.cb_id %>/request" method="post">
-                <button type="submit" id="reqBoot" name="requestedMessage" value="BootNotification"
-                  class="btn btn-info btn-sm">BootNotification</button>
-                <button type="submit" id="reqBeat" name="requestedMessage" value="Heartbeat"
-                  class="btn btn-info btn-sm">Heartbeat</button>
-                <button type="submit" id="reqStatus" name="requestedMessage" value="StatusNotification"
-                  class="btn btn-info btn-sm">StatusNotification</button>
-                <button type="submit" id="reqMeter" name="requestedMessage" value="MeterValues"
-                  class="btn btn-info btn-sm">MeterValues</button>
+                <button type="submit" name="requestedMessage" value="BootNotification"
+                  class="btn btn-secondary btn-sm ocppReq">BootNotification</button>
+                <button type="submit" name="requestedMessage" value="Heartbeat"
+                  class="btn btn-secondary btn-sm ocppReq">Heartbeat</button>
+                <button type="submit" name="requestedMessage" value="StatusNotification"
+                  class="btn btn-secondary btn-sm ocppReq">StatusNotification</button>
+                <button type="submit" name="requestedMessage" value="MeterValues"
+                  class="btn btn-secondary btn-sm ocppReq">MeterValues</button>
               </form>
             </div>
           </div>
         </div><!-- ROW REQUEST STATION-->
       </div><!-- SECOND LINE -->
       <% } %>
+      <!-- CONNECTORS LINES -->
+      <% conns.forEach(function(conn) { %>
+      <div class="row p-1">
+        <div class="col">
+          <div class="card">
+            <div class="card-header fs-6 fw-bold"><%=texts.CONNECTOR%>&nbsp;<%=conn.connector_id%></div>
+            <div class="card-body">
+              <div class="row mb-2">
+                <div class="col-4">
+                  <div class="card h-100">
+                    <div class="card-header fs-6 fw-bold"><%=texts.CONNECTOR_INFOS%></div>
+                    <div class="card-body">
+                      <div class="row p-1">
+                        <div class="col-7" id="connstatus<%=conn.connector_id%>">
+                          <span class="fw-bold"><%=texts.AVAILABILITY%>:&nbsp;</span>
+                          <% if(conn.status=='Unavailable' ) { %>
+                          <span class="badge text-bg-warning"><%=texts.INOPERATIVEM%></span>
+                          <% } else if(conn.status=='Faulted' ) { %>
+                          <span class="badge text-bg-danger"><%=texts.FAULTY%></span>
+                          <% } else { %>
+                          <span class="badge text-bg-success"><%=texts.OPERATIVEM%></span>
+                          <% } %>
+                        </div>
+                        <div class="col-5 text-end">
+                          <form action="/charger/<%= station.cb_id %>/available" method="post">
+                            <input type="hidden" id="connectorId" name="connectorId" value="<%=conn.connector_id%>">
+                            <button type="submit" name="AvailabilityType" value="Operative" class="btn btn-success btn-sm ocppReq"><%=texts.OPERATIVEM%></button>
+                            <button type="submit" name="AvailabilityType" value="Inoperative" class="btn btn-danger btn-sm ocppReq"><%=texts.INOPERATIVEM%></button>
+                          </form>
+                        </div>
+                      </div>
+                      <div class="row p-1">
+                        <div class="col-7" id="connlaststatus<%=conn.connector_id%>">
+                          <span class="fw-bold"><%=texts.LASTSTATUS%>:&nbsp;</span>
+                          <% let date3=new Date(conn.status_ts * 1000) %>
+                          <%= date3.toLocaleDateString() %>&nbsp;<%= date3.toLocaleTimeString() %>
+                        </div>
+                        <div class="col-5 text-end">
+                          <form action="/charger/<%= station.cb_id %>/reqconnector" method="post">
+                            <input type="hidden" id="connectorId" name="connectorId" value="<%= conn.connector_id %>">
+                            <button type="submit" id="reqStatus" name="requestedMessage" value="StatusNotification"
+                              class="btn btn-secondary btn-sm ocppReq">StatusNotification</button>
+                          </form>
+                        </div>
+                      </div>
+                      <div class="row p-1">
+                        <div class="col-7" id="connmeter<%=conn.connector_id%>">
+                          <span class="fw-bold"><%=texts.METERINDEX%>:&nbsp;</span>
+                          <%=(conn.energy/1000)%>&nbsp;<%=texts.ENERGYUNIT%>
+                        </div>
+                        <div class="col-5 text-end">
+                          <form action="/charger/<%= station.cb_id %>/reqconnector" method="post">
+                            <input type="hidden" id="connectorId" name="connectorId" value="<%= conn.connector_id %>">
+                            <button type="submit" id="reqMeter" name="requestedMessage" value="MeterValues"
+                              class="btn btn-secondary btn-sm ocppReq">MeterValues</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-8">
+                  <form class="h-100" method="post" action="/charger/<%= station.cb_id %>/updconnector">
+                    <input type="hidden" id="connectorId" name="connectorId" value="<%= conn.connector_id %>">
+                    <div class="card h-100">
+                      <div class="card-header fs-6 fw-bold"><%=texts.CONNECTOR_PERSO%></div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-3">
+                            <div class="input-group">
+                              <span class="input-group-text"><i class="bi bi-speedometer2"></i></span>
+                              <div class="form-floating">
+                                <input class="form-control" type="number" name="cmaxp" id="cmaxpInput" min="1" max="400" value="<%=conn.maxPower%>" required>
+                                <label for="cmaxpInput"><%=texts.MAX_POWER%></label>
+                              </div>
+                              <span class="input-group-text"><%=texts.POWERUNIT%></span>
+                            </div>
+                          </div>
+                          <div class="col-3">
+                              <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-info-lg"></i></span>
+                                <div class="form-floating">
+                                  <select class="form-select" name="cformat" id="cformatInput">
+                                    <option value="1" <% if(conn.format==1) { %> selected<% } %>><%=texts.CONNECTOR_SOCKET%>
+                                    </option>
+                                    <option value="2" <% if(conn.format==2) { %> selected<% } %>><%=texts.CONNECTOR_CABLE%>
+                                    </option>
+                                  </select>
+                                  <label for="cformatInput">
+                                    <%=texts.CONNECTOR_FORMAT%>
+                                  </label>
+                                </div>
+                              </div>
+                          </div>
+                          <div class="col-3">
+                              <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-gear"></i></span>
+                                <div class="form-floating">
+                                  <select class="form-select" name="ctype" id="ctypeInput">
+                                    <option value="1" <% if(conn.type==1) { %> selected<% } %>>Type 2</option>
+                                    <option value="2" <% if(conn.type==2) { %> selected<% } %>>Combo CCS</option>
+                                    <option value="3" <% if(conn.type==3) { %> selected<% } %>>Type 1</option>
+                                    <option value="4" <% if(conn.type==4) { %> selected<% } %>>CHAdeMO</option>
+                                  </select>
+                                  <label for="ctypeInput">
+                                    <%=texts.CONNECTOR_TYPE%>
+                                  </label>
+                                </div>
+                              </div>
+                          </div>
+                          <div class="col-3">
+                              <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-plugin"></i></span>
+                                <div class="form-floating">
+                                  <input class="form-control" type="text" name="cname" id="cnameInput" value="<%=conn.cname%>">
+                                  <label for="cnameInput">
+                                    <%=texts.CONNECTOR_NAME%>
+                                  </label>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-footer">
+                        <button class="btn btn-primary btn-sm" type="submit">
+                          <%=texts.UPDATE%>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% }); %>
     </div><!-- CARD BODY -->
   </div>
 </main>
@@ -222,7 +359,7 @@
     $('#inputErrors').delay(5000).fadeOut('slow');
   });
   // Refresh Charger Data
-  var interval = setInterval(reloadChargerStatus, 2500);
+  var interval1 = setInterval(reloadChargerStatus, 2500);
   function reloadChargerStatus() {
     $.ajax({
       url: '/ajax/charger_status',
@@ -231,24 +368,10 @@
       dataType: 'json',
       success: function (result) {
         if (result.data.online === 1) {
-          $('#online').html('<span class="fw-bold"><%=texts.ONLINE%>:</span>&nbsp;<span class="badge text-bg-success"><%=texts.ONLINE%></span>')
-          $('#softReset').prop('disabled', false);
-          $('#hardReset').prop('disabled', false);
-          $('#setOperative').prop('disabled', false);
-          $('#setInoperative').prop('disabled', false);
-          $('#reqBoot').prop('disabled', false);
-          $('#reqBeat').prop('disabled', false);
-          $('#reqStatus').prop('disabled', false);
-          $('#reqMeter').prop('disabled', false);
+          $('#online').html('<span class="fw-bold"><%=texts.ONLINE%>:</span>&nbsp;<span class="badge text-bg-success"><%=texts.ONLINE%></span>');
+          $('.ocppReq').prop('disabled', false);
         } else {
-          $('#softReset').prop('disabled', true);
-          $('#hardReset').prop('disabled', true);
-          $('#setOperative').prop('disabled', true);
-          $('#setInoperative').prop('disabled', true);
-          $('#reqBoot').prop('disabled', true);
-          $('#reqBeat').prop('disabled', true);
-          $('#reqStatus').prop('disabled', true);
-          $('#reqMeter').prop('disabled', true);
+          $('.ocppReq').prop('disabled', true);
           if (result.data.online === 0) {
             $('#online').html('<span class="fw-bold"><%=texts.ONLINE%>:</span>&nbsp;<span class="badge text-bg-danger"><%=texts.OFFLINE%></span>')
           } else {
@@ -267,10 +390,46 @@
       },
       error: function (jqXHR, textStatus, err) {
         alert(jqXHR.responseText)
-        clearInterval(interval)
+        clearInterval(interval1)
       }
     });
   }
   reloadChargerStatus();
+  // Refresh Connector Data
+  var interval2 = setInterval(reloadConnsStatus, 2500);
+  function reloadConnsStatus() {
+    $.ajax({
+      url: '/ajax/connectors_status',
+      type: 'POST',
+      data: { ocppName: '<%= station.cb_id %>' },
+      dataType: 'json',
+      success: function (result) {
+        for (const elem of result.data) {
+          var status_bg = '#connstatus' + elem.connector_id
+          var status_ts = '#connlaststatus' + elem.connector_id
+          var meter_idx = '#connmeter' + elem.connector_id
+          // Status Badge
+          if (elem.status == 'Unavailable') {
+            $(status_bg).html('<span class="fw-bold"><%=texts.AVAILABILITY%>:&nbsp;</span><span class="badge text-bg-warning"><%=texts.INOPERATIVEM%></span>');
+          } else if (elem.status == 'Faulted') {
+            $(status_bg).html('<span class="fw-bold"><%=texts.AVAILABILITY%>:&nbsp;</span><span class="badge text-bg-danger"><%=texts.FAULTY%></span>');
+          } else {
+            $(status_bg).html('<span class="fw-bold"><%=texts.AVAILABILITY%>:&nbsp;</span><span class="badge text-bg-success"><%=texts.OPERATIVEM%></span>');
+          }
+          // Status TS
+          let date = new Date(elem.status_ts * 1000)
+          $(status_ts).html('<span class="fw-bold"><%=texts.LASTSTATUS%>:&nbsp;</span>' + date.toLocaleDateString() + '&nbsp;' + date.toLocaleTimeString());
+          // Meter
+          let energy = (elem.energy / 1000)
+          $(meter_idx).html('<span class="fw-bold"><%=texts.METERINDEX%>:&nbsp;</span>' + energy + '&nbsp;<%=texts.ENERGYUNIT%>');
+        }
+      },
+      error: function (jqXHR, textStatus, err) {
+        alert(jqXHR.responseText)
+        clearInterval(interval2)
+      }
+    });
+  }
+  reloadConnsStatus();
 </script>
 <%- include('./partials/footer.ejs') %>

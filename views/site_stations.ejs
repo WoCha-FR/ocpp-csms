@@ -73,7 +73,7 @@
   });
   // Click to Station page
   $('#stationstable').on('click-row.bs.table', function (e, row) {
-    window.location.href = '/station/' + row.ocppid;
+    window.location.href = '/charger/' + row.ocppid;
   });
   // Refresh Stations Online Status
   var interval = setInterval(reloadConnStatus, 2500);
