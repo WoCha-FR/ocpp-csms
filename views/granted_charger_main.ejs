@@ -70,27 +70,17 @@
                     <span class="badge text-bg-warning"><%=texts.PENDING%></span>
                     <% } %>
                   </div>
-                  <div class="col" id="status"><span class="fw-bold"><%=texts.AVAILABILITY%>:&nbsp;</span>
-                    <% if(station.status=='Unavailable') { %>
-                    <span class="badge text-bg-warning"><%=texts.INOPERATIVE%></span>
-                    <% } else if(station.status=='Faulted') { %>
-                    <span class="badge text-bg-danger"><%=texts.FAULTY%></span>
-                    <% } else if(station.status=='Available') { %>
-                    <span class="badge text-bg-success"><%=texts.OPERATIVE%></span>
-                    <% } else { %>
-                    <span class="badge text-bg-secondary"><%=texts.PENDING%></span>
-                    <% } %>
-                  </div>
+                  <div class="col"></div>
                 </div>
                 <div class="row p-1">
                   <div class="col"><span class="fw-bold"><%=texts.FABRICANT%>:&nbsp;</span><%=cbinfos.cp_vendor%></div>
                   <% let date=new Date(station.last_bootnotif_ts * 1000) %>
-                  <div class="col"><span class="fw-bold"><%=texts.LASTBOOT%>:&nbsp;</span><%= date.toLocaleDateString() %>&nbsp;<%= date.toLocaleTimeString() %></div>
+                  <div class="col" id="lastboot"><span class="fw-bold"><%=texts.LASTBOOT%>:&nbsp;</span><%= date.toLocaleDateString() %>&nbsp;<%= date.toLocaleTimeString() %></div>
                 </div>
                 <div class="row p-1">
                   <div class="col"><span class="fw-bold"><%=texts.MODELE%>:&nbsp;</span><%=cbinfos.cp_model%></div>
                   <% let date2=new Date(station.last_heartbeat_ts * 1000) %>
-                  <div class="col"><span class="fw-bold"><%=texts.LASTHEART%>:&nbsp;</span><%= date2.toLocaleDateString() %>&nbsp;<%= date2.toLocaleTimeString() %></div>
+                  <div class="col" id="lastheart"><span class="fw-bold"><%=texts.LASTHEART%>:&nbsp;</span><%= date2.toLocaleDateString() %>&nbsp;<%= date2.toLocaleTimeString() %></div>
                 </div>
                 <div class="row p-1">
                   <div class="col"><span class="fw-bold"><%=texts.SERIAL%>:&nbsp;</span><%=cbinfos.cp_serial_number%></div>
@@ -381,15 +371,12 @@
             $('#online').html('<span class="fw-bold"><%=texts.ONLINE%>:</span>&nbsp;<span class="badge text-bg-warning"><%=texts.PENDING%></span>')
           }
         }
-        if (result.data.status == 'Unavailable') {
-          $('#status').html('<span class="fw-bold"><%=texts.AVAILABILITY%>:</span>&nbsp;<span class="badge text-bg-warning"><%=texts.INOPERATIVE%></span>')
-        }
-        if (result.data.status == 'Faulty') {
-          $('#status').html('<span class="fw-bold"><%=texts.AVAILABILITY%>:</span>&nbsp;<span class="badge text-bg-danger"><%=texts.FAULTY%></span>')
-        }
-        if (result.data.status == 'Available') {
-          $('#status').html('<span class="fw-bold"><%=texts.AVAILABILITY%>:</span>&nbsp;<span class="badge text-bg-success"><%=texts.OPERATIVE%></span>')
-        }
+        // Boot TS
+        let dateb = new Date(elem.last_bootnotif_ts * 1000)
+        $('#lastboot').html('<span class="fw-bold"><%=texts.LASTBOOT%>:&nbsp;</span>' + dateb.toLocaleDateString() + '&nbsp;' + dateb.toLocaleTimeString());
+        // HeartBeat TS
+        let dateh = new Date(elem.last_heartbeat_ts * 1000)
+        $('#lastheart').html('<span class="fw-bold"><%=texts.LASTHEART%>:&nbsp;</span>' + dateh.toLocaleDateString() + '&nbsp;' + dateh.toLocaleTimeString());
       },
       error: function (jqXHR, textStatus, err) {
         alert(jqXHR.responseText)

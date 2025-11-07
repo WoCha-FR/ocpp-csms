@@ -138,5 +138,6 @@
   "CONNECTOR_SOCKET": "Socket",
   "CONNECTOR_TYPE": "Type of connector",
   "ICCID": "ICCID",
-  "IMSI": "IMSI"
+  "IMSI": "IMSI",
+  "NBCONS": "Number of connectors"
 }

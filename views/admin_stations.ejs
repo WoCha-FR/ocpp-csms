@@ -38,7 +38,7 @@
                   <th data-sortable="true" data-field="ocppid"><%=texts.OCPP_ID%></th>
                   <th data-sortable="true" data-field="registration_status"><%=texts.OCPP_STATUS%></th>
                   <th data-sortable="true" data-field="online"><%=texts.ONLINE%></th>
-                  <th data-sortable="true" data-field="status"><%=texts.AVAILABILITY%></th>
+                  <th data-sortable="true" data-field="nbcon"><%=texts.NBCONS%></th>
                   <th></th>
                 </tr>
               </thead>
@@ -65,15 +65,11 @@
                   <span class="badge text-bg-warning"><%=texts.PENDING%></span>
                   <% } %>
                 </td>
-                <td data-searchable="false" id="constatus<%=station.cb_pk%>">
-                  <% if(station.status=='Unavailable') { %>
-                  <span class="badge text-bg-warning"><%=texts.INOPERATIVE%></span>
-                  <% } else if(station.status=='Faulted') { %>
-                  <span class="badge text-bg-danger"><%=texts.FAULTY%></span>
-                  <% } else if(station.status=='Available') { %>
-                  <span class="badge text-bg-success"><%=texts.OPERATIVE%></span>
+                <td data-searchable="false" id="nbcon<%=station.cb_pk%>">
+                  <% if(station.nbcon==0) { %>
+                  <span class="badge text-bg-disabled"><%=texts.PENDING%></span>
                   <% } else { %>
-                  <span class="badge text-bg-secondary"><%=texts.PENDING%></span>
+                  <span class="badge text-bg-primary"><%=station.nbcon%></span>
                   <% } %>
                 </td>
                 <td>
@@ -233,15 +229,11 @@
             $(online).html('<span class="badge text-bg-warning"><%=texts.PENDING%></span>')
             $(diag).addClass('d-none')
           }
-          var constatus = '#constatus' + elem.cb_pk
-          if (elem.status == 'Faulty') {
-            $(constatus).html('<span class="badge text-bg-danger"><%=texts.FAULTY%></span>')
-          } else if (elem.status == 'Unavailable') {
-            $(constatus).html('<span class="badge text-bg-warning"><%=texts.INOPERATIVE%></span>')
-          } else if (elem.status == 'Available') {
-            $(constatus).html('<span class="badge text-bg-success"><%=texts.OPERATIVE%></span>')
+          var nbcons = '#nbcon' + elem.cb_pk
+          if (elem.nbcon == 0) {
+            $(nbcons).html('<span class="badge text-bg-disabled"><%=texts.PENDING%></span>')
           } else {
-            $(constatus).html('<span class="badge text-bg-secondary"><%=texts.PENDING%></span>')
+            $(nbcons).html('<span class="badge text-bg-primary">' + elem.nbcon + '</span>')
           }
         }
       },

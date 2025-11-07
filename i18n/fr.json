@@ -138,5 +138,6 @@
   "CONNECTOR_SOCKET": "Prise",
   "CONNECTOR_TYPE": "Type de connecteur",
   "ICCID": "ICCID",
-  "IMSI": "IMSI"
+  "IMSI": "IMSI",
+  "NBCONS": "Nombre de connecteurs"
 }
