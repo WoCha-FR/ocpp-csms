@@ -372,10 +372,10 @@
           }
         }
         // Boot TS
-        let dateb = new Date(elem.last_bootnotif_ts * 1000)
+        let dateb = new Date(result.data.last_bootnotif_ts * 1000)
         $('#lastboot').html('<span class="fw-bold"><%=texts.LASTBOOT%>:&nbsp;</span>' + dateb.toLocaleDateString() + '&nbsp;' + dateb.toLocaleTimeString());
         // HeartBeat TS
-        let dateh = new Date(elem.last_heartbeat_ts * 1000)
+        let dateh = new Date(result.data.last_heartbeat_ts * 1000)
         $('#lastheart').html('<span class="fw-bold"><%=texts.LASTHEART%>:&nbsp;</span>' + dateh.toLocaleDateString() + '&nbsp;' + dateh.toLocaleTimeString());
       },
       error: function (jqXHR, textStatus, err) {

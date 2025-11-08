@@ -60,18 +60,18 @@
         <!-- HEADER : STATUS -->
         <div class="card-header">
           <small class="d-inline-flex mb-0 px-2 py-1 fw-bold text-white bg-secondary border border-secondary rounded-2">
-            <i class="bi bi-ev-station"></i>&nbsp;<%=texts.CONNECTOR%>&nbsp;<%= conn.connector_id %>
+            <i class="bi bi-ev-station"></i>&nbsp;<%=texts.CONNECTOR%>&nbsp;<%=conn.connector_id%>
           </small>
           <small class="d-inline-flex mb-0 px-2 py-1 fw-bold text-white bg-secondary border border-secondary rounded-2">
             <i class="bi bi-lightning-charge-fill"></i>&nbsp;<%= (conn.energy/1000) %> kWh
           </small>
           <div class="float-end">
             <h5>
-              <% if (conn.status=='Unavailable' || conn.status=='Faulted' ) { %>
+              <% if (conn.status=='Unavailable' || conn.status=='Faulted') { %>
               <span class="badge text-bg-danger"><%= conn.status %></span>
-              <% } else if (conn.status=='Available' ) { %>
+              <% } else if (conn.status=='Available') { %>
               <span class="badge text-bg-success"><%= conn.status %></span>
-              <% } else if (conn.status=='Charging' ) { %>
+              <% } else if (conn.status=='Charging') { %>
               <span class="badge text-bg-info"><%= conn.status %></span>
               <% } else { %>
               <span class="badge text-bg-warning"><%= conn.status %></span>
@@ -81,34 +81,70 @@
         </div>
         <!-- BODY -->
         <div class="card-body">
-          <div class="container-fluid text-center">
+          <div class="container-fluid">
             <div class="row">
               <div class="col-sm-2">
                 <!-- Available & Preparing -->
-                <form action="/charger/<%= station.cb_id %>/remotestart" method="post">
-                  <input type="hidden" id="connectorId<%= conn.connector_id %>" name="connectorId" value="<%= conn.connector_id %>">
-                  <button type="submit" id="remoteStart<%= conn.connector_id %>" class="btn btn-info btn-sm mb-2 w-100">
+                <% if (conn.status=='Available' || conn.status=='Preparing') { %>
+                <form action="/charger/<%=station.cb_id%>/remotestart" method="post">
+                  <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
+                  <button type="submit" id="remoteStart<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100">
                     <%=texts.START_CHARGING%>
                   </button>
                 </form>
-
+                <% } %>
+                <% if (conn.status!='Available' && conn.status!='Preparing' && conn.status!='Finishing') { %>
                 <!-- pas quand Available / Prepairing / Finishing -->
-                <form action="/charger/<%= station.cb_id %>/remotestop" method="post">
-                  <input type="hidden" id="transId<%= conn.connector_id %>" name="transId" value="">
-                  <button type="submit" id="remoteStop<%= conn.connector_id %>" class="btn btn-info btn-sm mb-2 w-100">
+                <form action="/charger/<%=station.cb_id%>/remotestop" method="post">
+                  <input type="hidden" id="transId<%=conn.pk%>" name="transId" value="">
+                  <button type="submit" id="remoteStop<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100">
                     <%=texts.STOP_CHARGING%>
                   </button>
                 </form>
-
+                <% } %>
                 <!-- TOUS -->
-                <form action="/charger/<%= station.cb_id %>/unlockcon" method="post">
-                  <input type="hidden" id="connectorId<%= conn.connector_id %>" name="connectorId" value="<%= conn.connector_id %>">
-                  <button type="submit" id="UnlockConn<%= conn.connector_id %>" class="btn btn-info btn-sm w-100">
+                <form action="/charger/<%=station.cb_id%>/unlockcon" method="post">
+                  <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
+                  <button type="submit" id="UnlockConn<%=conn.pk%>" class="btn btn-info btn-sm w-100">
                     <%=texts.UNLOCK_CONN%>
                   </button>
                 </form>
               </div>
-              <div class="col text-bg-warning">COL</div>
+              <div class="col-sm-4">
+                <div class="card h-100">
+                  <div class="card-header fs-6 fw-bold"><%=texts.CONNECTOR_INFOS%></div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col"><%=texts.NOM%>:&nbsp;<span class="fw-bold"><%=conn.cname%></span></div>
+                      <div class="col"><%=texts.MAX_POWER%>:&nbsp;<span class="fw-bold"><%=conn.maxPower%>&nbsp;<%=texts.POWERUNIT%></span></div>
+                    </div>
+                    <div class="row">
+                      <div class="col"><%=texts.FORMAT%>:&nbsp;
+                        <span class="fw-bold">
+                          <% if (conn.format==1) { %><%=texts.CONNECTOR_SOCKET%><% } %>
+                          <% if (conn.format==2) { %><%=texts.CONNECTOR_CABLE%><% } %>
+                        </span>
+                      </div>
+                      <div class="col"><%=texts.TYPE%>:&nbsp;
+                        <span class="fw-bold">
+                          <% if (conn.type==1) { %>Type 2<% } %>
+                          <% if (conn.type==2) { %>Combo CCS<% } %>
+                          <% if (conn.type==3) { %>Type 1<% } %>
+                          <% if (conn.type==4) { %>CHAdeMO<% } %>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <!-- Transactions en cours -->
+                <div class="card h-100">
+                  <div class="card-header fs-6 fw-bold"><%=texts.TRANSAC_ENCOURS%></div>
+                  <div class="card-body" id="transData<%=conn.pk%>">
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div><!-- BODY -->
@@ -126,8 +162,32 @@
   // Affect transactions Data
   const transactions = JSON.parse('<%- JSON.stringify(transactions)%>');
   for (const elem of transactions) {
-    let transId = '#transId' + elem.con_id;
+    // Transction ID for button
+    let transId = '#transId' + elem.con_pk;
     $(transId).val(elem.t_pk);
+    // Charge Duration
+    const thisTime = new Date();
+    const transDeb = new Date(elem.tsStart * 1000);
+    const Duration = secondsToTime((thisTime.getTime() - transDeb.getTime()));
+    // Transaction informations
+    let transData = '#transData' + elem.con_pk;
+    let transHtml = '<div class="row">' +
+      '<div class="col"><span class="fw-bold">:&nbsp;</span>' + elem.IdToken + '</div>' +
+      '<div class="col"><span class="fw-bold">:&nbsp;</span>' + Duration + '</div>' +
+      '</div>' +
+      '<div class="row">' +
+      '<div class="col"><span class="fw-bold">:&nbsp;</span>' + elem.tsEnergy + '&nbsp;<%=texts.ENERGYUNIT%></div>' +
+      '<div class="col"><span class="fw-bold">:&nbsp;</span>' + elem.tsPower + '&nbsp;<%=texts.POWERUNIT%></div>' +
+      '</div>'
+    $(transData).html(transHtml);
   }
+  function secondsToTime(Seconds) {
+    let totalSeconds = parseInt((Seconds / 1000), 10);
+    let hours = Math.floor(totalSeconds / 3600);
+    let minutes = Math.floor(totalSeconds / 60) % 60;
+    let seconds = totalSeconds % 60;
+    return hours + "h " + minutes + "m " + seconds
+  }
+  // Ajax Update
 </script>
 <%- include('./partials/footer.ejs') %>

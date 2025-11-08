@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="<%=texts.LANG%>" data-bs-theme="auto">
+  <head>
+    <script src="/js/color-modes.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>OCPP CSMS</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/bootstrap-icons.min.css" rel="stylesheet" />
+    <link href="/css/styles.css" rel="stylesheet" />
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body class="d-flex align-items-center py-4 bg-body-tertiary">
+    <main class="w-100 m-auto">
+      <div>
+        <div class="d-flex align-items-center justify-content-center min-vh-100 px-2">
+          <div class="text-center">
+            <h1 class="display-1 fw-bold"><%=errorinfo.code%></h1>
+            <p class="fs-2 fw-medium mt-4"><%=errorinfo.title%></p>
+            <p class="mt-4 mb-5"><%=errorinfo.message%></p>
+            <a href="/" class="btn btn-light fw-semibold rounded-pill px-4 py-2 custom-btn">Retour à l'accueil</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

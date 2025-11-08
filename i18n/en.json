@@ -139,5 +139,7 @@
   "CONNECTOR_TYPE": "Type of connector",
   "ICCID": "ICCID",
   "IMSI": "IMSI",
-  "NBCONS": "Number of connectors"
+  "NBCONS": "Number of connectors",
+  "FORMAT": "Format",
+  "TRANSAC_ENCOURS": "Recharging in progress"
 }
