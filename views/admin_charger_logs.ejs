@@ -53,10 +53,11 @@
           </div>
         </div>
         <div class="col-md-2 offset-md-5 text-end">
-          <button type="button" class="btn btn-secondary btn-sm"><i class="bi bi-download"></i></button>
+          <button type="button" class="btn btn-secondary btn-sm" id="refreshTable"><i class="bi bi-arrow-clockwise"></i></button>
+          <button type="button" class="btn btn-secondary btn-sm" id="exportTable"><i class="bi bi-download"></i></button>
         </div>
       </div>
-      <table class="table table-sm" id="logstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
+      <table class="table table-sm" id="logstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true" >
         <thead>
           <th data-field="timestamp" data-formatter="tsFormatter"><%=texts.DATETIME%></th>
           <th data-field="direction"><%=texts.DIRECTION%></th>
@@ -70,6 +71,7 @@
   </div>
 </main>
 <%- include('./partials/footerjs.ejs') %>
+<script src="/js/jquery-table-export.min.js"></script>
 <script src="/js/btable-export.min.js"></script>
 <script src="/js/flatpickr.min.js"></script>
 <% if (texts.LANG=='fr' ) { %>
@@ -87,6 +89,7 @@
     mode: "range",
     maxDate: "today",
     dateFormat: "D Y-m-d",
+    defaultDate: [Date.now(), Date.now()],
     wrap: true,
     onClose: function (selectedDates, dateStr, instance) {
       $('#logstab').bootstrapTable('refresh')
@@ -112,7 +115,6 @@
       queryParams: 'queryParams'
     })
   })
-  //TODO : Table Export
   // BSTable - data-formater
   function tsFormatter(value) {
     let jsdate = new Date(value)
@@ -158,6 +160,20 @@
     params.ocppName = '<%= station.cb_id %>'
     return params
   }
+  // Refresh
+  $('#refreshTable').on('click', function (event) {
+    event.preventDefault()
+    $('#logstab').bootstrapTable('refresh')
+  });
+  // Table Export
+  $('#exportTable').on('click', function (event) {
+    event.preventDefault()
+    $('#logstab').tableExport({
+      type: 'csv',
+      csvSeparator: ';',
+      fileName: 'logsExport'
+    });
+  });
 </script>
 <% if (texts.LANG=='fr') { %>
 <script>

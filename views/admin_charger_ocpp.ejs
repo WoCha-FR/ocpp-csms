@@ -57,7 +57,7 @@
         <div class="card-header">
           <h3 class="card-title"><%=texts.PARAMSOCPP%></h3>
           <div class="card-tools m-0">
-            <form class="form-inline" action="/charger/<%= station.cb_id %>/reqocppkeys" method="post">
+            <form class="form-inline" action="/charger/<%=station.cb_id%>/reqocppkeys" method="post">
               <button type="submit" id="reqConfig" name="action" value="GetConfiguration" class="btn btn-info btn-sm">
                 <%=texts.UPDATE%>
               </button>
@@ -76,7 +76,7 @@
             <tbody>
               <% if(configkeys.length> 0) { %>
                 <% configkeys.forEach(function(cfg) { %>
-                <form class="form" action="/charger/<%= station.cb_id %>/updocppkey" method="post">
+                <form class="form" action="/charger/<%=station.cb_id%>/updocppkey" method="post">
                   <tr>
                     <td>
                       <%=cfg.key%><input type="hidden" name="key" value="<%=cfg.key%>">
@@ -108,6 +108,7 @@ $(document).ready(function () {
 </script>
 <% if(station.online!=1) { %>
 <script>
+  // TODO: AJAX
   $(document).ready(function () {
     $('#reqConfig').prop('disabled', true);
     $('.okonline').prop('disabled', true);

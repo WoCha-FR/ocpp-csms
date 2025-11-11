@@ -186,13 +186,11 @@
     $('#inputErrors').delay(5000).fadeOut('slow');
     $('#ocppResponse').delay(5000).fadeOut('slow');
     $('#stationstable').removeClass('table-bordered');
-
     $('.btn-delete-elem').click(function (e) {
       e.preventDefault();
       var id = $(this).attr('data-form-elemid');
       $('#ModalFormDeleteId').attr('value', id)
     });
-
     $('#deleteMod').on('hidden.bs.modal', function (e) {
       $('#ModalFormDeleteId').attr('value', '');
     });
@@ -200,7 +198,7 @@
   // Click to Station page
   $('#stationstable').on('click-cell.bs.table', function (e, field, value, row, $element) {
     cellIndex = $element[0].cellIndex;
-    if (cellIndex != 5) {
+    if (cellIndex != 6) {
       window.location.href = '/charger/' + row.ocppid;
     }
   });

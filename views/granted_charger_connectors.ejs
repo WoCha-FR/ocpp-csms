@@ -173,13 +173,22 @@
     let transData = '#transData' + elem.con_pk;
     let transHtml = '<div class="row">' +
       '<div class="col"><span class="fw-bold">:&nbsp;</span>' + elem.IdToken + '</div>' +
-      '<div class="col"><span class="fw-bold">:&nbsp;</span>' + Duration + '</div>' +
+      '<div class="col"><span class="fw-bold">:&nbsp;</span><span id="duration' + elem.con_pk + '">' + Duration + '</span></div>' +
       '</div>' +
       '<div class="row">' +
-      '<div class="col"><span class="fw-bold">:&nbsp;</span>' + elem.tsEnergy + '&nbsp;<%=texts.ENERGYUNIT%></div>' +
-      '<div class="col"><span class="fw-bold">:&nbsp;</span>' + elem.tsPower + '&nbsp;<%=texts.POWERUNIT%></div>' +
+      '<div class="col"><span class="fw-bold">:&nbsp;</span>' + elem.tsEnergy / 1000 + '&nbsp;<%=texts.ENERGYUNIT%></div>' +
+      '<div class="col"><span class="fw-bold">:&nbsp;</span>' + elem.tsPower / 1000 + '&nbsp;<%=texts.POWERUNIT%></div>' +
       '</div>'
     $(transData).html(transHtml);
+    // TODO: increment duration every seconds
+    setInterval(updateDuration(transDeb, elem.con_pk), 1000);
+  }
+  function updateDuration(Start, con_pk) {
+    let now = new Date();
+    let Seconds = (now.getTime() - Start.getTime())
+    let value = secondsToTime(Seconds)
+    let span = document.getElementById('duration' + con_pk)
+    span.textContent = value
   }
   function secondsToTime(Seconds) {
     let totalSeconds = parseInt((Seconds / 1000), 10);
