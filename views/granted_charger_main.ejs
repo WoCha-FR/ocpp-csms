@@ -28,17 +28,17 @@
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
         <li>
-          <a class="nav-link active" href="/charger/<%= station.cb_id %>"><%=texts.STATION%></a>
+          <a class="nav-link active" href="/charger/<%=station.cb_id%>"><%=texts.STATION%></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/charger/<%= station.cb_id %>/connectors"><%=texts.CONNECTORS%></a>
+          <a class="nav-link" href="/charger/<%=station.cb_id%>/connectors"><%=texts.CONNECTORS%></a>
         </li>
         <% if (userInfo.isAdmin == 1) { %>
         <li class="nav-item">
-          <a class="nav-link" href="/charger/<%= station.cb_id %>/logs"><%=texts.LOGS%></a>
+          <a class="nav-link" href="/charger/<%=station.cb_id%>/logs"><%=texts.LOGS%></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/charger/<%= station.cb_id %>/ocppconfig"><%=texts.CONFIG_OCPP%></a>
+          <a class="nav-link" href="/charger/<%=station.cb_id%>/ocppconfig"><%=texts.CONFIG_OCPP%></a>
         </li>
         <% } %>
       </ul>
@@ -391,7 +391,7 @@
     $.ajax({
       url: '/ajax/connectors_status',
       type: 'POST',
-      data: { ocppName: '<%= station.cb_id %>' },
+      data: { ocppName: '<%=station.cb_id%>' },
       dataType: 'json',
       success: function (result) {
         for (const elem of result.data) {

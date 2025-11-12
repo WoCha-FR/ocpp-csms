@@ -141,5 +141,12 @@
   "IMSI": "IMSI",
   "NBCONS": "Number of connectors",
   "FORMAT": "Format",
-  "TRANSAC_ENCOURS": "Recharging in progress"
+  "TRANSAC_ENCOURS": "Recharging in progress",
+  "TRANSAC_DERNIERE": "Last charge",
+  "ENERGY_CONSUMED": "Energy Consumed",
+  "POWER": "Power",
+  "START": "Start",
+  "END": "End",
+  "DURATION": "Durée",
+  "REASON": "Reason"
 }

@@ -3,8 +3,8 @@
   <div class="content-header">
     <div class="container-fluid">
       <div class="row align-items-center">
-        <div class="col-md-auto fs-2"><%=texts.STATION%>&nbsp;<%= station.cb_name %></div>
-        <div class="col">
+        <div class="col-md-auto fs-2"><%=texts.STATION%>&nbsp;<%=station.cb_name%></div>
+        <div class="col" id="cbonline">
         <% if(station.online==1) { %>
           <span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>
         <% } else if(station.online==0) { %>
@@ -37,17 +37,17 @@
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
         <li>
-          <a class="nav-link" href="/charger/<%= station.cb_id %>"><%=texts.STATION%></a>
+          <a class="nav-link" href="/charger/<%=station.cb_id%>"><%=texts.STATION%></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/charger/<%= station.cb_id %>/connectors"><%=texts.CONNECTORS%></a>
+          <a class="nav-link active" href="/charger/<%=station.cb_id%>/connectors"><%=texts.CONNECTORS%></a>
         </li>
         <% if (userInfo.isAdmin == 1) { %>
         <li class="nav-item">
-          <a class="nav-link" href="/charger/<%= station.cb_id %>/logs"><%=texts.LOGS%></a>
+          <a class="nav-link" href="/charger/<%=station.cb_id%>/logs"><%=texts.LOGS%></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/charger/<%= station.cb_id %>/ocppconfig"><%=texts.CONFIG_OCPP%></a>
+          <a class="nav-link" href="/charger/<%=station.cb_id%>/ocppconfig"><%=texts.CONFIG_OCPP%></a>
         </li>
         <% } %>
       </ul>
@@ -56,25 +56,25 @@
     <div class="card-body">
       <!-- CONNECTORS ARRAY -->
       <% conns.forEach(function(conn) { %>
-      <div class="card h-100">
+      <div class="card h-100 mb-2">
         <!-- HEADER : STATUS -->
         <div class="card-header">
           <small class="d-inline-flex mb-0 px-2 py-1 fw-bold text-white bg-secondary border border-secondary rounded-2">
             <i class="bi bi-ev-station"></i>&nbsp;<%=texts.CONNECTOR%>&nbsp;<%=conn.connector_id%>
           </small>
           <small class="d-inline-flex mb-0 px-2 py-1 fw-bold text-white bg-secondary border border-secondary rounded-2">
-            <i class="bi bi-lightning-charge-fill"></i>&nbsp;<%= (conn.energy/1000) %> kWh
+            <i class="bi bi-lightning-charge-fill"></i>&nbsp;<span id="conKwh<%=conn.connector_id%>"><%=(conn.energy /1000)%></span>&nbsp;<%=texts.ENERGYUNIT%>
           </small>
           <div class="float-end">
-            <h5>
+            <h5 id="connstatus<%=conn.connector_id%>">
               <% if (conn.status=='Unavailable' || conn.status=='Faulted') { %>
-              <span class="badge text-bg-danger"><%= conn.status %></span>
+              <span class="badge text-bg-danger"><%=conn.status%></span>
               <% } else if (conn.status=='Available') { %>
-              <span class="badge text-bg-success"><%= conn.status %></span>
+              <span class="badge text-bg-success"><%=conn.status%></span>
               <% } else if (conn.status=='Charging') { %>
-              <span class="badge text-bg-info"><%= conn.status %></span>
+              <span class="badge text-bg-info"><%=conn.status%></span>
               <% } else { %>
-              <span class="badge text-bg-warning"><%= conn.status %></span>
+              <span class="badge text-bg-warning"><%=conn.status%></span>
               <% } %>
             </h5>
           </div>
@@ -84,28 +84,21 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-sm-2">
-                <!-- Available & Preparing -->
-                <% if (conn.status=='Available' || conn.status=='Preparing') { %>
-                <form action="/charger/<%=station.cb_id%>/remotestart" method="post">
+                <form action="/charger/<%=station.cb_id%>/remotestart" method="post" id="btnStart<%=conn.pk%>" class="">
                   <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
-                  <button type="submit" id="remoteStart<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100">
+                  <button type="submit" id="remoteStart<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq">
                     <%=texts.START_CHARGING%>
                   </button>
                 </form>
-                <% } %>
-                <% if (conn.status!='Available' && conn.status!='Preparing' && conn.status!='Finishing') { %>
-                <!-- pas quand Available / Prepairing / Finishing -->
-                <form action="/charger/<%=station.cb_id%>/remotestop" method="post">
+                <form action="/charger/<%=station.cb_id%>/remotestop" method="post"id="btnStop<%=conn.pk%>" class="">
                   <input type="hidden" id="transId<%=conn.pk%>" name="transId" value="">
-                  <button type="submit" id="remoteStop<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100">
+                  <button type="submit" id="remoteStop<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq">
                     <%=texts.STOP_CHARGING%>
                   </button>
                 </form>
-                <% } %>
-                <!-- TOUS -->
                 <form action="/charger/<%=station.cb_id%>/unlockcon" method="post">
                   <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
-                  <button type="submit" id="UnlockConn<%=conn.pk%>" class="btn btn-info btn-sm w-100">
+                  <button type="submit" id="UnlockConn<%=conn.pk%>" class="btn btn-info btn-sm w-100 ocppReq">
                     <%=texts.UNLOCK_CONN%>
                   </button>
                 </form>
@@ -115,7 +108,7 @@
                   <div class="card-header fs-6 fw-bold"><%=texts.CONNECTOR_INFOS%></div>
                   <div class="card-body">
                     <div class="row">
-                      <div class="col"><%=texts.NOM%>:&nbsp;<span class="fw-bold"><%=conn.cname%></span></div>
+                      <div class="col"><%=texts.NOM%>:&nbsp;<span class="fw-bold"><%- conn.cname ? conn.cname : texts.CONNECTOR + ' ' + conn.connector_id %></span></div>
                       <div class="col"><%=texts.MAX_POWER%>:&nbsp;<span class="fw-bold"><%=conn.maxPower%>&nbsp;<%=texts.POWERUNIT%></span></div>
                     </div>
                     <div class="row">
@@ -138,10 +131,37 @@
                 </div>
               </div>
               <div class="col">
-                <!-- Transactions en cours -->
-                <div class="card h-100">
-                  <div class="card-header fs-6 fw-bold"><%=texts.TRANSAC_ENCOURS%></div>
-                  <div class="card-body" id="transData<%=conn.pk%>">
+                <!-- Transactions -->
+                <div class="card h-100 invisible" id="trans<%=conn.pk%>">
+                  <span id="transActiv<%=conn.pk%>" class="d-none"></span>
+                  <span id="transTimer<%=conn.pk%>" class="d-none"></span>
+                  <div class="card-header fs-6 fw-bold">
+                    <span id="transState<%=conn.pk%>"></span>
+                    <div class="float-end">
+                      <a id="transHisto<%=conn.pk%>" href="#"><i class="bi bi-file-bar-graph" style="cursor: pointer;"></i></a>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col">
+                        <span class="fw-bold"><%=texts.USER%>:&nbsp;</span><span id="transUser<%=conn.pk%>"></span>
+                      </div>
+                      <div class="col">
+                        <span class="fw-bold"><%=texts.START%>:&nbsp;</span><span id="transDeb<%=conn.pk%>"></span>
+                      </div>
+                      <div class="col">
+                        <span class="fw-bold"><%=texts.END%>:&nbsp;</span><span id="transFin<%=conn.pk%>"></span>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <span class="fw-bold"><%=texts.DURATION%>:&nbsp;</span><span id="transTime<%=conn.pk%>"></span>
+                      </div>
+                      <div class="col">
+                        <span class="fw-bold"><%=texts.ENERGY_CONSUMED%>:&nbsp;</span><span id="transKwh<%=conn.pk%>"></span>&nbsp;<%=texts.ENERGYUNIT%>
+                      </div>
+                      <div class="col" id="transPwrStop<%=conn.pk%>"></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -162,41 +182,183 @@
   // Affect transactions Data
   const transactions = JSON.parse('<%- JSON.stringify(transactions)%>');
   for (const elem of transactions) {
-    // Transction ID for button
-    let transId = '#transId' + elem.con_pk;
-    $(transId).val(elem.t_pk);
-    // Charge Duration
-    const thisTime = new Date();
+    if (elem.online === 1) {
+      $('.ocppReq').prop('disabled', false);
+      $('#cbonline').html('<span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>')
+    } else {
+      $('.ocppReq').prop('disabled', true);
+      if (elem.online === 0) {
+        $('#cbonline').html('<span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>')
+      } else {
+        $('#cbonline').html('<span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>')
+      }
+    }
+    // Données Fixes
+    $('#trans' + elem.con_pk).removeClass('invisible');
+    $('#transUser' + elem.con_pk).html(elem.IdToken);
     const transDeb = new Date(elem.tsStart * 1000);
-    const Duration = secondsToTime((thisTime.getTime() - transDeb.getTime()));
-    // Transaction informations
-    let transData = '#transData' + elem.con_pk;
-    let transHtml = '<div class="row">' +
-      '<div class="col"><span class="fw-bold">:&nbsp;</span>' + elem.IdToken + '</div>' +
-      '<div class="col"><span class="fw-bold">:&nbsp;</span><span id="duration' + elem.con_pk + '">' + Duration + '</span></div>' +
-      '</div>' +
-      '<div class="row">' +
-      '<div class="col"><span class="fw-bold">:&nbsp;</span>' + elem.tsEnergy / 1000 + '&nbsp;<%=texts.ENERGYUNIT%></div>' +
-      '<div class="col"><span class="fw-bold">:&nbsp;</span>' + elem.tsPower / 1000 + '&nbsp;<%=texts.POWERUNIT%></div>' +
-      '</div>'
-    $(transData).html(transHtml);
-    // TODO: increment duration every seconds
-    setInterval(updateDuration(transDeb, elem.con_pk), 1000);
+    $('#transDeb' + elem.con_pk).html(transDeb.toLocaleDateString() + '&nbsp;' + transDeb.toLocaleTimeString());
+    $('#transKwh' + elem.con_pk).html(elem.tsEnergy / 1000);
+    // Lien pour courbe de charge
+    $('#transHisto' + elem.con_pk).prop('href', '/reports/charge/' + elem.t_pk);
+    // Transaction terminée ?
+    if (elem.tsStop) {
+      // Titre
+      $('#transState' + elem.con_pk).html('<%=texts.TRANSAC_DERNIERE%>');
+      $('#transActiv' + elem.con_pk).html('non');
+      // Fin
+      const transFin = new Date(elem.tsStop * 1000);
+      $('#transFin' + elem.con_pk).html(transFin.toLocaleDateString() + '&nbsp;' + transFin.toLocaleTimeString());
+      // Durée
+      const duration = ((transFin.getTime() - transDeb.getTime()) / 1000);
+      $('#transTime' + elem.con_pk).html(secToString(duration));
+      // Reason
+      $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.REASON%>:&nbsp;</span>' + elem.tsReason );
+    } else {
+      // Set transaction ID to button
+      let transId = '#transId' + elem.con_pk;
+      $(transId).val(elem.t_pk);
+      // Titre
+      $('#transState' + elem.con_pk).html('<%=texts.TRANSAC_ENCOURS%>');
+      $('#transActiv' + elem.con_pk).html('oui');
+      // Durée
+      const thisTime = new Date();
+      let duration = ((thisTime.getTime() - transDeb.getTime()) / 1000);
+      $('#transTime' + elem.con_pk).html(secToString(duration));
+      const timerID = setInterval(function () {
+        $('#transTime' + elem.con_pk).html(secToString(++duration));
+      }, 1000)
+      $('#transTimer' + elem.con_pk).html(timerID);
+      // Puissance
+      $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.POWER%>:&nbsp;</span>' + (elem.tsPower / 1000) + '&nbsp;<%=texts.POWERUNIT%>');
+    }
   }
-  function updateDuration(Start, con_pk) {
-    let now = new Date();
-    let Seconds = (now.getTime() - Start.getTime())
-    let value = secondsToTime(Seconds)
-    let span = document.getElementById('duration' + con_pk)
-    span.textContent = value
+  // Ajax Update Transaction
+  const interval = setInterval(reloadTransactionsStatus, 30000);
+  function reloadTransactionsStatus() {
+    $.ajax({
+      url: '/ajax/connectors_last_trans',
+      type: 'POST',
+      data: { ocppName: '<%=station.cb_id%>' },
+      dataType: 'json',
+      success: function (result) {
+        for (const elem of result.data) {
+          // Transaction terminée
+          if (elem.tsStop) {
+            // Etait en cours ?
+            if ($('#transActiv' + elem.con_pk).html() == 'oui') {
+              $('#transHisto' + elem.con_pk).prop('href', '/reports/charge/' + elem.t_pk);
+              // Fin du timer + modif state
+              clearInterval($('#transTimer' + elem.con_pk).html());
+              $('#transActiv' + elem.con_pk).html('non');
+              $('#transTimer' + elem.con_pk).html('');
+              // Modification Titre
+              $('#transState' + elem.con_pk).html('<%=texts.TRANSAC_DERNIERE%>');
+              // Fin session + durée
+              const transDeb = new Date(elem.tsStart * 1000);
+              const transFin = new Date(elem.tsStop * 1000);
+              $('#transFin' + elem.con_pk).html(transFin.toLocaleDateString() + '&nbsp;' + transFin.toLocaleTimeString());
+              const duration = ((transFin.getTime() - transDeb.getTime()) / 1000);
+              $('#transTime' + elem.con_pk).html(secToString(duration));
+              // Energie + Reason
+              $('#transKwh' + elem.con_pk).html(elem.tsEnergy / 1000);
+              $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.REASON%>:&nbsp;</span>' + elem.tsReason);
+            }
+          // Transaction en cours
+          } else {
+            // Nouvelle transaction ?
+            if ($('#transActiv' + elem.con_pk).html() == 'non') {
+              $('#transHisto' + elem.con_pk).prop('href', '/' + elem.t_pk);
+              // Passage en actif & MaJ des données
+              $('#transState' + elem.con_pk).html('<%=texts.TRANSAC_ENCOURS%>');
+              $('#transActiv' + elem.con_pk).html('oui');
+              $('#transUser' + elem.con_pk).html(elem.IdToken);
+              const transDeb = new Date(elem.tsStart * 1000);
+              $('#transDeb' + elem.con_pk).html(transDeb.toLocaleDateString() + '&nbsp;' + transDeb.toLocaleTimeString());
+              $('#transFin' + elem.con_pk).html('');
+              // Durée
+              const thisTime = new Date();
+              let duration = ((thisTime.getTime() - transDeb.getTime()) / 1000);
+              $('#transTime' + elem.con_pk).html(secToString(duration));
+              const timerID = setInterval(function () {
+                $('#transTime' + elem.con_pk).html(secToString(++duration));
+              }, 1000)
+              $('#transTimer' + elem.con_pk).html(timerID);
+            }
+            // Transaction déjà en cours
+            $('#transKwh' + elem.con_pk).html(elem.tsEnergy / 1000);
+            $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.POWER%>:&nbsp;</span>' + (elem.tsPower / 1000) + '&nbsp;<%=texts.POWERUNIT%>');
+          }
+        }
+      },
+      error: function (jqXHR, textStatus, err) {
+        alert(jqXHR.responseText)
+        clearInterval(interval)
+      }
+    });
   }
-  function secondsToTime(Seconds) {
-    let totalSeconds = parseInt((Seconds / 1000), 10);
-    let hours = Math.floor(totalSeconds / 3600);
-    let minutes = Math.floor(totalSeconds / 60) % 60;
-    let seconds = totalSeconds % 60;
-    return hours + "h " + minutes + "m " + seconds
+  // Refresh Connector Data
+  var interval2 = setInterval(reloadConnsStatus, 2500);
+  function reloadConnsStatus() {
+    $.ajax({
+      url: '/ajax/connectors_status',
+      type: 'POST',
+      data: { ocppName: '<%=station.cb_id%>' },
+      dataType: 'json',
+      success: function (result) {
+        for (const elem of result.data) {
+          // Online / Offline
+          if (elem.online === 1) {
+            $('.ocppReq').prop('disabled', false);
+            $('#cbonline').html('<span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>')
+          } else {
+            $('.ocppReq').prop('disabled', true);
+            if (elem.online === 0) {
+              $('#cbonline').html('<span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>')
+            } else {
+              $('#cbonline').html('<span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>')
+            }
+          }
+          var status_bg = '#connstatus' + elem.connector_id
+          // Status Badge
+          if (elem.status == 'Unavailable' || elem.status == 'Faulted') {
+            $(status_bg).html('<span class="badge text-bg-danger">' + elem.status + '</span>');
+          } else if (elem.status == 'Available') {
+            $(status_bg).html('<span class="badge text-bg-success">' + elem.status + '</span>');
+          } else if (elem.status == 'Charging') {
+            $(status_bg).html('<span class="badge text-bg-info">' + elem.status + '</span>');
+          } else {
+            $(status_bg).html('<span class="badge text-bg-warning">' + elem.status + '</span>');
+          }
+          // Action button
+          if (elem.status == 'Available' || elem.status == 'Preparing') {
+            $('#btnStart' + elem.connector_id).removeClass('d-none');
+          } else {
+            $('#btnStart' + elem.connector_id).addClass('d-none');
+          }
+          if (elem.status != 'Available' && elem.status != 'Preparing' && elem.status != 'Finishing') {
+            $('#btnStop' + elem.connector_id).removeClass('d-none');
+          } else {
+            $('#btnStop' + elem.connector_id).addClass('d-none');
+          }
+          // Meter
+          $('#conKwh' + elem.connector_id).html((elem.energy / 1000));
+        }
+      },
+      error: function (jqXHR, textStatus, err) {
+        alert(jqXHR.responseText)
+        clearInterval(interval2)
+      }
+    });
   }
-  // Ajax Update
+  reloadConnsStatus();
+  // Fonctions autres
+  function pad(val) { return val > 9 ? val : "0" + val; }
+  function secToString(duration) {
+    let seconds = pad(parseInt(duration % 60));
+    let minutes = pad(parseInt(duration / 60, 10) % 60);
+    let hours = pad(parseInt(duration / 3600, 10));
+    return hours + ':' + minutes + ':' + seconds;
+  }
 </script>
 <%- include('./partials/footer.ejs') %>
