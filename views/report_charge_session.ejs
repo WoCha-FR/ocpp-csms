@@ -1,0 +1,73 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <%- include('./partials/ocpperrors.ejs') %>
+  <div class="card">
+    <!-- CARD HEADER-->
+    <div class="card-header">
+      <ul class="nav nav-tabs card-header-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active">Transaction details</a>
+        </li>
+      </ul>
+    </div>
+    <div class="card-body">
+      <div class="tab-content">
+        <div class="card">
+          <div class="card-header">
+            Header
+          </div>
+          <div class="card-body">
+            <canvas id="myChart"
+              style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script src="/js/chart.js"></script>
+<script>
+  const ctx = document.getElementById('myChart');
+  const all = JSON.parse('<%- JSON.stringify(all)%>');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      datasets: [
+        {
+          label: 'Energy',
+          data: all,
+          yAxisID: 'y',
+          parsing: { yAxisKey: 'energy' }
+        },
+        {
+          label: 'Power',
+          data: all,
+          yAxisID: 'y1',
+          parsing: { yAxisKey: 'power' }
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          type: 'linear',
+          display: true,
+          position: 'left',
+          beginAtZero: true,
+          title: { display: true, text: 'Energy in kWh' }
+        },
+        y1: {
+          type: 'linear',
+          display: true,
+          position: 'right',
+          beginAtZero: true,
+          title: { display: true, text: 'Power in kW' }
+        }
+      }
+    }
+  });
+</script>
+<%- include('./partials/footer.ejs') %>
