@@ -63,10 +63,10 @@
             <i class="bi bi-ev-station"></i>&nbsp;<%=texts.CONNECTOR%>&nbsp;<%=conn.connector_id%>
           </small>
           <small class="d-inline-flex mb-0 px-2 py-1 fw-bold text-white bg-secondary border border-secondary rounded-2">
-            <i class="bi bi-lightning-charge-fill"></i>&nbsp;<span id="conKwh<%=conn.connector_id%>"><%=(conn.energy /1000)%></span>&nbsp;<%=texts.ENERGYUNIT%>
+            <i class="bi bi-lightning-charge-fill"></i>&nbsp;<span id="conKwh<%=conn.pk%>"><%=(conn.energy /1000)%></span>&nbsp;<%=texts.ENERGYUNIT%>
           </small>
           <div class="float-end">
-            <h5 id="connstatus<%=conn.connector_id%>">
+            <h5 id="connstatus<%=conn.pk%>">
               <% if (conn.status=='Unavailable' || conn.status=='Faulted') { %>
               <span class="badge text-bg-danger"><%=conn.status%></span>
               <% } else if (conn.status=='Available') { %>
@@ -195,6 +195,7 @@
     }
     // Données Fixes
     $('#trans' + elem.con_pk).removeClass('invisible');
+    // TODO: Affichage Nom utilisateur / Nom RFID / Autostart / etc etc
     $('#transUser' + elem.con_pk).html(elem.IdToken);
     const transDeb = new Date(elem.tsStart * 1000);
     $('#transDeb' + elem.con_pk).html(transDeb.toLocaleDateString() + '&nbsp;' + transDeb.toLocaleTimeString());
@@ -319,7 +320,7 @@
               $('#cbonline').html('<span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>')
             }
           }
-          var status_bg = '#connstatus' + elem.connector_id
+          var status_bg = '#connstatus' + elem.pk
           // Status Badge
           if (elem.status == 'Unavailable' || elem.status == 'Faulted') {
             $(status_bg).html('<span class="badge text-bg-danger">' + elem.status + '</span>');
@@ -332,17 +333,17 @@
           }
           // Action button
           if (elem.status == 'Available' || elem.status == 'Preparing') {
-            $('#btnStart' + elem.connector_id).removeClass('d-none');
+            $('#btnStart' + elem.pk).removeClass('d-none');
           } else {
-            $('#btnStart' + elem.connector_id).addClass('d-none');
+            $('#btnStart' + elem.pk).addClass('d-none');
           }
           if (elem.status != 'Available' && elem.status != 'Preparing' && elem.status != 'Finishing') {
-            $('#btnStop' + elem.connector_id).removeClass('d-none');
+            $('#btnStop' + elem.pk).removeClass('d-none');
           } else {
-            $('#btnStop' + elem.connector_id).addClass('d-none');
+            $('#btnStop' + elem.pk).addClass('d-none');
           }
           // Meter
-          $('#conKwh' + elem.connector_id).html((elem.energy / 1000));
+          $('#conKwh' + elem.pk).html((elem.energy / 1000));
         }
       },
       error: function (jqXHR, textStatus, err) {

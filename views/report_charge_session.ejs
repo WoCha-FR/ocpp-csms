@@ -6,20 +6,20 @@
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs" role="tablist">
         <li class="nav-item">
-          <a class="nav-link active">Transaction details</a>
+          <a class="nav-link active"><%=texts.TRANSAC_DETAILS%></a>
         </li>
       </ul>
     </div>
     <div class="card-body">
       <div class="tab-content">
         <div class="card">
-          <div class="card-header">
-            Header
-          </div>
+          <div class="card-header">Header</div>
           <div class="card-body">
             <canvas id="myChart"
               style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;"></canvas>
-            </div>
+          </div>
+          <div class="card-footer">
+            <a class="btn btn-primary" role="button" href="javascript:history.back();"><%=texts.BACK%></a>
           </div>
         </div>
       </div>
@@ -36,13 +36,13 @@
     data: {
       datasets: [
         {
-          label: 'Energy',
+          label: '<%=texts.ENERGY_CONSUMED%>',
           data: all,
           yAxisID: 'y',
           parsing: { yAxisKey: 'energy' }
         },
         {
-          label: 'Power',
+          label: '<%=texts.POWER%>',
           data: all,
           yAxisID: 'y1',
           parsing: { yAxisKey: 'power' }
@@ -57,14 +57,14 @@
           display: true,
           position: 'left',
           beginAtZero: true,
-          title: { display: true, text: 'Energy in kWh' }
+          title: { display: true, text: '<%=texts.ENERGYINKWH%>' }
         },
         y1: {
           type: 'linear',
           display: true,
           position: 'right',
           beginAtZero: true,
-          title: { display: true, text: 'Power in kW' }
+          title: { display: true, text: '<%=texts.POWERINKW%>' }
         }
       }
     }

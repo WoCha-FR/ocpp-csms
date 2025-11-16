@@ -148,5 +148,8 @@
   "START": "Début",
   "END": "Fin",
   "DURATION": "Durée",
-  "REASON": "Reason"
+  "REASON": "Reason",
+  "TRANSAC_DETAILS": "Détails de la session de recharge",
+  "ENERGYINKWH": "Energie en kWh",
+  "POWERINKW": "Puissance en kW"
 }
