@@ -69,7 +69,7 @@
               <div class="form-floating">
                 <select class="form-select" name="rfuser" id="rfuserInput">
                   <%users.forEach(function(user) { %>
-                  <option value="<%=user.user_pk%>" <% if(rfid.user==user.user_pk) { %> selected<% } %>><%=user.usermail%> (<%=user.name%>)</option>
+                  <option value="<%=user.user_pk%>" <% if(rfid.user==user.user_pk) { %> selected<% } %>><%=user.name%> (<%=user.usermail%>)</option>
                   <% }) %>
                   <option value=""<% if(!rfid.user) { %> selected<% } %>><%=texts.NONAFFECTE%></option>
                 </select>
@@ -91,6 +91,27 @@
   $(document).ready(function () {
     $('#inputErrors').delay(5000).fadeOut('slow');
   });
+  const rfsite = document.getElementById("rfsiteInput");
+  rfsite.addEventListener("change", updateValue)
+  function updateValue(e) {
+    const params = { rfsite: e.target.value }
+    $.ajax({
+      url: '/admin/rfids/ajax/updsiteusers',
+      type: 'POST',
+      data: params,
+      dataType: 'json',
+      success: function (result) {
+        $('#rfuserInput').empty();
+        for (const elem of result.data) {
+          $('#rfuserInput').append('<option value="' + elem.user_pk + '">' + elem.name + ' ('+ elem.usermail +')</option>');
+        }
+        $('#rfuserInput').append('<option value="" selected><%=texts.NONAFFECTE%></option>');
+      },
+      error: function (jqXHR, textStatus, err) {
+        alert(jqXHR.responseText)
+      }
+    });
+  }
 </script>
 <script src="/js/flatpickr.min.js"></script>
 <% if (texts.LANG == 'fr') { %>

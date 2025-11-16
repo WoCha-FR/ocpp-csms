@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `rfid_tags` (
 `blocked` INTEGER(1) DEFAULT(0) CHECK (`blocked` IN (0, 1)),
 `expire` TIMESTAMP(11) NULL DEFAULT NULL
 );
-CREATE UNIQUE INDEX `site_rfid_tags_UNIQUE` ON `rfid_tags` (`site`,`idtag` COLLATE NOCASE);
+CREATE UNIQUE INDEX `site_rfid_tags_UNIQUE` ON `rfid_tags` (COALESCE(`site`,0),`idtag` COLLATE NOCASE);
 /* Charge_Box */
 CREATE TABLE IF NOT EXISTS `charge_box` (
 `cb_pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

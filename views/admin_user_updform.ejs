@@ -3,7 +3,7 @@
   <%- include('./partials/ocpperrors.ejs') %>
   <div class="card mb-3">
     <div class="card-header fs-5 fw-bold"><%=texts.USER_INFOS%></div>
-    <form method="post" action="/admin/user/edit/">
+    <form method="post" action="/admin/user/edit">
       <input type="hidden" name="userpk" value="<%=user.user_pk%>">
       <div class="card-body">
         <!-- FORMULAIRE -->

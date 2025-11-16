@@ -67,7 +67,7 @@
                 </td>
                 <td data-searchable="false" id="nbcon<%=station.cb_pk%>">
                   <% if(station.nbcon==0) { %>
-                  <span class="badge text-bg-disabled"><%=texts.PENDING%></span>
+                  <span class="badge text-bg-secondary"><%=texts.PENDING%></span>
                   <% } else { %>
                   <span class="badge text-bg-primary"><%=station.nbcon%></span>
                   <% } %>
@@ -229,7 +229,7 @@
           }
           var nbcons = '#nbcon' + elem.cb_pk
           if (elem.nbcon == 0) {
-            $(nbcons).html('<span class="badge text-bg-disabled"><%=texts.PENDING%></span>')
+            $(nbcons).html('<span class="badge text-bg-secondary"><%=texts.PENDING%></span>')
           } else {
             $(nbcons).html('<span class="badge text-bg-primary">' + elem.nbcon + '</span>')
           }
