@@ -1,0 +1,120 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <%- include('./partials/ocpperrors.ejs') %>
+  <!-- Stations & Connectors -->
+  <div class="container-fluid text-center">
+    <div class="row">
+      <div class="col-4">
+        <div class="card">
+          <div class="card-header fw-bold"><%=texts.STATIONS%></div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <div class="alert alert-success" role="alert">
+                  <h6 class="my-0 fw-bold"><%=texts.ONLINE%></h6>
+                  <hr class="my-1">
+                  <h1 class="my-0 fw-bold" id="online"><%=stations.online%></h1>
+                </div>
+              </div>
+              <div class="col">
+                <div class="alert alert-danger" role="alert">
+                  <h6 class="my-0 fw-bold"><%=texts.OFFLINE%></h6>
+                  <hr class="my-1">
+                  <h1 class="my-0 fw-bold" id="offline"><%=stations.offline%></h1>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <div class="card-header fw-bold"><%=texts.CONNECTORS%></div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <div class="alert alert-success" role="alert">
+                  <h6 class="my-0 fw-bold"><%=texts.AVAILABLE%></h6>
+                  <hr class="my-1">
+                  <h1 class="my-0 fw-bold" id="available"><%=connectors.available%></h1>
+                </div>
+              </div>
+              <div class="col">
+                <div class="alert alert-secondary" role="alert">
+                  <h6 class="my-0 fw-bold"><%=texts.INOPERATIVEM%></h6>
+                  <hr class="my-1">
+                  <h1 class="my-0 fw-bold" id="unavailable"><%=connectors.unavailable%></h1>
+                </div>
+              </div>
+              <div class="col">
+                <div class="alert alert-info" role="alert">
+                  <h6 class="my-0 fw-bold"><%=texts.CHARGING%></h6>
+                  <hr class="my-1">
+                  <h1 class="my-0 fw-bold" id="charging"><%=connectors.charging%></h1>
+                </div>
+              </div>
+              <div class="col">
+                <div class="alert alert-warning" role="alert">
+                  <h6 class="my-0 fw-bold"><%=texts.OCCUPIED%></h6>
+                  <hr class="my-1">
+                  <h1 class="my-0 fw-bold" id="occupied"><%=connectors.occupied%></h1>
+                </div>
+              </div>
+              <div class="col">
+                <div class="alert alert-danger" role="alert">
+                  <h6 class="my-0 fw-bold"><%=texts.FAULTY%></h6>
+                  <hr class="my-1">
+                  <h1 class="my-0 fw-bold" id="faulted"><%=connectors.faulted%></h1>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script>
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+  });
+  // Refresh Station Data
+  var interval1 = setInterval(reloadCBStatus, 1500);
+  function reloadCBStatus() {
+    $.ajax({
+      url: '/ajax/stations_stats',
+      type: 'POST',
+      dataType: 'json',
+      success: function (result) {
+        $('#online').html(result.data.online)
+        $('#offline').html(result.data.offline)
+      },
+      error: function (jqXHR, textStatus, err) {
+        alert(jqXHR.responseText)
+        clearInterval(interval1)
+      }
+    })
+  }
+  // Refresh Connectors Data
+  var interval2 = setInterval(reloadConnsStatus, 1500);
+  function reloadConnsStatus() {
+    $.ajax({
+      url: '/ajax/connectors_stats',
+      type: 'POST',
+      dataType: 'json',
+      success: function (result) {
+        $('#available').html(result.data.available)
+        $('#unavailable').html(result.data.unavailable)
+        $('#charging').html(result.data.charging)
+        $('#faulted').html(result.data.faulted)
+        $('#occupied').html(result.data.occupied)
+      },
+      error: function (jqXHR, textStatus, err) {
+        alert(jqXHR.responseText)
+        clearInterval(interval2)
+      }
+    })
+  }
+</script>
+<%- include('./partials/footer.ejs') %>

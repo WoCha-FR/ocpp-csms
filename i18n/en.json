@@ -151,5 +151,8 @@
   "REASON": "Reason",
   "TRANSAC_DETAILS": "Charging Session Details",
   "ENERGYINKWH": "Energy in kWh",
-  "POWERINKW": "Power in kW"
+  "POWERINKW": "Power in kW",
+  "AVAILABLE": "Available",
+  "CHARGING": "Charging",
+  "OCCUPIED": "Occupied"
 }
