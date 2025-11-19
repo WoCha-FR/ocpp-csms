@@ -1,6 +1,14 @@
 <%- include('./partials/header.ejs') %>
 <main class="container-fluid">
   <%- include('./partials/ocpperrors.ejs') %>
+  <% if (typeof infosui.ocppResult !=='undefined' ) { %>
+    <% if (infosui.ocppResult.status=='Rejected' ) { %><div id="ocppResponse" class="alert alert-danger" role="alert"><%=texts.REJECTEDM%></div>
+    <% } else if(infosui.ocppResult.status=='NotSupported' ) { %><div id="ocppResponse" class="alert alert-warning" role="alert"><%=texts.NOT_SUPPORTED%></div>
+    <% } else if(infosui.ocppResult.status=='RebootRequired' ) { %><div id="ocppResponse" class="alert alert-warning" role="alert"><%=texts.REBOOT_REQUIRED%></div>
+    <% } else if(infosui.ocppResult.status=='Accepted' ) { %><div id="ocppResponse" class="alert alert-success" role="alert"><%=texts.ACCEPTEDM%></div>
+    <% } else if(infosui.ocppResult.status=='Updated' ) { %><div id="ocppResponse" class="alert alert-success" role="alert"><%=texts.UPDATED%></div>
+    <% } else { %><div id="ocppResponse" class="alert alert-warning" role="alert"><%=infosui.ocppResult.status%></div><% } %>
+  <% } %>
   <!-- Stations & Connectors status-->
   <div class="container-fluid text-center mb-2 p-0">
     <div class="row">
@@ -120,7 +128,7 @@
                           <div class="col align-self-center">
                             <form action="/charger/<%=elem.cb_id%>/unlockcon" method="post">
                               <input type="hidden" id="connectorId<%=elem.pk%>" name="connectorId" value="<%=elem.connector_id%>">
-                              <button type="submit" id="UnlockConn<%=elem.pk%>" class="btn btn-secondary btn-sm w-100 ocppReq<%=elem.pk%>" <%
+                              <button type="submit" id="UnlockConn<%=elem.pk%>" class="btn btn-secondary btn-sm w-100 ocppReq<%=elem.pk%>"<%
                                 if(elem.online!==1) { %> disabled<% } %>><%=texts.UNLOCK_CONN%></button>
                             </form>
                           </div>
@@ -142,7 +150,7 @@
                             <form action="/charger/<%=elem.cb_id%>/remotestart" method="post" id="btnStart<%=elem.pk%>"
                               class="<% if(elem.status!='Available' && elem.status!='Preparing') { %>d-none<% } %>">
                               <input type="hidden" id="connectorId<%=elem.pk%>" name="connectorId" value="<%=elem.connector_id%>">
-                              <button type="submit" id="remoteStart<%=elem.pk%>" class="btn btn-success btn-sm w-100 ocppReq<%=elem.pk%>" <%
+                              <button type="submit" id="remoteStart<%=elem.pk%>" class="btn btn-success btn-sm w-100 ocppReq<%=elem.pk%>"<%
                                 if(elem.online!==1) { %> disabled<% } %>>
                                   <%=texts.START_CHARGING%>
                               </button>
@@ -150,7 +158,7 @@
                             <form action="/charger/<%=elem.cb_id%>/remotestop" method="post" id="btnStop<%=elem.pk%>"
                               class="<% if(elem.status!='Charging' && elem.status!='SuspendedEVSE' && elem.status!='SuspendedEV') { %>d-none<% } %>">
                               <input type="hidden" id="transId<%=elem.pk%>" name="transId" value="<%=elem.t_pk%>">
-                              <button type="submit" id="remoteStop<%=elem.pk%>" class="btn btn-danger btn-sm w-100 ocppReq<%=elem.pk%>" <%
+                              <button type="submit" id="remoteStop<%=elem.pk%>" class="btn btn-danger btn-sm w-100 ocppReq<%=elem.pk%>"<%
                                 if(elem.online!==1) { %> disabled<% } %>>
                                   <%=texts.STOP_CHARGING%>
                               </button>
@@ -190,8 +198,8 @@
                         <div class="row p-1">
                           <div class="col align-self-center">
                             <span class="fw-bold"><%=texts.END%>:&nbsp;</span><% if (elem.tsStop) { let date2=new Date(elem.tsStop * 1000); %>
-                              <span id="transActiv<%=elem.pk%>" class="d-none">non</span>
-                              <span id="transFin<%=elem.pk%>"><%= date2.toLocaleDateString(texts.LOCALE) %>&nbsp;<%= date2.toLocaleTimeString(texts.LOCALE) %></span>
+                            <span id="transActiv<%=elem.pk%>" class="d-none">non</span>
+                            <span id="transFin<%=elem.pk%>"><%= date2.toLocaleDateString(texts.LOCALE) %>&nbsp;<%= date2.toLocaleTimeString(texts.LOCALE) %></span>
                             <% } else { %>
                             <span id="transActiv<%=elem.pk%>" class="d-none">oui</span>
                             <span id="transFin<%=elem.pk%>"></span><% } %>
@@ -202,7 +210,7 @@
                           <% } else { %>
                             <% let power=(elem.tsPower / 1000); %><span class="fw-bold"><%=texts.POWER%>:&nbsp;</span><%= power %>&nbsp;<%=texts.POWERUNIT%><% } %>
                           </div>
-                        </div><%} %>
+                        </div><% } %>
                       </div>
                     </div>
                   <% } %></div>
@@ -219,6 +227,7 @@
 <script>
   $(document).ready(function () {
     $('#inputErrors').delay(5000).fadeOut('slow');
+    $('#ocppResponse').delay(3000).fadeOut('slow');
   });
   // Refresh Station Stats Data
   var interval1 = setInterval(reloadCBStatus, 1500);
@@ -266,13 +275,12 @@
       dataType: 'json',
       success: function (result) {
         for (const elem of result.data) {
-          // Test refresh si nouvelle données => var elementExists = document.getElementById("find-me");
           // Nouveau Site => Refresh
           if (document.body.contains(document.querySelector('div#site' + elem.s_pk)) === false) {
             location.reload();
           }
           // Nouveau chargeur => Refresh
-          if (elem.cb_bk && document.body.contains(document.querySelector('h5.cbonline' + elem.cb_pk)) === false) {
+          if (elem.cb_pk && document.body.contains(document.querySelector('h5.cbonline' + elem.cb_pk)) === false) {
             location.reload();
           }
           // Nouveau connecteur => Refresh
@@ -356,7 +364,7 @@
         alert(jqXHR.responseText)
         clearInterval(interval3)
       }
-    })
+    });
   }
 </script>
 <%- include('./partials/footer.ejs') %>
