@@ -144,6 +144,7 @@
   "TRANSAC_ENCOURS": "Recharging in progress",
   "TRANSAC_DERNIERE": "Last charge",
   "ENERGY_CONSUMED": "Energy Consumed",
+  "ENERGY": "Energy",
   "POWER": "Power",
   "START": "Start",
   "END": "End",
@@ -154,5 +155,7 @@
   "POWERINKW": "Power in kW",
   "AVAILABLE": "Available",
   "CHARGING": "Charging",
-  "OCCUPIED": "Occupied"
+  "OCCUPIED": "Occupied",
+  "REPORTS": "Reports",
+  "NO_INFOS": "No information yet."
 }

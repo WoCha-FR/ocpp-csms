@@ -18,7 +18,7 @@
             <td><%= pending.try %></td>
             <td>
               <% let date=new Date(pending.last * 1000) %>
-              <%= date.toLocaleDateString() %>&nbsp;<%= date.toLocaleTimeString() %>
+              <%= date.toLocaleDateString(texts.LOCALE) %>&nbsp;<%= date.toLocaleTimeString(texts.LOCALE) %>
             </td>
             <td>
               <form class="form-inline" action="/registerPending/<%= pending.id %>" method="post">

@@ -75,12 +75,12 @@
                 <div class="row p-1">
                   <div class="col"><span class="fw-bold"><%=texts.FABRICANT%>:&nbsp;</span><%=cbinfos.cp_vendor%></div>
                   <% let date=new Date(station.last_bootnotif_ts * 1000) %>
-                  <div class="col" id="lastboot"><span class="fw-bold"><%=texts.LASTBOOT%>:&nbsp;</span><%= date.toLocaleDateString() %>&nbsp;<%= date.toLocaleTimeString() %></div>
+                  <div class="col" id="lastboot"><span class="fw-bold"><%=texts.LASTBOOT%>:&nbsp;</span><%= date.toLocaleDateString(texts.LOCALE) %>&nbsp;<%= date.toLocaleTimeString(texts.LOCALE) %></div>
                 </div>
                 <div class="row p-1">
                   <div class="col"><span class="fw-bold"><%=texts.MODELE%>:&nbsp;</span><%=cbinfos.cp_model%></div>
                   <% let date2=new Date(station.last_heartbeat_ts * 1000) %>
-                  <div class="col" id="lastheart"><span class="fw-bold"><%=texts.LASTHEART%>:&nbsp;</span><%= date2.toLocaleDateString() %>&nbsp;<%= date2.toLocaleTimeString() %></div>
+                  <div class="col" id="lastheart"><span class="fw-bold"><%=texts.LASTHEART%>:&nbsp;</span><%= date2.toLocaleDateString(texts.LOCALE) %>&nbsp;<%= date2.toLocaleTimeString(texts.LOCALE) %></div>
                 </div>
                 <div class="row p-1">
                   <div class="col"><span class="fw-bold"><%=texts.SERIAL%>:&nbsp;</span><%=cbinfos.cp_serial_number%></div>
@@ -240,7 +240,7 @@
                         <div class="col-7" id="connlaststatus<%=conn.connector_id%>">
                           <span class="fw-bold"><%=texts.LASTSTATUS%>:&nbsp;</span>
                           <% let date3=new Date(conn.status_ts * 1000) %>
-                          <%= date3.toLocaleDateString() %>&nbsp;<%= date3.toLocaleTimeString() %>
+                          <%= date3.toLocaleDateString(texts.LOCALE) %>&nbsp;<%= date3.toLocaleTimeString(texts.LOCALE) %>
                         </div>
                         <div class="col-5 text-end">
                           <form action="/charger/<%= station.cb_id %>/reqconnector" method="post">
@@ -256,7 +256,7 @@
                           <%=(conn.energy/1000)%>&nbsp;<%=texts.ENERGYUNIT%>
                         </div>
                         <div class="col-5 text-end">
-                          <form action="/charger/<%= station.cb_id %>/reqconnector" method="post">
+                          <form action="/charger/<%=station.cb_id%>/reqconnector" method="post">
                             <input type="hidden" id="connectorId" name="connectorId" value="<%= conn.connector_id %>">
                             <button type="submit" id="reqMeter" name="requestedMessage" value="MeterValues"
                               class="btn btn-secondary btn-sm ocppReq">MeterValues</button>
@@ -293,9 +293,7 @@
                                     <option value="2" <% if(conn.format==2) { %> selected<% } %>><%=texts.CONNECTOR_CABLE%>
                                     </option>
                                   </select>
-                                  <label for="cformatInput">
-                                    <%=texts.CONNECTOR_FORMAT%>
-                                  </label>
+                                  <label for="cformatInput"><%=texts.CONNECTOR_FORMAT%></label>
                                 </div>
                               </div>
                           </div>

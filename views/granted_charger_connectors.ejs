@@ -81,87 +81,85 @@
         </div>
         <!-- BODY -->
         <div class="card-body">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-sm-2">
-                <form action="/charger/<%=station.cb_id%>/remotestart" method="post" id="btnStart<%=conn.pk%>" class="">
-                  <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
-                  <button type="submit" id="remoteStart<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq">
-                    <%=texts.START_CHARGING%>
-                  </button>
-                </form>
-                <form action="/charger/<%=station.cb_id%>/remotestop" method="post"id="btnStop<%=conn.pk%>" class="">
-                  <input type="hidden" id="transId<%=conn.pk%>" name="transId" value="">
-                  <button type="submit" id="remoteStop<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq">
-                    <%=texts.STOP_CHARGING%>
-                  </button>
-                </form>
-                <form action="/charger/<%=station.cb_id%>/unlockcon" method="post">
-                  <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
-                  <button type="submit" id="UnlockConn<%=conn.pk%>" class="btn btn-info btn-sm w-100 ocppReq">
-                    <%=texts.UNLOCK_CONN%>
-                  </button>
-                </form>
-              </div>
-              <div class="col-sm-4">
-                <div class="card h-100">
-                  <div class="card-header fs-6 fw-bold"><%=texts.CONNECTOR_INFOS%></div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col"><%=texts.NOM%>:&nbsp;<span class="fw-bold"><%- conn.cname ? conn.cname : texts.CONNECTOR + ' ' + conn.connector_id %></span></div>
-                      <div class="col"><%=texts.MAX_POWER%>:&nbsp;<span class="fw-bold"><%=conn.maxPower%>&nbsp;<%=texts.POWERUNIT%></span></div>
+          <div class="row">
+            <div class="col-sm-2">
+              <form action="/charger/<%=station.cb_id%>/remotestart" method="post" id="btnStart<%=conn.pk%>" class="">
+                <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
+                <button type="submit" id="remoteStart<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq">
+                  <%=texts.START_CHARGING%>
+                </button>
+              </form>
+              <form action="/charger/<%=station.cb_id%>/remotestop" method="post"id="btnStop<%=conn.pk%>" class="">
+                <input type="hidden" id="transId<%=conn.pk%>" name="transId" value="">
+                <button type="submit" id="remoteStop<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq">
+                  <%=texts.STOP_CHARGING%>
+                </button>
+              </form>
+              <form action="/charger/<%=station.cb_id%>/unlockcon" method="post">
+                <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
+                <button type="submit" id="UnlockConn<%=conn.pk%>" class="btn btn-info btn-sm w-100 ocppReq">
+                  <%=texts.UNLOCK_CONN%>
+                </button>
+              </form>
+            </div>
+            <div class="col-sm-4">
+              <div class="card h-100">
+                <div class="card-header fs-6 fw-bold"><%=texts.CONNECTOR_INFOS%></div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col"><%=texts.NOM%>:&nbsp;<span class="fw-bold"><%- conn.cname ? conn.cname : texts.CONNECTOR + ' ' + conn.connector_id %></span></div>
+                    <div class="col"><%=texts.MAX_POWER%>:&nbsp;<span class="fw-bold"><%=conn.maxPower%>&nbsp;<%=texts.POWERUNIT%></span></div>
+                  </div>
+                  <div class="row">
+                    <div class="col"><%=texts.FORMAT%>:&nbsp;
+                      <span class="fw-bold">
+                        <% if (conn.format==1) { %><%=texts.CONNECTOR_SOCKET%><% } %>
+                        <% if (conn.format==2) { %><%=texts.CONNECTOR_CABLE%><% } %>
+                      </span>
                     </div>
-                    <div class="row">
-                      <div class="col"><%=texts.FORMAT%>:&nbsp;
-                        <span class="fw-bold">
-                          <% if (conn.format==1) { %><%=texts.CONNECTOR_SOCKET%><% } %>
-                          <% if (conn.format==2) { %><%=texts.CONNECTOR_CABLE%><% } %>
-                        </span>
-                      </div>
-                      <div class="col"><%=texts.TYPE%>:&nbsp;
-                        <span class="fw-bold">
-                          <% if (conn.type==1) { %>Type 2<% } %>
-                          <% if (conn.type==2) { %>Combo CCS<% } %>
-                          <% if (conn.type==3) { %>Type 1<% } %>
-                          <% if (conn.type==4) { %>CHAdeMO<% } %>
-                        </span>
-                      </div>
+                    <div class="col"><%=texts.TYPE%>:&nbsp;
+                      <span class="fw-bold">
+                        <% if (conn.type==1) { %>Type 2<% } %>
+                        <% if (conn.type==2) { %>Combo CCS<% } %>
+                        <% if (conn.type==3) { %>Type 1<% } %>
+                        <% if (conn.type==4) { %>CHAdeMO<% } %>
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col">
-                <!-- Transactions -->
-                <div class="card h-100 invisible" id="trans<%=conn.pk%>">
-                  <span id="transActiv<%=conn.pk%>" class="d-none"></span>
-                  <span id="transTimer<%=conn.pk%>" class="d-none"></span>
-                  <div class="card-header fs-6 fw-bold">
-                    <span id="transState<%=conn.pk%>"></span>
-                    <div class="float-end">
-                      <a id="transHisto<%=conn.pk%>" href="#"><i class="bi bi-file-bar-graph" style="cursor: pointer;"></i></a>
+            </div>
+            <div class="col">
+              <!-- Transactions -->
+              <div class="card h-100 invisible" id="trans<%=conn.pk%>">
+                <span id="transActiv<%=conn.pk%>" class="d-none"></span>
+                <span id="transTimer<%=conn.pk%>" class="d-none"></span>
+                <div class="card-header fs-6 fw-bold">
+                  <span id="transState<%=conn.pk%>"></span>
+                  <div class="float-end">
+                    <a id="transHisto<%=conn.pk%>" href="#"><i class="bi bi-file-bar-graph" style="cursor: pointer;"></i></a>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <span class="fw-bold"><%=texts.USER%>:&nbsp;</span><span id="transUser<%=conn.pk%>"></span>
+                    </div>
+                    <div class="col">
+                      <span class="fw-bold"><%=texts.START%>:&nbsp;</span><span id="transDeb<%=conn.pk%>"></span>
+                    </div>
+                    <div class="col">
+                      <span class="fw-bold"><%=texts.END%>:&nbsp;</span><span id="transFin<%=conn.pk%>"></span>
                     </div>
                   </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col">
-                        <span class="fw-bold"><%=texts.USER%>:&nbsp;</span><span id="transUser<%=conn.pk%>"></span>
-                      </div>
-                      <div class="col">
-                        <span class="fw-bold"><%=texts.START%>:&nbsp;</span><span id="transDeb<%=conn.pk%>"></span>
-                      </div>
-                      <div class="col">
-                        <span class="fw-bold"><%=texts.END%>:&nbsp;</span><span id="transFin<%=conn.pk%>"></span>
-                      </div>
+                  <div class="row">
+                    <div class="col">
+                      <span class="fw-bold"><%=texts.DURATION%>:&nbsp;</span><span id="transTime<%=conn.pk%>"></span>
                     </div>
-                    <div class="row">
-                      <div class="col">
-                        <span class="fw-bold"><%=texts.DURATION%>:&nbsp;</span><span id="transTime<%=conn.pk%>"></span>
-                      </div>
-                      <div class="col">
-                        <span class="fw-bold"><%=texts.ENERGY_CONSUMED%>:&nbsp;</span><span id="transKwh<%=conn.pk%>"></span>&nbsp;<%=texts.ENERGYUNIT%>
-                      </div>
-                      <div class="col" id="transPwrStop<%=conn.pk%>"></div>
+                    <div class="col">
+                      <span class="fw-bold"><%=texts.ENERGY_CONSUMED%>:&nbsp;</span><span id="transKwh<%=conn.pk%>"></span>&nbsp;<%=texts.ENERGYUNIT%>
                     </div>
+                    <div class="col" id="transPwrStop<%=conn.pk%>"></div>
                   </div>
                 </div>
               </div>
@@ -214,7 +212,7 @@
       const duration = ((transFin.getTime() - transDeb.getTime()) / 1000);
       $('#transTime' + elem.con_pk).html(secToString(duration));
       // Reason
-      $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.REASON%>:&nbsp;</span>' + elem.tsReason );
+      $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.REASON%>:&nbsp;</span>' + elem.tsReason);
     } else {
       // Set transaction ID to button
       let transId = '#transId' + elem.con_pk;
@@ -320,7 +318,7 @@
               $('#cbonline').html('<span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>')
             }
           }
-          var status_bg = '#connstatus' + elem.pk
+          const status_bg = '#connstatus' + elem.pk
           // Status Badge
           if (elem.status == 'Unavailable' || elem.status == 'Faulted') {
             $(status_bg).html('<span class="badge text-bg-danger">' + elem.status + '</span>');
@@ -337,7 +335,7 @@
           } else {
             $('#btnStart' + elem.pk).addClass('d-none');
           }
-          if (elem.status != 'Available' && elem.status != 'Preparing' && elem.status != 'Finishing') {
+          if (elem.status != 'Charging' || elem.status != 'SuspendedEVSE' || elem.status != 'SuspendedEV') {
             $('#btnStop' + elem.pk).removeClass('d-none');
           } else {
             $('#btnStop' + elem.pk).addClass('d-none');

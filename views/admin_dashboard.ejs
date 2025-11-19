@@ -1,8 +1,8 @@
 <%- include('./partials/header.ejs') %>
 <main class="container-fluid">
   <%- include('./partials/ocpperrors.ejs') %>
-  <!-- Stations & Connectors -->
-  <div class="container-fluid text-center">
+  <!-- Stations & Connectors status-->
+  <div class="container-fluid text-center mb-2 p-0">
     <div class="row">
       <div class="col-4">
         <div class="card">
@@ -73,13 +73,154 @@
       </div>
     </div>
   </div>
+  <!-- Sites & Connectors -->
+  <% if(sitesconns.length > 0) { %><% let cur_site=0 %>
+    <div class="accordion">
+    <% sitesconns.forEach(function(elem) { %>
+    <% if (cur_site != elem.s_pk) { //CHANGEMENT DE SITE %>
+            <% if (cur_site != 0) { //FERMETURE SITE OUVERT %></div>
+          </div>
+        </div>
+      </div><% } %>
+      <% cur_site=elem.s_pk %><!-- Ouverture Nouveau Site -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button collapsed" data-bs-target="#site<%=elem.s_pk%>" aria-controls="site<%=elem.s_pk%>" type="button" data-bs-toggle="collapse" aria-expanded="fale"><%=elem.s_name%></button>
+        </h2>
+        <div id="site<%=elem.s_pk%>" class="accordion-collapse collapse">
+          <div class="accordion-body p-2">
+            <div class="row row-cols-2">
+              <% } //FIN NOUVEAU SITE %><% if (!elem.cb_pk) {%>
+              <div class="col-12 text-center"><%=texts.NO_STATIONS%></div>
+              <% } else { %>
+              <div class="col">
+                <div class="card h-100">
+                  <div class="card-header">
+                    <small class="d-inline-flex mb-0 px-2 py-1 fw-bold text-white bg-secondary border border-secondary rounded-2">
+                      <i class="bi bi-ev-station"></i>&nbsp;<%=elem.cb_name%>
+                    </small><% if(elem.connector_id==1) { %>
+                    <small class="d-inline-flex mb-0 px-2 py-1 fw-bold text-white bg-secondary border border-secondary rounded-2">
+                      <i class="bi bi-plugin"></i>&nbsp;<%=elem.connector_id%>
+                    </small><% } %>
+                    <div class="float-end">
+                      <h5 class="cbonline<%=elem.cb_pk%>"><% if(elem.online==1) { %>
+                        <span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span><% } else if(elem.online==0) { %>
+                        <span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span><% } else { %>
+                        <span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span><% } %>
+                      </h5>
+                    </div>
+                  </div>
+                  <div class="card-body p-1"><% if (!elem.pk) { %><%=texts.NO_INFOS%><% } else { %>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="row p-1">
+                          <div class="col align-self-center">
+                            <span class="fw-bold"><%=texts.NOM%>:&nbsp;</span><%- elem.cname ? elem.cname : texts.CONNECTOR + ' ' + elem.connector_id%>
+                          </div>
+                          <div class="col align-self-center">
+                            <form action="/charger/<%=elem.cb_id%>/unlockcon" method="post">
+                              <input type="hidden" id="connectorId<%=elem.pk%>" name="connectorId" value="<%=elem.connector_id%>">
+                              <button type="submit" id="UnlockConn<%=elem.pk%>" class="btn btn-secondary btn-sm w-100 ocppReq<%=elem.pk%>" <%
+                                if(elem.online!==1) { %> disabled<% } %>><%=texts.UNLOCK_CONN%></button>
+                            </form>
+                          </div>
+                        </div>
+                        <div class="row p-1">
+                          <div class="col align-self-center" id="connStatus<%=elem.pk%>">
+                            <span class="fw-bold"><%=texts.STATE%>:</span>
+                            <% if (elem.status=='Unavailable' || elem.status=='Faulted') { %>
+                            <span class="badge text-bg-danger"><%=elem.status%></span>
+                            <% } else if (elem.status=='Available') { %>
+                            <span class="badge text-bg-success"><%=elem.status%></span>
+                            <% } else if (elem.status=='Charging') { %>
+                            <span class="badge text-bg-info"><%=elem.status%></span>
+                            <% } else { %>
+                            <span class="badge text-bg-warning"><%=elem.status%></span>
+                            <% } %>
+                          </div>
+                          <div class="col align-self-center">
+                            <form action="/charger/<%=elem.cb_id%>/remotestart" method="post" id="btnStart<%=elem.pk%>"
+                              class="<% if(elem.status!='Available' && elem.status!='Preparing') { %>d-none<% } %>">
+                              <input type="hidden" id="connectorId<%=elem.pk%>" name="connectorId" value="<%=elem.connector_id%>">
+                              <button type="submit" id="remoteStart<%=elem.pk%>" class="btn btn-success btn-sm w-100 ocppReq<%=elem.pk%>" <%
+                                if(elem.online!==1) { %> disabled<% } %>>
+                                  <%=texts.START_CHARGING%>
+                              </button>
+                            </form>
+                            <form action="/charger/<%=elem.cb_id%>/remotestop" method="post" id="btnStop<%=elem.pk%>"
+                              class="<% if(elem.status!='Charging' && elem.status!='SuspendedEVSE' && elem.status!='SuspendedEV') { %>d-none<% } %>">
+                              <input type="hidden" id="transId<%=elem.pk%>" name="transId" value="<%=elem.t_pk%>">
+                              <button type="submit" id="remoteStop<%=elem.pk%>" class="btn btn-danger btn-sm w-100 ocppReq<%=elem.pk%>" <%
+                                if(elem.online!==1) { %> disabled<% } %>>
+                                  <%=texts.STOP_CHARGING%>
+                              </button>
+                            </form>
+                          </div>
+                        </div>
+                        <div class="row p-1">
+                          <div class="col align-self-center" id="connDispo<%=elem.pk%>">
+                            <span class="fw-bold"><%=texts.AVAILABILITY%>:</span><% if(elem.status=='Unavailable') { %>
+                            <span class="badge text-bg-warning"><%=texts.INOPERATIVEM%></span><% } else if(elem.status=='Faulted') { %>
+                            <span class="badge text-bg-danger"><%=texts.FAULTY%></span><% } else { %>
+                            <span class="badge text-bg-success"><%=texts.OPERATIVEM%></span><% } %>
+                          </div>
+                          <div class="col align-self-center">
+                            <form action="/charger/<%=elem.cb_id%>/available" method="post">
+                              <input type="hidden" id="connectorId" name="connectorId" value="<%=elem.connector_id%>">
+                                <button type="submit" id="setAvailable<%=elem.pk%>" name="AvailabilityType" value="Operative" class="btn btn-success btn-sm w-100 ocppReq<%=elem.pk%><% if(elem.status!='Unavailable' ) { %> d-none<% } %>"<% if(elem.online!==1) { %> disabled<% } %>><%=texts.OPERATIVEM%></button>
+                                <button type="submit" id="setUnavailable<%=elem.pk%>" name="AvailabilityType" value="Inoperative" class="btn btn-danger btn-sm w-100 ocppReq<%=elem.pk%><% if(elem.status=='Unavailable') { %> d-none<% } %>"<% if(elem.online!==1) { %> disabled<% } %>><%=texts.INOPERATIVEM%></button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="row p-1">
+                          <div class="col align-self-center"><span class="fw-bold"><%=texts.TRANSAC_DETAILS%>:</span></div>
+                        </div><% if (!elem.t_pk) {%>
+                        <div class="row p-1">
+                          <div class="col align-self-center"><%=texts.NO_INFOS%></div>
+                        </div><%} else {%>
+                        <div class="row p-1">
+                          <div class="col align-self-center"><% let date1=new Date(elem.tsStart * 1000) %>
+                            <span class="fw-bold"><%=texts.START%>:&nbsp;</span><span id="transDeb<%=elem.pk%>"><%= date1.toLocaleDateString(texts.LOCALE) %>&nbsp;<%= date1.toLocaleTimeString(texts.LOCALE) %></span>
+                          </div>
+                          <div class="col align-self-center"><% let energy=(elem.tsEnergy / 1000); %>
+                            <span class="fw-bold"><%=texts.ENERGY%>:&nbsp;</span><%= energy %>&nbsp;<%=texts.ENERGYUNIT%></div>
+                        </div>
+                        <div class="row p-1">
+                          <div class="col align-self-center">
+                            <span class="fw-bold"><%=texts.END%>:&nbsp;</span><% if (elem.tsStop) { let date2=new Date(elem.tsStop * 1000); %>
+                              <span id="transActiv<%=elem.pk%>" class="d-none">non</span>
+                              <span id="transFin<%=elem.pk%>"><%= date2.toLocaleDateString(texts.LOCALE) %>&nbsp;<%= date2.toLocaleTimeString(texts.LOCALE) %></span>
+                            <% } else { %>
+                            <span id="transActiv<%=elem.pk%>" class="d-none">oui</span>
+                            <span id="transFin<%=elem.pk%>"></span><% } %>
+                          </div>
+                          <div class="col align-self-center" id="transPwrStop<%=elem.pk%>">
+                          <% if (elem.tsStop) { %>
+                            <span class="fw-bold"><%=texts.REASON%>:&nbsp;</span><%=elem.tsReason%>
+                          <% } else { %>
+                            <% let power=(elem.tsPower / 1000); %><span class="fw-bold"><%=texts.POWER%>:&nbsp;</span><%= power %>&nbsp;<%=texts.POWERUNIT%><% } %>
+                          </div>
+                        </div><%} %>
+                      </div>
+                    </div>
+                  <% } %></div>
+                </div>
+              </div><% } %>
+            <% }); //FOREACH %></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
 </main>
 <%- include('./partials/footerjs.ejs') %>
 <script>
   $(document).ready(function () {
     $('#inputErrors').delay(5000).fadeOut('slow');
   });
-  // Refresh Station Data
+  // Refresh Station Stats Data
   var interval1 = setInterval(reloadCBStatus, 1500);
   function reloadCBStatus() {
     $.ajax({
@@ -96,7 +237,7 @@
       }
     })
   }
-  // Refresh Connectors Data
+  // Refresh Connectors Stats Data
   var interval2 = setInterval(reloadConnsStatus, 1500);
   function reloadConnsStatus() {
     $.ajax({
@@ -113,6 +254,107 @@
       error: function (jqXHR, textStatus, err) {
         alert(jqXHR.responseText)
         clearInterval(interval2)
+      }
+    })
+  }
+  // Refresh CB/Conns/Transac Datas
+  var interval3 = setInterval(reloadSiteCbConnTransac, 5000);
+  function reloadSiteCbConnTransac() {
+    $.ajax({
+      url: '/ajax/cbconstransac_data',
+      type: 'POST',
+      dataType: 'json',
+      success: function (result) {
+        for (const elem of result.data) {
+          // Test refresh si nouvelle données => var elementExists = document.getElementById("find-me");
+          // Nouveau Site => Refresh
+          if (document.body.contains(document.querySelector('div#site' + elem.s_pk)) === false) {
+            location.reload();
+          }
+          // Nouveau chargeur => Refresh
+          if (elem.cb_bk && document.body.contains(document.querySelector('h5.cbonline' + elem.cb_pk)) === false) {
+            location.reload();
+          }
+          // Nouveau connecteur => Refresh
+          if (elem.pk && document.body.contains(document.querySelector('div#connStatus' + elem.pk)) === false) {
+            location.reload();
+          }
+          // Première transaction
+          if (elem.t_pk && document.body.contains(document.querySelector('span#transActiv' + elem.pk)) === false) {
+            location.reload();
+          }
+          // Online / Offline
+          if (elem.online === 1) {
+            $('.ocppReq' + elem.pk).prop('disabled', false);
+            $('.cbonline' + elem.cb_pk).html('<span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>')
+          } else {
+            $('.ocppReq' + elem.pk).prop('disabled', true);
+            if (elem.online === 0) {
+              $('.cbonline' + elem.cb_pk).html('<span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>')
+            } else {
+              $('.cbonline' + elem.cb_pk).html('<span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>')
+            }
+          }
+          // Connector Status & Operative & Bouton Availability
+          if (elem.status == 'Unavailable' || elem.status == 'Faulted') {
+            $('#connStatus' + elem.pk).html('<span class="fw-bold"><%=texts.STATE%>:&nbsp;</span><span class="badge text-bg-danger">' + elem.status + '</span>');
+            if (elem.status == 'Unavailable') {
+              $('#connDispo' + elem.pk).html('<span class="fw-bold"><%=texts.AVAILABILITY%>:&nbsp;</span><span class="badge text-bg-warning"><%=texts.INOPERATIVEM%></span>');
+              $('#setAvailable' + elem.pk).removeClass('d-none');
+              $('#setUnavailable' + elem.pk).addClass('d-none');
+            } else {
+              $('#connDispo' + elem.pk).html('<span class="fw-bold"><%=texts.AVAILABILITY%>:&nbsp;</span><span class="badge text-bg-danger"><%=texts.FAULTY%></span>');
+              $('#setAvailable' + elem.pk).addClass('d-none');
+              $('#setUnavailable' + elem.pk).removeClass('d-none');
+            }
+          } else if (elem.status == 'Available') {
+            $('#connStatus' + elem.pk).html('<span class="fw-bold"><%=texts.STATE%>:&nbsp;</span><span class="badge text-bg-success">' + elem.status + '</span>');
+            $('#connDispo' + elem.pk).html('<span class="fw-bold"><%=texts.AVAILABILITY%>:&nbsp;</span><span class="badge text-bg-success"><%=texts.OPERATIVEM%></span>');
+            $('#setAvailable' + elem.pk).addClass('d-none');
+            $('#setUnavailable' + elem.pk).removeClass('d-none');
+          } else if (elem.status == 'Charging') {
+            $('#connStatus' + elem.pk).html('<span class="fw-bold"><%=texts.STATE%>:&nbsp;</span><span class="badge text-bg-info">' + elem.status + '</span>');
+            $('#connDispo' + elem.pk).html('<span class="fw-bold"><%=texts.AVAILABILITY%>:&nbsp;</span><span class="badge text-bg-success"><%=texts.OPERATIVEM%></span>');
+            $('#setAvailable' + elem.pk).addClass('d-none');
+            $('#setUnavailable' + elem.pk).removeClass('d-none');
+          } else {
+            $('#connStatus' + elem.pk).html('<span class="fw-bold"><%=texts.STATE%>:&nbsp;</span><span class="badge text-bg-warning">' + elem.status + '</span>');
+            $('#connDispo' + elem.pk).html('<span class="fw-bold"><%=texts.AVAILABILITY%>:&nbsp;</span><span class="badge text-bg-success"><%=texts.OPERATIVEM%></span>');
+            $('#setAvailable' + elem.pk).addClass('d-none');
+            $('#setUnavailable' + elem.pk).removeClass('d-none');
+          }
+          // Boutons Start & Stop
+          if (elem.status == 'Available' || elem.status == 'Preparing') {
+            $('#btnStart' + elem.pk).removeClass('d-none');
+          } else {
+            $('#btnStart' + elem.pk).addClass('d-none');
+          }
+          if (elem.status=='Charging' || elem.status=='SuspendedEVSE' || elem.status=='SuspendedEV') {
+            $('#btnStop' + elem.pk).removeClass('d-none');
+          } else {
+            $('#btnStop' + elem.pk).addClass('d-none');
+          }
+          // Infos Charge
+          const transDeb = new Date(elem.tsStart * 1000);
+          $('#transDeb' + elem.pk).html(transDeb.toLocaleDateString() + '&nbsp;' + transDeb.toLocaleTimeString());
+          $('#transKwh' + elem.pk).html(elem.tsEnergy / 1000);
+          // Transaction terminée ?
+          if (elem.tsStop) {
+            $('#transActiv' + elem.pk).html('non');
+            const transFin = new Date(elem.tsStop * 1000);
+            $('#transFin' + elem.pk).html(transFin.toLocaleDateString() + '&nbsp;' + transFin.toLocaleTimeString());
+            $('#transPwrStop' + elem.pk).html('<span class="fw-bold"><%=texts.REASON%>:&nbsp;</span>' + elem.tsReason);
+          } else {
+            $('#transId' + elem.pk).val(elem.t_pk);
+            $('#transActiv' + elem.pk).html('oui');
+            $('#transFin' + elem.pk).html('');
+            $('#transPwrStop' + elem.pk).html('<span class="fw-bold"><%=texts.POWER%>:&nbsp;</span>' + (elem.tsPower / 1000) + '&nbsp;<%=texts.POWERUNIT%>');
+          }
+        }
+      },
+      error: function (jqXHR, textStatus, err) {
+        alert(jqXHR.responseText)
+        clearInterval(interval3)
       }
     })
   }

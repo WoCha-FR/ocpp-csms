@@ -40,6 +40,9 @@
             <li class="nav-item">
               <a class="nav-link<%=typeof onDashboard !== 'undefined' ? ' active' : '' %>" href="/dashboard"><%=texts.ACCUEIL%></a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link<%=typeof onReports !== 'undefined' ? ' active' : '' %>" href="/reports"><%=texts.REPORTS%></a>
+            </li>
             <% if (userInfo.isAdmin==1) { %>
             <li class="nav-item">
               <a class="nav-link<%=typeof onSites !== 'undefined' ? ' active' : '' %>" href="/admin/sites"><%=texts.SITES%></a>

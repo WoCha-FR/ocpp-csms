@@ -144,15 +144,18 @@
   "TRANSAC_ENCOURS": "Charge en cours",
   "TRANSAC_DERNIERE": "Dernière charge",
   "ENERGY_CONSUMED": "Énergie consommée",
+  "ENERGY": "Énergie",
   "POWER": "Puissance",
   "START": "Début",
   "END": "Fin",
   "DURATION": "Durée",
-  "REASON": "Reason",
+  "REASON": "Arret",
   "TRANSAC_DETAILS": "Détails de la session de recharge",
   "ENERGYINKWH": "Energie en kWh",
   "POWERINKW": "Puissance en kW",
   "AVAILABLE": "Disponible",
   "CHARGING": "En charge",
-  "OCCUPIED": "Occupé"
+  "OCCUPIED": "Occupé",
+  "REPORTS": "Rapports",
+  "NO_INFOS": "Pas d'informations pour le moment."
 }
