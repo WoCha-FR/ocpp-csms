@@ -29,6 +29,10 @@
 <%- include('./partials/footerjs.ejs') %>
 <script src="/js/chart.js"></script>
 <script>
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+  });
+  // CHART
   const ctx = document.getElementById('myChart');
   const all = JSON.parse('<%- JSON.stringify(all)%>');
   new Chart(ctx, {

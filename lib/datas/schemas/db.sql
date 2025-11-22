@@ -38,7 +38,7 @@ CREATE UNIQUE INDEX `site_rfid_tags_UNIQUE` ON `rfid_tags` (COALESCE(`site`,0),`
 CREATE TABLE IF NOT EXISTS `charge_box` (
 `cb_pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 `cb_id` TEXT(75) NOT NULL CONSTRAINT `cbid_UNIQUE` UNIQUE,
-`cb_name` TEXT(75) NOT NULL CONSTRAINT `cbname_UNIQUE` UNIQUE COLLATE NOCASE,
+`cb_name` TEXT(75) NOT NULL COLLATE NOCASE,
 `cb_pwd` TEXT(75) DEFAULT NULL,
 `registration_status` TEXT(20) NOT NULL DEFAULT 'Accepted',
 `last_heartbeat_ts` TIMESTAMP(11) NULL DEFAULT NULL,
@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS `charge_box` (
 `site` INTEGER DEFAULT NULL REFERENCES `sites` (`s_pk`) ON DELETE SET NULL,
 `cb_mode` INTEGER(1) DEFAULT(1) NOT NULL CHECK (`cb_mode` IN (0, 1, 2))
 );
+CREATE UNIQUE INDEX `cbnameinsite_UNIQUE` ON `charge_box` (`cb_name` COLLATE NOCASE,`site`);
 /* Charge_Box_Infos */
 CREATE TABLE IF NOT EXISTS `charge_box_infos` (
 `cb_pk` INTEGER PRIMARY KEY REFERENCES `charge_box` (`cb_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -120,7 +121,11 @@ CREATE TABLE IF NOT EXISTS `transactions_data` (
 `t_pk` INTEGER REFERENCES `transactions` (`t_pk`) ON DELETE CASCADE ON UPDATE CASCADE,
 `data_ts` TIMESTAMP (11) NOT NULL,
 `power` INTEGER (10) DEFAULT NULL,
-`energy` INTEGER (10) DEFAULT NULL
+`energy` INTEGER (10) DEFAULT NULL,
+`ampl1` INTEGER (10) DEFAULT NULL,
+`ampl2` INTEGER (10) DEFAULT NULL,
+`ampl3` INTEGER (10) DEFAULT NULL,
+`ampoffer` INTEGER (10) DEFAULT NULL
 );
 /* OCPP_Default_Conf */
 CREATE TABLE IF NOT EXISTS `ocpp_default_conf` (

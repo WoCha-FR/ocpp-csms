@@ -39,12 +39,6 @@
     <!-- CARD BODY -->
     <div class="card-body">
       <div class="row mb-2">
-        <div class="col-md-2">
-          <div class="input-group input-group-sm">
-            <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
-            <input type="text" class="form-control" aria-label="<%=texts.SEARCH%>" aria-describedby="basic-addon1" id="mySearch">
-          </div>
-        </div>
         <div class="col-md-3">
           <div class="input-group input-group-sm flatpickr">
             <div class="input-group-text"><%=texts.DATE%></div>
@@ -52,7 +46,20 @@
             <span class="input-group-text" data-clear><i class="bi bi-calendar2-x"></i></span>
           </div>
         </div>
-        <div class="col-md-2 offset-md-5 text-end">
+        <div class="col-md-5" id="myFilter">
+          <div class="row">
+            <div class="col input-group-sm"><select class="form-control bootstrap-table-filter-control-method">
+                <option value=""></option>
+              </select></div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="input-group input-group-sm">
+            <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
+            <input type="text" class="form-control" aria-label="<%=texts.SEARCH%>" aria-describedby="basic-addon1" id="mySearch">
+          </div>
+        </div>
+        <div class="col-md-2 text-end">
           <button type="button" class="btn btn-secondary btn-sm" id="refreshTable"><i class="bi bi-arrow-clockwise"></i></button>
           <button type="button" class="btn btn-secondary btn-sm" id="exportTable"><i class="bi bi-download"></i></button>
         </div>
@@ -62,7 +69,7 @@
           <th data-field="timestamp" data-formatter="tsFormatter"><%=texts.DATETIME%></th>
           <th data-field="direction"><%=texts.DIRECTION%></th>
           <th data-field="type"><%=texts.TYPE%></th>
-          <th data-field="method"><%=texts.METHOD%></th>
+          <th data-field="method" data-filter-control="select"><%=texts.METHOD%></th>
           <th data-field="message" class="text-break"><%=texts.MESSAGE%></th>
         </thead>
       </table>
@@ -71,12 +78,12 @@
   </div>
 </main>
 <%- include('./partials/footerjs.ejs') %>
+<script src="/js/btable-filter.min.js"></script>
 <script src="/js/jquery-table-export.min.js"></script>
 <script src="/js/btable-export.min.js"></script>
 <script src="/js/flatpickr.min.js"></script>
 <% if (texts.LANG=='fr' ) { %>
 <script src="/js/flatpickr-fr.min.js"></script>
-<script>flatpickr.localize(flatpickr.l10ns.fr);</script>
 <% } %>
 <script>
   // Document
@@ -84,12 +91,14 @@
     $('#inputErrors').delay(5000).fadeOut('slow');
   });
   // Flatpickr
+  const tsnow = new Date()
+  const defaultDate = flatpickr.formatDate(tsnow, "D Y-m-d")
   const elem = document.querySelector('div[class$="flatpickr"]');
   const picker = flatpickr(elem, {
     mode: "range",
     maxDate: "today",
     dateFormat: "D Y-m-d",
-    defaultDate: [Date.now(), Date.now()],
+    defaultDate: [defaultDate, defaultDate],
     wrap: true,
     onClose: function (selectedDates, dateStr, instance) {
       $('#logstab').bootstrapTable('refresh')
@@ -112,7 +121,9 @@
       pageSize: 50,
       pageList: [50, 100, 250, 'All'],
       ajax: "ajaxRequest",
-      queryParams: 'queryParams'
+      queryParams: 'queryParams',
+      filterControl: true,
+      filterControlContainer: '#myFilter'
     })
   })
   // BSTable - data-formater
@@ -177,7 +188,33 @@
 </script>
 <% if (texts.LANG=='fr') { %>
 <script>
+  picker.set('locale', 'fr')
   picker.set("dateFormat", "D d/m/Y")
 </script>
 <% } %>
+<script>
+  // Refresh Charger Data
+  var interval1 = setInterval(reloadChargerStatus, 5000);
+  function reloadChargerStatus() {
+    $.ajax({
+      url: '/ajax/charger_status',
+      type: 'POST',
+      data: { ocppName: '<%= station.cb_id %>' },
+      dataType: 'json',
+      success: function (result) {
+        if (result.data.online === 1) {
+          $('#cbonline').html('<span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>')
+        } else if (result.data.online === 0) {
+          $('#cbonline').html('<span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>')
+        } else {
+          $('#cbonline').html('<span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>')
+        }
+      },
+      error: function (jqXHR, textStatus, err) {
+        alert(jqXHR.responseText)
+        clearInterval(interval1)
+      }
+    });
+  }
+</script>
 <%- include('./partials/footer.ejs') %>

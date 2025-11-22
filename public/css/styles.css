@@ -43,10 +43,12 @@ i.flag-fr::before {
   background-position: 0 -1976px !important;
 }
 
-table#logstab th {
+table#logstab th,
+table#reportstab th {
   font-size: medium;
 }
-table#logstab td {
+table#logstab td,
+table#reportstab td {
   font-size: small;
 }
 

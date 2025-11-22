@@ -84,6 +84,7 @@
   "CHARGEAUTH_MODE": "Autoristation de charge",
   "FREE_CHARGE_OCPP": "Démarrage automatique par OCPP",
   "FREE_CHARGE_BORNE": "Gérer par la borne ou son application",
+  "FREE_CHARGE": "Charge libre",
   "RESTRICTED_CHARGE": "RFID / Web",
   "CONNECTOR": "Connecteur",
   "CONNECTORS": "Connecteurs",

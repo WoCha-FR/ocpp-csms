@@ -84,6 +84,7 @@
   "CHARGEAUTH_MODE": "Charging authorisation",
   "FREE_CHARGE_OCPP": "Automatic start-up by OCPP",
   "FREE_CHARGE_BORNE": "Manage via the charger or its application",
+  "FREE_CHARGE": "Free charge",
   "RESTRICTED_CHARGE": "RFID / Web",
   "CONNECTOR": "Connector",
   "CONNECTORS": "Connectors",

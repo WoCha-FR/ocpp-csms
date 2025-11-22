@@ -101,17 +101,45 @@
 </main>
 <%- include('./partials/footerjs.ejs') %>
 <script>
-$(document).ready(function () {
-  $('#ocppResponse').delay(3000).fadeOut('slow');
-  $('#inputErrors').delay(5000).fadeOut('slow');
-});
+  $(document).ready(function () {
+    $('#ocppResponse').delay(3000).fadeOut('slow');
+    $('#inputErrors').delay(5000).fadeOut('slow');
+  });
+  // Refresh Charger Data
+  var interval1 = setInterval(reloadChargerStatus, 5000);
+  function reloadChargerStatus() {
+    $.ajax({
+      url: '/ajax/charger_status',
+      type: 'POST',
+      data: { ocppName: '<%= station.cb_id %>' },
+      dataType: 'json',
+      success: function (result) {
+        if (result.data.online === 1) {
+          $('#cbonline').html('<span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>')
+          $('#reqConfig').prop('disabled', false)
+          $('.okonline').prop('disabled', false)
+        } else if (result.data.online === 0) {
+          $('#cbonline').html('<span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>')
+          $('#reqConfig').prop('disabled', true)
+          $('.okonline').prop('disabled', true)
+        } else {
+          $('#cbonline').html('<span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>')
+          $('#reqConfig').prop('disabled', true)
+          $('.okonline').prop('disabled', true)
+        }
+      },
+      error: function (jqXHR, textStatus, err) {
+        alert(jqXHR.responseText)
+        clearInterval(interval1)
+      }
+    });
+  }
 </script>
 <% if(station.online!=1) { %>
 <script>
-  // TODO: AJAX
   $(document).ready(function () {
-    $('#reqConfig').prop('disabled', true);
-    $('.okonline').prop('disabled', true);
+    $('#reqConfig').prop('disabled', true)
+    $('.okonline').prop('disabled', true)
   });
 </script>
 <% } %>

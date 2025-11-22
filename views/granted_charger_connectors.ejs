@@ -83,13 +83,13 @@
         <div class="card-body">
           <div class="row">
             <div class="col-sm-2">
-              <form action="/charger/<%=station.cb_id%>/remotestart" method="post" id="btnStart<%=conn.pk%>" class="">
+              <form action="/charger/<%=station.cb_id%>/remotestart" method="post" id="btnStart<%=conn.pk%>" class="<% if(conn.status!='Available' && conn.status!='Preparing' ) { %>d-none<% } %>">
                 <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
                 <button type="submit" id="remoteStart<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq">
                   <%=texts.START_CHARGING%>
                 </button>
               </form>
-              <form action="/charger/<%=station.cb_id%>/remotestop" method="post"id="btnStop<%=conn.pk%>" class="">
+              <form action="/charger/<%=station.cb_id%>/remotestop" method="post"id="btnStop<%=conn.pk%>" class="<% if(conn.status!='Charging' && conn.status!='SuspendedEVSE' && conn.status!='SuspendedEV' ) { %>d-none<% } %>">
                 <input type="hidden" id="transId<%=conn.pk%>" name="transId" value="">
                 <button type="submit" id="remoteStop<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq">
                   <%=texts.STOP_CHARGING%>
@@ -174,8 +174,8 @@
 <%- include('./partials/footerjs.ejs') %>
 <script>
   $(document).ready(function () {
-    $('#ocppResponse').delay(3000).fadeOut('slow');
-    $('#inputErrors').delay(5000).fadeOut('slow');
+    $('#ocppResponse').delay(3000).fadeOut('slow')
+    $('#inputErrors').delay(5000).fadeOut('slow')
   });
   // Affect transactions Data
   const transactions = JSON.parse('<%- JSON.stringify(transactions)%>');
@@ -192,12 +192,19 @@
       }
     }
     // Données Fixes
-    $('#trans' + elem.con_pk).removeClass('invisible');
-    // TODO: Affichage Nom utilisateur / Nom RFID / Autostart / etc etc
+    $('#trans' + elem.con_pk).removeClass('invisible')
+    // Affichage Nom utilisateur / Nom RFID / Autostart
+    if (elem.uname) {
+      $('#transUser' + elem.con_pk).html(elem.uname + '(' + elem.usermail +')')
+    } else if (elem.rf_name) {
+      $('#transUser' + elem.con_pk).html(elem.rf_name + '(RFID)')
+    } else {
+      $('#transUser' + elem.con_pk).html('<%= texts.FREE_CHARGE %>')
+    }
     $('#transUser' + elem.con_pk).html(elem.IdToken);
     const transDeb = new Date(elem.tsStart * 1000);
-    $('#transDeb' + elem.con_pk).html(transDeb.toLocaleDateString() + '&nbsp;' + transDeb.toLocaleTimeString());
-    $('#transKwh' + elem.con_pk).html(elem.tsEnergy / 1000);
+    $('#transDeb' + elem.con_pk).html(transDeb.toLocaleDateString() + '&nbsp;' + transDeb.toLocaleTimeString())
+    $('#transKwh' + elem.con_pk).html(elem.tsEnergy / 1000)
     // Lien pour courbe de charge
     $('#transHisto' + elem.con_pk).prop('href', '/reports/charge/' + elem.t_pk);
     // Transaction terminée ?
@@ -206,19 +213,19 @@
       $('#transState' + elem.con_pk).html('<%=texts.TRANSAC_DERNIERE%>');
       $('#transActiv' + elem.con_pk).html('non');
       // Fin
-      const transFin = new Date(elem.tsStop * 1000);
-      $('#transFin' + elem.con_pk).html(transFin.toLocaleDateString() + '&nbsp;' + transFin.toLocaleTimeString());
+      const transFin = new Date(elem.tsStop * 1000)
+      $('#transFin' + elem.con_pk).html(transFin.toLocaleDateString() + '&nbsp;' + transFin.toLocaleTimeString())
       // Durée
       const duration = ((transFin.getTime() - transDeb.getTime()) / 1000);
       $('#transTime' + elem.con_pk).html(secToString(duration));
       // Reason
-      $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.REASON%>:&nbsp;</span>' + elem.tsReason);
+      $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.REASON%>:&nbsp;</span>' + elem.tsReason)
     } else {
       // Set transaction ID to button
       let transId = '#transId' + elem.con_pk;
       $(transId).val(elem.t_pk);
       // Titre
-      $('#transState' + elem.con_pk).html('<%=texts.TRANSAC_ENCOURS%>');
+      $('#transState' + elem.con_pk).html('<%=texts.TRANSAC_ENCOURS%>')
       $('#transActiv' + elem.con_pk).html('oui');
       // Durée
       const thisTime = new Date();
@@ -229,11 +236,11 @@
       }, 1000)
       $('#transTimer' + elem.con_pk).html(timerID);
       // Puissance
-      $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.POWER%>:&nbsp;</span>' + (elem.tsPower / 1000) + '&nbsp;<%=texts.POWERUNIT%>');
+      $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.POWER%>:&nbsp;</span>' + (elem.tsPower / 1000) + '&nbsp;<%=texts.POWERUNIT%>')
     }
   }
   // Ajax Update Transaction
-  const interval = setInterval(reloadTransactionsStatus, 30000);
+  const interval = setInterval(reloadTransactionsStatus, 30000)
   function reloadTransactionsStatus() {
     $.ajax({
       url: '/ajax/connectors_last_trans',
@@ -336,9 +343,9 @@
             $('#btnStart' + elem.pk).addClass('d-none');
           }
           if (elem.status != 'Charging' || elem.status != 'SuspendedEVSE' || elem.status != 'SuspendedEV') {
-            $('#btnStop' + elem.pk).removeClass('d-none');
-          } else {
             $('#btnStop' + elem.pk).addClass('d-none');
+          } else {
+            $('#btnStop' + elem.pk).removeClass('d-none');
           }
           // Meter
           $('#conKwh' + elem.pk).html((elem.energy / 1000));
@@ -350,7 +357,6 @@
       }
     });
   }
-  reloadConnsStatus();
   // Fonctions autres
   function pad(val) { return val > 9 ? val : "0" + val; }
   function secToString(duration) {

@@ -49,7 +49,6 @@
 <script>
   $(document).ready(function () {
     $('#inputErrors').delay(5000).fadeOut('slow');
-
     $("#show_hide_password1 a").on('click', function (event) {
       event.preventDefault();
       if ($('#show_hide_password1 input').attr("type") == "text") {
@@ -62,7 +61,6 @@
         $('#show_hide_password1 i').addClass("bi-eye");
       }
     });
-
     $("#show_hide_password2 a").on('click', function (event) {
       event.preventDefault();
       if ($('#show_hide_password2 input').attr("type") == "text") {
