@@ -200,6 +200,12 @@
                 <button type="submit" name="requestedMessage" value="MeterValues"
                   class="btn btn-secondary btn-sm ocppReq">MeterValues</button>
               </form>
+              <form action="/charger/<%= station.cb_id %>/clearcache" method="post">
+                <button type="submit" class="btn btn-secondary btn-sm ocppReq">ClearCache</button>
+              </form>
+              <form action="/charger/<%= station.cb_id %>/getlocallist" method="post">
+                <button type="submit" class="btn btn-secondary btn-sm ocppReq">GetLocalListVersion</button>
+              </form>
             </div>
           </div>
         </div><!-- ROW REQUEST STATION-->

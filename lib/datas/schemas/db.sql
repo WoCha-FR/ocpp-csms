@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 `usermail` TEXT(320) UNIQUE NOT NULL COLLATE NOCASE,
 `password` TEXT(60) NOT NULL,
 `name` TEXT(50) DEFAULT NULL COLLATE NOCASE,
-`isAdmin` INTEGER(1) DEFAULT(0) CHECK (`isAdmin` IN (0, 1)),
+`isAdmin` INTEGER(1) DEFAULT NULL CHECK (`isAdmin` IN (NULL, 1)),
 `ownedSite` INTEGER DEFAULT NULL REFERENCES `sites` (`s_pk`) ON DELETE SET NULL
 );
 /* Users of Sites */
@@ -31,7 +31,8 @@ CREATE TABLE IF NOT EXISTS `rfid_tags` (
 `rf_name` TEXT(50) NOT NULL,
 `user` INTEGER DEFAULT NULL REFERENCES `users` (`user_pk`) ON DELETE SET NULL,
 `blocked` INTEGER(1) DEFAULT(0) CHECK (`blocked` IN (0, 1)),
-`expire` TIMESTAMP(11) NULL DEFAULT NULL
+`expire` TIMESTAMP(11) NULL DEFAULT NULL,
+`isparent` INTEGER(1) DEFAULT(0) CHECK (`isparent` IN (0, 1))
 );
 CREATE UNIQUE INDEX `site_rfid_tags_UNIQUE` ON `rfid_tags` (COALESCE(`site`,0),`idtag` COLLATE NOCASE);
 /* Charge_Box */
@@ -156,6 +157,7 @@ CREATE TABLE IF NOT EXISTS `schema_version` (
 BEGIN TRANSACTION;
 INSERT INTO `schema_version` (`version`) VALUES ('0.1.0');
 INSERT INTO `users` (`usermail`,`password`,`name`,`isAdmin`) VALUES ('admin@admin.eu','$2b$10$FTdLTiTsGV81/PcjArPmB.izN7RPXT3t93O0LoIGXZDovyOf178cy','Admin',1);
+INSERT INTO `rfid_tags` (`idtag`,`rf_name`,`isparent`) VALUES (CONCAT('SU',HEX(RANDOMBLOB(6))),'SUPERADMIN',1);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('AllowOfflineTxForUnknownId', NULL, 0, 'b', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('AuthorizeRemoteTxRequests', '', 0, 'b', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('ClockAlignedDataInterval', NULL, 0, 'i', 'SEC');
