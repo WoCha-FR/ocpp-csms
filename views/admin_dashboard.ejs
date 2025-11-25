@@ -101,12 +101,12 @@
               <% } //FIN NOUVEAU SITE %><% if (!elem.cb_pk) {%>
               <div class="col-12 text-center"><%=texts.NO_STATIONS%></div>
               <% } else { %>
-              <div class="col">
+              <div class="col mb-3">
                 <div class="card h-100">
                   <div class="card-header">
                     <small class="d-inline-flex mb-0 px-2 py-1 fw-bold text-white bg-secondary border border-secondary rounded-2">
                       <i class="bi bi-ev-station"></i>&nbsp;<%=elem.cb_name%>
-                    </small><% if(elem.connector_id==1) { %>
+                    </small><% if(elem.connector_id) { %>
                     <small class="d-inline-flex mb-0 px-2 py-1 fw-bold text-white bg-secondary border border-secondary rounded-2">
                       <i class="bi bi-plugin"></i>&nbsp;<%=elem.connector_id%>
                     </small><% } %>
@@ -193,7 +193,7 @@
                             <span class="fw-bold"><%=texts.START%>:&nbsp;</span><span id="transDeb<%=elem.pk%>"><%= date1.toLocaleDateString(texts.LOCALE) %>&nbsp;<%= date1.toLocaleTimeString(texts.LOCALE) %></span>
                           </div>
                           <div class="col align-self-center"><% let energy=(elem.tsEnergy / 1000); %>
-                            <span class="fw-bold"><%=texts.ENERGY%>:&nbsp;</span><%= energy %>&nbsp;<%=texts.ENERGYUNIT%></div>
+                            <span class="fw-bold"><%=texts.ENERGY%>:&nbsp;</span><span id="transKwh<%=elem.pk%>"><%= energy %></span>&nbsp;<%=texts.ENERGYUNIT%></div>
                         </div>
                         <div class="row p-1">
                           <div class="col align-self-center">

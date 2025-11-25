@@ -123,7 +123,8 @@
       ajax: "ajaxRequest",
       queryParams: 'queryParams',
       filterControl: true,
-      filterControlContainer: '#myFilter'
+      filterControlContainer: '#myFilter',
+      sortSelectOptions: true
     })
   })
   // BSTable - data-formater
@@ -150,7 +151,8 @@
         params.success(response)
       },
       error: function (er) {
-        params.error(er.statusText)
+        params.error(er.responseText)
+        alert(er.statusText + '\n' + er.responseText)
       }
     });
   }
@@ -159,9 +161,6 @@
     if (picker.selectedDates.length == 2) {
       params.start = picker.selectedDates[0].getTime()
       params.stop = (picker.selectedDates[1].getTime() + 86399000)
-    } else if (picker.selectedDates.length == 1) {
-      params.start = picker.selectedDates[0].getTime()
-      params.stop = params.start + 86399000
     } else {
       var d = new Date()
       d.setHours(0, 0, 0, 0)

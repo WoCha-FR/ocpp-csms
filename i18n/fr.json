@@ -148,6 +148,7 @@
   "ENERGY_CONSUMED": "Énergie consommée",
   "ENERGY": "Énergie",
   "POWER": "Puissance",
+  "POWEROFFERED": "Puissance offerte",
   "START": "Début",
   "END": "Fin",
   "DURATION": "Durée",
@@ -159,5 +160,11 @@
   "CHARGING": "En charge",
   "OCCUPIED": "Occupé",
   "REPORTS": "Rapports",
-  "NO_INFOS": "Pas d'informations pour le moment."
+  "NO_INFOS": "Pas d'informations pour le moment.",
+  "ALL_SITES": "Tous les sites",
+  "ALL_CHARGERS": "Toutes les stations",
+  "ALL_USERS": "Tous les utilisateurs",
+  "PHASE": "Phase",
+  "CURRENT_OFFERED": "Courant offert",
+  "CURRENTINA": "Courant en Ampère"
 }

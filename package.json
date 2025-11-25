@@ -30,7 +30,7 @@
   "homepage": "https://github.com/WoCha-FR/ocpp-csms#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "better-sqlite3": "^12.4.1",
+    "better-sqlite3": "^12.4.6",
     "connect-lowdb": "^3.1.0",
     "cookie-parser": "^1.4.7",
     "debug-level": "^4.1.1",
@@ -38,7 +38,7 @@
     "express": "^5.1.0",
     "express-favicon": "^2.0.4",
     "express-session": "^1.18.2",
-    "express-validator": "^7.3.0",
+    "express-validator": "^7.3.1",
     "i18n-express": "^1.1.3",
     "lowdb": "^7.0.1",
     "morgan": "^1.10.1",

@@ -86,12 +86,12 @@
     <div class="card-header fw-bold"><%=texts.MY_STATIONS%></div>
     <div class="card-body"><% if(siteconns.length> 0) { %>
       <div class="row row-cols-2"><% siteconns.forEach(function(elem) { %>
-        <div class="col">
+        <div class="col mb-3">
           <div class="card h-100">
             <div class="card-header">
               <small class="d-inline-flex mb-0 px-2 py-1 fw-bold text-white bg-secondary border border-secondary rounded-2">
                 <i class="bi bi-ev-station"></i>&nbsp;<%=elem.cb_name%>
-              </small><% if(elem.connector_id==1) { %>
+              </small><% if(elem.connector_id) { %>
               <small class="d-inline-flex mb-0 px-2 py-1 fw-bold text-white bg-secondary border border-secondary rounded-2">
                 <i class="bi bi-plugin"></i>&nbsp;<%=elem.connector_id%>
               </small><% } %>

@@ -6,6 +6,7 @@
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs" role="tablist">
         <li class="nav-item">
+          <!--TODO: Afficher infos de la sessions en plus des courbes -->
           <a class="nav-link active"><%=texts.TRANSAC_DETAILS%></a>
         </li>
       </ul>
@@ -15,8 +16,8 @@
         <div class="card">
           <div class="card-header">Header</div>
           <div class="card-body">
-            <canvas id="myChart"
-              style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;"></canvas>
+            <canvas id="myChartPE" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;"></canvas>
+            <canvas id="myChartCR" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;"></canvas>
           </div>
           <div class="card-footer">
             <a class="btn btn-primary" role="button" href="javascript:history.back();"><%=texts.BACK%></a>
@@ -30,48 +31,77 @@
 <script src="/js/chart.js"></script>
 <script>
   $(document).ready(function () {
-    $('#inputErrors').delay(5000).fadeOut('slow');
+    $('#inputErrors').delay(5000).fadeOut('slow')
   });
   // CHART
-  const ctx = document.getElementById('myChart');
-  const all = JSON.parse('<%- JSON.stringify(all)%>');
+  const ctx = document.getElementById('myChartPE')
+  const cty = document.getElementById('myChartCR')
+  const all = JSON.parse('<%- JSON.stringify(all)%>')
   new Chart(ctx, {
     type: 'line',
     data: {
       datasets: [
         {
           label: '<%=texts.ENERGY_CONSUMED%>',
-          data: all,
-          yAxisID: 'y',
-          parsing: { yAxisKey: 'energy' }
+          data: all, yAxisID: 'y', parsing: { yAxisKey: 'energy' }
         },
         {
           label: '<%=texts.POWER%>',
-          data: all,
-          yAxisID: 'y1',
-          parsing: { yAxisKey: 'power' }
+          data: all, yAxisID: 'y1', parsing: { yAxisKey: 'power' }
+        },
+        {
+          label: '<%=texts.POWEROFFERED%>',
+          data: all, yAxisID: 'y1', parsing: { yAxisKey: 'poffer' }
         }
       ]
     },
     options: {
       responsive: true,
+      interaction: { intersect: true, mode: 'index' },
       scales: {
         y: {
-          type: 'linear',
-          display: true,
-          position: 'left',
-          beginAtZero: true,
+          type: 'linear', display: true, position: 'left', beginAtZero: true, suggestedMax: 50,
           title: { display: true, text: '<%=texts.ENERGYINKWH%>' }
         },
         y1: {
-          type: 'linear',
-          display: true,
-          position: 'right',
-          beginAtZero: true,
+          type: 'linear', display: true, position: 'right', beginAtZero: true, suggestedMax: 22,
           title: { display: true, text: '<%=texts.POWERINKW%>' }
         }
       }
     }
-  });
+  })
+  new Chart(cty, {
+    type: 'line',
+    data: {
+      datasets: [
+        {
+          label: '<%=texts.PHASE%> L1',
+          data: all, yAxisID: 'y', parsing: { yAxisKey: 'ampl1' }
+        },
+        {
+          label: '<%=texts.PHASE%> L2',
+          data: all, yAxisID: 'y', parsing: { yAxisKey: 'ampl2' }
+        },
+        {
+          label: '<%=texts.PHASE%> L3',
+          data: all, yAxisID: 'y', parsing: { yAxisKey: 'ampl3' }
+        },
+        {
+          label: '<%=texts.CURRENT_OFFERED%>',
+          data: all, yAxisID: 'y', parsing: { yAxisKey: 'ampoffer' }
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { intersect: true, mode: 'index' },
+      scales: {
+        y: {
+          type: 'linear', display: true, position: 'left', beginAtZero: true, suggestedMax: 32,
+          title: { display: true, text: '<%=texts.CURRENTINA%>' }
+        }
+      }
+    }
+  })
 </script>
 <%- include('./partials/footer.ejs') %>

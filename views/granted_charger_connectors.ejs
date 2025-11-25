@@ -85,19 +85,19 @@
             <div class="col-sm-2">
               <form action="/charger/<%=station.cb_id%>/remotestart" method="post" id="btnStart<%=conn.pk%>" class="<% if(conn.status!='Available' && conn.status!='Preparing' ) { %>d-none<% } %>">
                 <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
-                <button type="submit" id="remoteStart<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq">
+                <button type="submit" id="remoteStart<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq"<% if(conn.online!==1) { %> disabled<% } %>>
                   <%=texts.START_CHARGING%>
                 </button>
               </form>
               <form action="/charger/<%=station.cb_id%>/remotestop" method="post"id="btnStop<%=conn.pk%>" class="<% if(conn.status!='Charging' && conn.status!='SuspendedEVSE' && conn.status!='SuspendedEV' ) { %>d-none<% } %>">
-                <input type="hidden" id="transId<%=conn.pk%>" name="transId" value="">
-                <button type="submit" id="remoteStop<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq">
+                <input type="hidden" id="transId<%=conn.pk%>" name="transId" value="<%if (!conn.tsStop) { %><%=conn.t_pk%><% } %>">
+                <button type="submit" id="remoteStop<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq"<% if(conn.online!==1) { %> disabled<% } %>>
                   <%=texts.STOP_CHARGING%>
                 </button>
               </form>
               <form action="/charger/<%=station.cb_id%>/unlockcon" method="post">
                 <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
-                <button type="submit" id="UnlockConn<%=conn.pk%>" class="btn btn-info btn-sm w-100 ocppReq">
+                <button type="submit" id="UnlockConn<%=conn.pk%>" class="btn btn-info btn-sm w-100 ocppReq"<% if(conn.online!==1) { %> disabled<% } %>>
                   <%=texts.UNLOCK_CONN%>
                 </button>
               </form>
@@ -131,35 +131,45 @@
             </div>
             <div class="col">
               <!-- Transactions -->
-              <div class="card h-100 invisible" id="trans<%=conn.pk%>">
-                <span id="transActiv<%=conn.pk%>" class="d-none"></span>
+              <div class="card h-100<% if (!conn.t_pk) {%> invisible<%}%>" id="trans<%=conn.pk%>">
+                <span id="transActiv<%=conn.pk%>" class="d-none"><%if (conn.tsStop) { %>non<% } %><%if (conn.tsStart) { %>oui<% } %></span>
                 <span id="transTimer<%=conn.pk%>" class="d-none"></span>
                 <div class="card-header fs-6 fw-bold">
-                  <span id="transState<%=conn.pk%>"></span>
+                  <span id="transState<%=conn.pk%>"><%if (conn.tsStop) { %>
+                    <%=texts.TRANSAC_DERNIERE%><% } else { %>
+                    <%=texts.TRANSAC_ENCOURS%><% } %>
+                  </span>
                   <div class="float-end">
-                    <a id="transHisto<%=conn.pk%>" href="#"><i class="bi bi-file-bar-graph" style="cursor: pointer;"></i></a>
+                    <a id="transHisto<%=conn.pk%>" href="/reports/charge/<%=conn.t_pk%>"><i class="bi bi-file-bar-graph" style="cursor: pointer;"></i></a>
                   </div>
                 </div>
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <span class="fw-bold"><%=texts.USER%>:&nbsp;</span><span id="transUser<%=conn.pk%>"></span>
+                      <span class="fw-bold"><%=texts.USER%>:&nbsp;</span><span id="transUser<%=conn.pk%>"><% if (conn.uname) { %><%= conn.uname %>&nbsp;(<%= conn.usermail %>)<% } else if (conn.rf_name) { %><%= conn.rf_name %>&nbsp;(RFID)<% } else { %><%= texts.FREE_CHARGE %>&nbsp;(<%= conn.IdToken %>)<% } %>
+                      </span>
+                    </div>
+                    <div class="col"><% let date1=new Date(conn.tsStart * 1000) %>
+                      <span class="fw-bold"><%=texts.START%>:&nbsp;</span><span id="transDeb<%=conn.pk%>"><%= date1.toLocaleDateString(texts.LOCALE) %>&nbsp;<%= date1.toLocaleTimeString(texts.LOCALE) %></span>
                     </div>
                     <div class="col">
-                      <span class="fw-bold"><%=texts.START%>:&nbsp;</span><span id="transDeb<%=conn.pk%>"></span>
-                    </div>
-                    <div class="col">
-                      <span class="fw-bold"><%=texts.END%>:&nbsp;</span><span id="transFin<%=conn.pk%>"></span>
+                      <span class="fw-bold"><%=texts.END%>:&nbsp;</span><% if (conn.tsStop) { let date2=new Date(conn.tsStop * 1000); %>
+                      <span id="transFin<%=conn.pk%>"><%= date2.toLocaleDateString(texts.LOCALE) %>&nbsp;<%= date2.toLocaleTimeString(texts.LOCALE) %></span><% } else { %>
+                      <span id="transFin<%=conn.pk%>"></span><% } %>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col">
-                      <span class="fw-bold"><%=texts.DURATION%>:&nbsp;</span><span id="transTime<%=conn.pk%>"></span>
+                      <span class="fw-bold"><%=texts.DURATION%>:&nbsp;</span>
+                      <span id="transTime<%=conn.pk%>"></span>
                     </div>
-                    <div class="col">
-                      <span class="fw-bold"><%=texts.ENERGY_CONSUMED%>:&nbsp;</span><span id="transKwh<%=conn.pk%>"></span>&nbsp;<%=texts.ENERGYUNIT%>
+                    <div class="col"><% let energy=(conn.tsEnergy / 1000); %>
+                      <span class="fw-bold"><%=texts.ENERGY_CONSUMED%>:&nbsp;</span><span id="transKwh<%=conn.pk%>"><%= energy %></span>&nbsp;<%=texts.ENERGYUNIT%>
                     </div>
-                    <div class="col" id="transPwrStop<%=conn.pk%>"></div>
+                    <div class="col" id="transPwrStop<%=conn.pk%>"><% if (conn.tsStop) { %>
+                      <span class="fw-bold"><%=texts.REASON%>:&nbsp;</span><%= conn.tsReason %><% } else { let power=(conn.tsPower / 1000); %>
+                      <span class="fw-bold"><%=texts.POWER%>:&nbsp;</span><%= power %>&nbsp;<%=texts.POWERUNIT%><% } %>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -177,134 +187,29 @@
     $('#ocppResponse').delay(3000).fadeOut('slow')
     $('#inputErrors').delay(5000).fadeOut('slow')
   });
-  // Affect transactions Data
-  const transactions = JSON.parse('<%- JSON.stringify(transactions)%>');
-  for (const elem of transactions) {
-    if (elem.online === 1) {
-      $('.ocppReq').prop('disabled', false);
-      $('#cbonline').html('<span class="badge text-bg-success fs-6"><%=texts.ONLINE%></span>')
-    } else {
-      $('.ocppReq').prop('disabled', true);
-      if (elem.online === 0) {
-        $('#cbonline').html('<span class="badge text-bg-danger fs-6"><%=texts.OFFLINE%></span>')
-      } else {
-        $('#cbonline').html('<span class="badge text-bg-warning fs-6"><%=texts.PENDING%></span>')
-      }
-    }
-    // Données Fixes
-    $('#trans' + elem.con_pk).removeClass('invisible')
-    // Affichage Nom utilisateur / Nom RFID / Autostart
-    if (elem.uname) {
-      $('#transUser' + elem.con_pk).html(elem.uname + '(' + elem.usermail +')')
-    } else if (elem.rf_name) {
-      $('#transUser' + elem.con_pk).html(elem.rf_name + '(RFID)')
-    } else {
-      $('#transUser' + elem.con_pk).html('<%= texts.FREE_CHARGE %>')
-    }
-    $('#transUser' + elem.con_pk).html(elem.IdToken);
-    const transDeb = new Date(elem.tsStart * 1000);
-    $('#transDeb' + elem.con_pk).html(transDeb.toLocaleDateString() + '&nbsp;' + transDeb.toLocaleTimeString())
-    $('#transKwh' + elem.con_pk).html(elem.tsEnergy / 1000)
-    // Lien pour courbe de charge
-    $('#transHisto' + elem.con_pk).prop('href', '/reports/charge/' + elem.t_pk);
-    // Transaction terminée ?
-    if (elem.tsStop) {
-      // Titre
-      $('#transState' + elem.con_pk).html('<%=texts.TRANSAC_DERNIERE%>');
-      $('#transActiv' + elem.con_pk).html('non');
-      // Fin
+  // Set duration
+  const connectors = JSON.parse('<%-JSON.stringify(conns)%>');
+  for (const elem of connectors) {
+    const transDeb = new Date(elem.tsStart * 1000)
+    // Session Terminée
+    if (elem.tsStart && elem.tsStop) {
       const transFin = new Date(elem.tsStop * 1000)
-      $('#transFin' + elem.con_pk).html(transFin.toLocaleDateString() + '&nbsp;' + transFin.toLocaleTimeString())
-      // Durée
-      const duration = ((transFin.getTime() - transDeb.getTime()) / 1000);
-      $('#transTime' + elem.con_pk).html(secToString(duration));
-      // Reason
-      $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.REASON%>:&nbsp;</span>' + elem.tsReason)
-    } else {
-      // Set transaction ID to button
-      let transId = '#transId' + elem.con_pk;
-      $(transId).val(elem.t_pk);
-      // Titre
-      $('#transState' + elem.con_pk).html('<%=texts.TRANSAC_ENCOURS%>')
-      $('#transActiv' + elem.con_pk).html('oui');
-      // Durée
-      const thisTime = new Date();
-      let duration = ((thisTime.getTime() - transDeb.getTime()) / 1000);
-      $('#transTime' + elem.con_pk).html(secToString(duration));
-      const timerID = setInterval(function () {
-        $('#transTime' + elem.con_pk).html(secToString(++duration));
-      }, 1000)
-      $('#transTimer' + elem.con_pk).html(timerID);
-      // Puissance
-      $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.POWER%>:&nbsp;</span>' + (elem.tsPower / 1000) + '&nbsp;<%=texts.POWERUNIT%>')
+      const duration = ((transFin.getTime() - transDeb.getTime()) / 1000)
+      $('#transTime' + elem.pk).html(secToString(duration))
     }
-  }
-  // Ajax Update Transaction
-  const interval = setInterval(reloadTransactionsStatus, 30000)
-  function reloadTransactionsStatus() {
-    $.ajax({
-      url: '/ajax/connectors_last_trans',
-      type: 'POST',
-      data: { ocppName: '<%=station.cb_id%>' },
-      dataType: 'json',
-      success: function (result) {
-        for (const elem of result.data) {
-          // Transaction terminée
-          if (elem.tsStop) {
-            // Etait en cours ?
-            if ($('#transActiv' + elem.con_pk).html() == 'oui') {
-              $('#transHisto' + elem.con_pk).prop('href', '/reports/charge/' + elem.t_pk);
-              // Fin du timer + modif state
-              clearInterval($('#transTimer' + elem.con_pk).html());
-              $('#transActiv' + elem.con_pk).html('non');
-              $('#transTimer' + elem.con_pk).html('');
-              // Modification Titre
-              $('#transState' + elem.con_pk).html('<%=texts.TRANSAC_DERNIERE%>');
-              // Fin session + durée
-              const transDeb = new Date(elem.tsStart * 1000);
-              const transFin = new Date(elem.tsStop * 1000);
-              $('#transFin' + elem.con_pk).html(transFin.toLocaleDateString() + '&nbsp;' + transFin.toLocaleTimeString());
-              const duration = ((transFin.getTime() - transDeb.getTime()) / 1000);
-              $('#transTime' + elem.con_pk).html(secToString(duration));
-              // Energie + Reason
-              $('#transKwh' + elem.con_pk).html(elem.tsEnergy / 1000);
-              $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.REASON%>:&nbsp;</span>' + elem.tsReason);
-            }
-          // Transaction en cours
-          } else {
-            // Nouvelle transaction ?
-            if ($('#transActiv' + elem.con_pk).html() == 'non') {
-              $('#transHisto' + elem.con_pk).prop('href', '/' + elem.t_pk);
-              // Passage en actif & MaJ des données
-              $('#transState' + elem.con_pk).html('<%=texts.TRANSAC_ENCOURS%>');
-              $('#transActiv' + elem.con_pk).html('oui');
-              $('#transUser' + elem.con_pk).html(elem.IdToken);
-              const transDeb = new Date(elem.tsStart * 1000);
-              $('#transDeb' + elem.con_pk).html(transDeb.toLocaleDateString() + '&nbsp;' + transDeb.toLocaleTimeString());
-              $('#transFin' + elem.con_pk).html('');
-              // Durée
-              const thisTime = new Date();
-              let duration = ((thisTime.getTime() - transDeb.getTime()) / 1000);
-              $('#transTime' + elem.con_pk).html(secToString(duration));
-              const timerID = setInterval(function () {
-                $('#transTime' + elem.con_pk).html(secToString(++duration));
-              }, 1000)
-              $('#transTimer' + elem.con_pk).html(timerID);
-            }
-            // Transaction déjà en cours
-            $('#transKwh' + elem.con_pk).html(elem.tsEnergy / 1000);
-            $('#transPwrStop' + elem.con_pk).html('<span class="fw-bold"><%=texts.POWER%>:&nbsp;</span>' + (elem.tsPower / 1000) + '&nbsp;<%=texts.POWERUNIT%>');
-          }
-        }
-      },
-      error: function (jqXHR, textStatus, err) {
-        alert(jqXHR.responseText)
-        clearInterval(interval)
-      }
-    });
+    // Session en Cours
+    if(elem.tsStart && !elem.tsStop) {
+      const thisTime = new Date()
+      let duration = ((thisTime.getTime() - transDeb.getTime()) / 1000)
+      $('#transTime' + elem.pk).html(secToString(duration))
+      const timerID = setInterval(function () {
+        $('#transTime' + elem.pk).html(secToString(++duration))
+      }, 1000)
+      $('#transTimer' + elem.pk).html(timerID)
+    }
   }
   // Refresh Connector Data
-  var interval2 = setInterval(reloadConnsStatus, 2500);
+  const interval1 = setInterval(reloadConnsStatus, 2500);
   function reloadConnsStatus() {
     $.ajax({
       url: '/ajax/connectors_status',
@@ -342,13 +247,86 @@
           } else {
             $('#btnStart' + elem.pk).addClass('d-none');
           }
-          if (elem.status != 'Charging' || elem.status != 'SuspendedEVSE' || elem.status != 'SuspendedEV') {
-            $('#btnStop' + elem.pk).addClass('d-none');
-          } else {
+          if (elem.status == 'Charging' || elem.status == 'SuspendedEVSE' || elem.status == 'SuspendedEV') {
             $('#btnStop' + elem.pk).removeClass('d-none');
+          } else {
+            $('#btnStop' + elem.pk).addClass('d-none');
           }
           // Meter
           $('#conKwh' + elem.pk).html((elem.energy / 1000));
+        }
+      },
+      error: function (jqXHR, textStatus, err) {
+        alert(jqXHR.responseText)
+        clearInterval(interval1)
+      }
+    });
+  }
+  // Ajax Update Transaction
+  const interval2 = setInterval(reloadTransactionsStatus, 30000)
+  function reloadTransactionsStatus() {
+    $.ajax({
+      url: '/ajax/connectors_last_trans',
+      type: 'POST',
+      data: { ocppName: '<%=station.cb_id%>' },
+      dataType: 'json',
+      success: function (result) {
+        for (const elem of result.data) {
+          // Transaction terminée
+          if (elem.tsStop) {
+            // Etait en cours ? => on modifie
+            if ($('#transActiv' + elem.pk).html() == 'oui') {
+              $('#transHisto' + elem.pk).prop('href', '/reports/charge/' + elem.t_pk)
+              // Fin du timer + modif state
+              clearInterval($('#transTimer' + elem.pk).html())
+              $('#transActiv' + elem.pk).html('non')
+              $('#transTimer' + elem.pk).html('')
+              // Modification Titre
+              $('#transState' + elem.pk).html('<%=texts.TRANSAC_DERNIERE%>')
+              // Fin session + durée
+              const transDeb = new Date(elem.tsStart * 1000)
+              const transFin = new Date(elem.tsStop * 1000)
+              $('#transFin' + elem.pk).html(transFin.toLocaleDateString() + '&nbsp;' + transFin.toLocaleTimeString())
+              const duration = ((transFin.getTime() - transDeb.getTime()) / 1000)
+              $('#transTime' + elem.pk).html(secToString(duration))
+              // Energie + Reason
+              $('#transKwh' + elem.pk).html(elem.tsEnergy / 1000)
+              $('#transPwrStop' + elem.pk).html('<span class="fw-bold"><%=texts.REASON%>:&nbsp;</span>' + elem.tsReason)
+            }
+           // Transaction en cours
+           } else {
+            // Nouvelle transaction ?
+            $('#trans' + elem.pk).removeClass('invisible')
+            if ($('#transActiv' + elem.pk).html() != 'oui') {
+              $('#transHisto' + elem.pk).prop('href', '/' + elem.t_pk)
+              // Passage en actif & MaJ des données
+              $('#transState' + elem.pk).html('<%=texts.TRANSAC_ENCOURS%>')
+              $('#transActiv' + elem.pk).html('oui')
+              // Utilisateur
+              if (elem.uname) {
+                $('#transUser' + elem.pk).html(elem.uname + ' (' + elem.usermail + ')')
+              } else if (elem.rf_name) {
+                $('#transUser' + elem.pk).html(elem.rfname + ' (RFID)')
+              } else {
+                $('#transUser' + elem.pk).html('<%= texts.FREE_CHARGE %> (' + elem.IdToken + ')')
+              }
+              // Début & Timer
+              const transDeb = new Date(elem.tsStart * 1000)
+              $('#transDeb' + elem.pk).html(transDeb.toLocaleDateString() + '&nbsp;' + transDeb.toLocaleTimeString())
+              $('#transFin' + elem.pk).html('')
+              // Durée
+              const thisTime = new Date()
+              let duration = ((thisTime.getTime() - transDeb.getTime()) / 1000)
+              $('#transTime' + elem.pk).html(secToString(duration))
+              const timerID = setInterval(function () {
+                $('#transTime' + elem.pk).html(secToString(++duration))
+              }, 1000)
+              $('#transTimer' + elem.pk).html(timerID)
+            }
+            // Transaction déjà en cours
+            $('#transKwh' + elem.pk).html(elem.tsEnergy / 1000)
+            $('#transPwrStop' + elem.pk).html('<span class="fw-bold"><%=texts.POWER%>:&nbsp;</span>' + (elem.tsPower / 1000) + '&nbsp;<%=texts.POWERUNIT%>')
+          }
         }
       },
       error: function (jqXHR, textStatus, err) {
