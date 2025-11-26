@@ -1,7 +1,7 @@
 <%- include('./partials/header.ejs') %>
 <main class="container-fluid">
   <%- include('./partials/ocpperrors.ejs') %>
-  <div class="card">
+  <div class="card mb-3">
     <!-- CARD HEADER-->
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs" id="rfids-tabs" role="tablist">
@@ -25,9 +25,9 @@
       <div id="rfids-tabs-conteneur" class="tab-content">
         <!-- RFIDS TAB -->
         <div id="rfids-tabs-list" class="tab-pane fade active show" role="tabpanel" aria-labelledby="rfids-tabs-list-tab">
-          <div class="card">
+          <div class="card p-3">
             <table id="rfidstable" class="table table-striped table-hover" data-toggle="table" data-locale="<%=texts.LOCALE%>"
-              data-mobile-responsive="true" data-search="true" data-search-highlight="true" data-search-align="left">
+              data-mobile-responsive="true" data-search="true" data-show-search-button="true" data-search-highlight="true" data-search-align="left">
               <thead>
                 <th data-sortable="true" data-field="idtag"><%=texts.IDTAG%></th>
                 <th data-sortable="true" data-field="rf_name"><%=texts.CARD_NAME%></th>
@@ -151,6 +151,7 @@
 <script>
   $(document).ready(function () {
     $('#inputErrors').delay(5000).fadeOut('slow');
+    $('#rfidstable').removeClass('table-bordered');
 
     $('.btn-delete-elem').click(function (e) {
       e.preventDefault();

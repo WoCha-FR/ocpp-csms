@@ -2,11 +2,11 @@
 <main class="container-fluid">
   <%- include('./partials/ocpperrors.ejs') %>
   <div class="card">
-    <div class="card-header fw-bold"><%=texts.REPORTS%></div>
+    <div class="card-header fs-5 fw-bold"><%=texts.REPORTS%></div>
     <div class="card-body">
       <div class="row mb-2">
         <div class="col-md-3">
-          <div class="input-group input-group-sm flatpickr">
+          <div class="input-group flatpickr">
             <div class="input-group-text"><%=texts.DATE%></div>
             <input type="text" class="form-control" id="dateInput" readonly="readonly" data-input>
             <span class="input-group-text" data-clear><i class="bi bi-calendar2-x"></i></span>
@@ -15,13 +15,13 @@
         <div class="col-md-7" id="myFilter">
           <div class="row">
             <div class="col">
-              <div class="input-group input-group-sm">
+              <div class="input-group">
                 <div class="input-group-text"><i class="bi bi-funnel"></i></div>
                 <select class="form-control bootstrap-table-filter-control-cb_name"><option value=""><%= texts.ALL_CHARGERS %></option></select>
               </div>
             </div>
             <div class="col">
-              <div class="input-group input-group-sm">
+              <div class="input-group">
                 <div class="input-group-text"><i class="bi bi-funnel"></i></div>
                 <select class="form-control bootstrap-table-filter-control-user"><option value=""><%= texts.ALL_USERS %></option></select>
               </div>
@@ -34,7 +34,7 @@
           <button type="button" class="btn btn-secondary btn-sm" id="exportTable"><i class="bi bi-download"></i></button>
         </div>
       </div>
-      <table class="table table-sm" id="reportstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
+      <table class="table" id="reportstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
         <thead>
           <th data-field="cb_name" data-filter-control="select"><%=texts.STATION%></th>
           <th data-field="connector_id"><%=texts.CONNECTOR%></th>

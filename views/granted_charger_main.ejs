@@ -62,13 +62,9 @@
               <% } else { %>
                 <div class="row p-1">
                   <div class="col" id="online"><span class="fw-bold"><%=texts.ONLINE%>:&nbsp;</span>
-                    <% if(station.online==1) { %>
-                    <span class="badge text-bg-success"><%=texts.ONLINE%></span>
-                    <% } else if(station.online==0) { %>
-                    <span class="badge text-bg-danger"><%=texts.OFFLINE%></span>
-                    <% } else { %>
-                    <span class="badge text-bg-warning"><%=texts.PENDING%></span>
-                    <% } %>
+                    <% if(station.online==1) { %><span class="badge text-bg-success"><%=texts.ONLINE%></span>
+                    <% } else if(station.online==0) { %><span class="badge text-bg-danger"><%=texts.OFFLINE%></span>
+                    <% } else { %><span class="badge text-bg-warning"><%=texts.PENDING%></span><% } %>
                   </div>
                   <div class="col"></div>
                 </div>
@@ -398,6 +394,10 @@
       dataType: 'json',
       success: function (result) {
         for (const elem of result.data) {
+          // Nouveau Connecteur ?
+          if (elem.connector_id && document.body.contains(document.querySelector('div#connstatus' + elem.connector_id)) === false) {
+            location.reload();
+          }
           var status_bg = '#connstatus' + elem.connector_id
           var status_ts = '#connlaststatus' + elem.connector_id
           var meter_idx = '#connmeter' + elem.connector_id

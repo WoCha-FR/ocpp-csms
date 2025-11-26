@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `schema_version` (
 BEGIN TRANSACTION;
 INSERT INTO `schema_version` (`version`) VALUES ('0.1.0');
 INSERT INTO `users` (`usermail`,`password`,`name`,`isAdmin`) VALUES ('admin@admin.eu','$2b$10$FTdLTiTsGV81/PcjArPmB.izN7RPXT3t93O0LoIGXZDovyOf178cy','Admin',1);
-INSERT INTO `rfid_tags` (`idtag`,`rf_name`,`isparent`) VALUES (CONCAT('SU',HEX(RANDOMBLOB(6))),'SUPERADMIN',1);
+INSERT INTO `rfid_tags` (`idtag`,`rf_name`,`isparent`) VALUES (CONCAT('SADM',HEX(RANDOMBLOB(6))),'SUPERADMIN',1);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('AllowOfflineTxForUnknownId', NULL, 0, 'b', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('AuthorizeRemoteTxRequests', '', 0, 'b', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('ClockAlignedDataInterval', NULL, 0, 'i', 'SEC');

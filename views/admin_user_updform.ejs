@@ -81,11 +81,56 @@
       </div>
     </form>
   </div>
+  <!-- Sites Autorisés -->
+  <div class="card">
+    <div class="card-header fs-5 fw-bold"><%=texts.SITECHARGEOK%></div>
+    <div class="card-body">
+      <table id="user-sites-table" class="table table-hover table-striped" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
+        <thead>
+          <tr>
+            <th><%=texts.SITE%></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody><% if(userSites.length > 0) { userSites.forEach(function(site) { %>
+          <tr>
+            <td><%= site.s_name %></td>
+            <td class="text-end">
+              <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=site.pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
+            </td>
+          </tr>
+        <% }); } %></tbody>
+      </table>
+    </div>
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="deleteMod" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+          <%=texts.CONFIRM_DELETE%>
+        </div>
+        <div class="modal-footer">
+          <form action="/admin/user/deleteinsite" method="post" id="ModalFormDelete">
+            <input type="hidden" name="elemId" id="ModalFormDeleteId" value="">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <%=texts.NON%>
+            </button>
+            <button type="submit" class="btn btn-danger">
+              <%=texts.YES%>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal -->
 </main>
 <%- include('./partials/footerjs.ejs') %>
 <script>
   $(document).ready(function () {
     $('#inputErrors').delay(5000).fadeOut('slow');
+    $('#user-sites-table').removeClass('table-bordered');
 
     $("#show_hide_password a").on('click', function (event) {
       event.preventDefault();
@@ -98,6 +143,15 @@
         $('#show_hide_password i').removeClass("bi-eye-slash");
         $('#show_hide_password i').addClass("bi-eye");
       }
+    });
+    $('.btn-delete-elem').click(function (e) {
+      e.preventDefault();
+      var id = $(this).attr('data-form-elemid');
+      $('#ModalFormDeleteId').attr('value', id)
+    });
+
+    $('#deleteMod').on('hidden.bs.modal', function (e) {
+      $('#ModalFormDeleteId').attr('value', '');
     });
   });
 </script>

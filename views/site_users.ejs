@@ -27,12 +27,13 @@
         <!-- ALL USERS TAB -->
         <div id="users-tabs-list" class="tab-pane fade active show" role="tabpanel" aria-labelledby="users-tabs-list-tab">
           <div class="card p-3">
-            <table id="users-table" class="table table-hover table-striped" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
+            <table id="userstable" class="table table-hover table-striped" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true"
+              data-search="true" data-search-align="left" data-search-highlight="true" data-show-search-button="true">
               <thead>
                 <tr>
                   <th data-sortable="true" data-field="name"><%=texts.NOM%></th>
                   <th data-sortable="true" data-field="usermail"><%=texts.EMAIL_ADDR%></th>
-                  <th>Action</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -51,45 +52,45 @@
             </table>
           </div>
         </div>
-      </div>
-      <!-- ALL USERS TAB -->
-      <!-- ADD USER TAB -->
-      <div class="tab-pane fade" id="users-tabs-add" role="tabpanel" aria-labelledby="users-tabs-add-tab" tabindex="0">
-        <div class="card">
-          <div class="card-header"><%=texts.USER_INFOS%></div>
-          <form method="post" action="/site/user/add">
-            <div class="card-body">
-              <div class="row mb-3">
-                <div class="col-sm-6">
-                  <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
-                    <div class="form-floating">
-                      <input class="form-control" type="email" name="usermail" id="usermailInput" aria-describedby="usermailHelpBlock" placeholder="" required>
-                      <label for="usermailInput"><%=texts.EMAIL_ADDR%></label>
+        <!-- ALL USERS TAB -->
+        <!-- ADD USER TAB -->
+        <div class="tab-pane fade" id="users-tabs-add" role="tabpanel" aria-labelledby="users-tabs-add-tab" tabindex="0">
+          <div class="card">
+            <div class="card-header"><%=texts.USER_INFOS%></div>
+            <form method="post" action="/site/user/add">
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-sm-6">
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-envelope-at"></i></span>
+                      <div class="form-floating">
+                        <input class="form-control" type="email" name="usermail" id="usermailInput" aria-describedby="usermailHelpBlock" placeholder="" required>
+                        <label for="usermailInput"><%=texts.EMAIL_ADDR%></label>
+                      </div>
                     </div>
+                    <div id="usermailHelpBlock" class="form-text"><%=texts.USERMAIL_INFOS%></div>
                   </div>
-                  <div id="usermailHelpBlock" class="form-text"><%=texts.USERMAIL_INFOS%></div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-person-vcard"></i></span>
-                    <div class="form-floating">
-                      <input class="form-control" type="text" name="uname" id="unameInput" aria-describedby="unameHelpBlock"
-                        placeholder="" required>
-                      <label for="unameInput"><%=texts.USER%></label>
+                  <div class="col-sm-6">
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-person-vcard"></i></span>
+                      <div class="form-floating">
+                        <input class="form-control" type="text" name="uname" id="unameInput" aria-describedby="unameHelpBlock"
+                          placeholder="" required>
+                        <label for="unameInput"><%=texts.USER%></label>
+                      </div>
                     </div>
+                    <div id="unameHelpBlock" class="form-text"><%=texts.USERNOM_INFOS%></div>
                   </div>
-                  <div id="unameHelpBlock" class="form-text"><%=texts.USERNOM_INFOS%></div>
                 </div>
               </div>
-            </div>
-            <div class="card-footer">
-              <button class="btn btn-primary" type="submit"><%=texts.ADD%></button>
-            </div>
-          </form>
+              <div class="card-footer">
+                <button class="btn btn-primary" type="submit"><%=texts.ADD%></button>
+              </div>
+            </form>
+          </div>
         </div>
+        <!-- ADD USER TAB -->
       </div>
-      <!-- ADD USER TAB -->
     </div>
   </div>
   <!-- Modal -->
@@ -119,6 +120,7 @@
 <script>
   $(document).ready(function () {
     $('#inputErrors').delay(5000).fadeOut('slow');
+    $('#userstable').removeClass('table-bordered');
 
     $('.btn-delete-elem').click(function (e) {
       e.preventDefault();

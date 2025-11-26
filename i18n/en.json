@@ -114,6 +114,7 @@
   "ALL": "All",
   "NONAFFECTE": "Unallocated",
   "NBSITEOK": "Number of authorised sites",
+  "SITECHARGEOK": "Authorised sites for recharging",
   "NEWPASSWORD": "New password",
   "CONFIRMPASSWORD": "Confirm new password",
   "FABRICANT": "Vendor",
