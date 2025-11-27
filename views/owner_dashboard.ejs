@@ -230,8 +230,8 @@
         $('#offline').html(result.data.offline)
       },
       error: function (jqXHR, textStatus, err) {
-        alert(jqXHR.responseText)
         clearInterval(interval1)
+        alert(jqXHR.responseText)
       }
     })
   }
@@ -250,8 +250,8 @@
         $('#occupied').html(result.data.occupied)
       },
       error: function (jqXHR, textStatus, err) {
-        alert(jqXHR.responseText)
         clearInterval(interval2)
+        alert(jqXHR.responseText)
       }
     })
   }
@@ -346,8 +346,8 @@
         }
       },
       error: function (jqXHR, textStatus, err) {
-        alert(jqXHR.responseText)
         clearInterval(interval3)
+        alert(jqXHR.responseText)
       }
     });
   }

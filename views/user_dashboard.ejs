@@ -1,6 +1,31 @@
 <%- include('./partials/header.ejs') %>
 <main class="container-fluid">
   <%- include('./partials/ocpperrors.ejs') %>
+  <!--No Chargers-->
+  <% if (chargers.length == 0) { %><div class="alert alert-warning" role="alert">
+    <%= texts.NO_STATIONS %>
+  </div><% } else { %>
+  <div class="row row-cols-4">
+    <% chargers.forEach(function(charger) { %><div class="col">
+      <div class="card">
+        <div class="card-header">
+          <small class="d-inline-flex mb-0 px-2 py-1 fw-bold text-white bg-secondary border border-secondary rounded-2">
+            <i class="bi bi-geo-alt"></i>&nbsp;<%= charger.s_name %>
+          </small>
+        </div>
+        <div class="card-body p-2">
+          <div class="d-flex align-items-end">
+            <div class="p-1">
+              <% if (charger.online == 1) { %><span class="text-success"><i class="bi bi-circle-fill fs-5"></i>
+              <% } else { %><span class="text-secondary"><i class="bi bi-circle-fill fs-5"></i><% } %>
+            </div>
+            <div class="p-1 flex-grow-1 fs-5 fw-bold"><%= charger.cb_name %></div>
+            <div class="p-1"><a href="/connectors/<%= charger.cb_id %>" class="link-secondary"><i class="bi bi-caret-right-square-fill fs-5"></i></a></div>
+          </div>
+        </div>
+      </div>
+    </div><% }); %>
+  </div><% } %>
 </main>
 <%- include('./partials/footerjs.ejs') %>
 <script>

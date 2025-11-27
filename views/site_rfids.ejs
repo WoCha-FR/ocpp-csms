@@ -25,38 +25,36 @@
       <div id="rfids-tabs-conteneur" class="tab-content">
         <!-- RFIDS TAB -->
         <div id="rfids-tabs-list" class="tab-pane fade active show" role="tabpanel" aria-labelledby="rfids-tabs-list-tab">
-          <div class="card p-3">
-            <table id="rfidstable" class="table table-striped table-hover" data-toggle="table" data-locale="<%=texts.LOCALE%>"
-              data-mobile-responsive="true" data-search="true" data-show-search-button="true" data-search-highlight="true" data-search-align="left">
-              <thead>
-                <th data-sortable="true" data-field="idtag"><%=texts.IDTAG%></th>
-                <th data-sortable="true" data-field="rf_name"><%=texts.CARD_NAME%></th>
-                <th data-sortable="true" data-field="blocked"><%=texts.STATE%></th>
-                <th data-sortable="true" data-field="expire" data-formatter="tsFormatter"><%=texts.EXPIRE%></th>
-                <th data-sortable="true" data-field="uname"><%=texts.USER%></th>
-                <th></th>
-              </thead>
-              <tbody>
-              <% rfids.forEach(function(rfid) { %>
-                <tr>
-                  <td><%= rfid.idtag %></td>
-                  <td><%= rfid.rf_name %></td>
-                  <% if(rfid.blocked==1) { %>
-                  <td data-searchable="false"><span class="badge text-bg-danger"><%=texts.REJECTEDF%></span></td>
-                  <% } else { %>
-                  <td data-searchable="false"><span class="badge text-bg-success"><%=texts.ACCEPTEDF%></span></td>
-                  <% } %>
-                  <td><%= rfid.expire %></td>
-                  <td><%- rfid.uname ? rfid.uname : texts.NONAFFECTE %></td>
-                  <td>
-                    <a class="btn btn-sm btn-warning" href="/site/rfid/edit/<%=rfid.rf_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
-                    <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=rfid.rf_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
-                  </td>
-                </tr>
-              <% }); %>
-              </tbody>
-            </table>
-          </div>
+          <table id="rfidstable" class="table table-striped table-hover" data-toggle="table" data-locale="<%=texts.LOCALE%>"
+            data-mobile-responsive="true" data-search="true" data-show-search-button="true" data-search-highlight="true" data-search-align="left">
+            <thead>
+              <th data-sortable="true" data-field="idtag"><%=texts.IDTAG%></th>
+              <th data-sortable="true" data-field="rf_name"><%=texts.CARD_NAME%></th>
+              <th data-sortable="true" data-field="blocked"><%=texts.STATE%></th>
+              <th data-sortable="true" data-field="expire" data-formatter="tsFormatter"><%=texts.EXPIRE%></th>
+              <th data-sortable="true" data-field="uname"><%=texts.USER%></th>
+              <th></th>
+            </thead>
+            <tbody>
+            <% rfids.forEach(function(rfid) { %>
+              <tr>
+                <td><%= rfid.idtag %></td>
+                <td><%= rfid.rf_name %></td>
+                <% if(rfid.blocked==1) { %>
+                <td data-searchable="false"><span class="badge text-bg-danger"><%=texts.REJECTEDF%></span></td>
+                <% } else { %>
+                <td data-searchable="false"><span class="badge text-bg-success"><%=texts.ACCEPTEDF%></span></td>
+                <% } %>
+                <td><%= rfid.expire %></td>
+                <td><%- rfid.uname ? rfid.uname : texts.NONAFFECTE %></td>
+                <td>
+                  <a class="btn btn-sm btn-warning" href="/site/rfid/edit/<%=rfid.rf_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
+                  <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=rfid.rf_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
+                </td>
+              </tr>
+            <% }); %>
+            </tbody>
+          </table>
         </div>
         <!-- ADD RFIDS TAB -->
         <div id="rfids-tabs-add" class="tab-pane fade" role="tabpanel" aria-labelledby="rfids-tabs-add-tab" tabindex="0">

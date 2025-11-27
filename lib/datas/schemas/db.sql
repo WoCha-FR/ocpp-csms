@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 `password` TEXT(60) NOT NULL,
 `name` TEXT(50) DEFAULT NULL COLLATE NOCASE,
 `isAdmin` INTEGER(1) DEFAULT NULL CHECK (`isAdmin` IN (NULL, 1)),
-`ownedSite` INTEGER DEFAULT NULL REFERENCES `sites` (`s_pk`) ON DELETE SET NULL
+`ownedSite` INTEGER DEFAULT NULL REFERENCES `sites` (`s_pk`) ON DELETE SET NULL,
+`idtag` TEXT(20) NOT NULL UNIQUE COLLATE NOCASE
 );
 /* Users of Sites */
 CREATE TABLE IF NOT EXISTS `sites_users` (
@@ -156,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `schema_version` (
 /* Initial Values */
 BEGIN TRANSACTION;
 INSERT INTO `schema_version` (`version`) VALUES ('0.1.0');
-INSERT INTO `users` (`usermail`,`password`,`name`,`isAdmin`) VALUES ('admin@admin.eu','$2b$10$FTdLTiTsGV81/PcjArPmB.izN7RPXT3t93O0LoIGXZDovyOf178cy','Admin',1);
+INSERT INTO `users` (`usermail`,`password`,`name`,`isAdmin`,`idtag`) VALUES ('admin@admin.eu','$2b$10$FTdLTiTsGV81/PcjArPmB.izN7RPXT3t93O0LoIGXZDovyOf178cy','Admin',1,CONCAT('WUSR',HEX(RANDOMBLOB(6))));
 INSERT INTO `rfid_tags` (`idtag`,`rf_name`,`isparent`) VALUES (CONCAT('SADM',HEX(RANDOMBLOB(6))),'SUPERADMIN',1);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('AllowOfflineTxForUnknownId', NULL, 0, 'b', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('AuthorizeRemoteTxRequests', '', 0, 'b', NULL);

@@ -21,9 +21,9 @@
         }
       },
       error: function (jqXHR, textStatus, err) {
+        clearInterval(interval)
         alert('refreshPendings Error: ' + textStatus + ', err ' + err)
         console.log()
-        clearInterval(interval)
       }
     });
   }

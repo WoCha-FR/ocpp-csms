@@ -26,31 +26,29 @@
       <div id="users-tabs-conteneur" class="tab-content">
         <!-- ALL USERS TAB -->
         <div id="users-tabs-list" class="tab-pane fade active show" role="tabpanel" aria-labelledby="users-tabs-list-tab">
-          <div class="card p-3">
-            <table id="userstable" class="table table-hover table-striped" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true"
-              data-search="true" data-search-align="left" data-search-highlight="true" data-show-search-button="true">
-              <thead>
-                <tr>
-                  <th data-sortable="true" data-field="name"><%=texts.NOM%></th>
-                  <th data-sortable="true" data-field="usermail"><%=texts.EMAIL_ADDR%></th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <% siteusers.forEach(function(siteuser) { %>
-                <tr>
-                  <td><%=siteuser.uname%></td>
-                  <td><%=siteuser.usermail%></td>
-                  <td>
-                    <a class="btn btn-sm btn-warning" href="/site/user/edit/<%=siteuser.pk%>" title="Update"><i class="bi bi-pencil"></i></a>
-                    <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=siteuser.pk%>" data-bs-toggle="modal"
-                      data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
-                  </td>
-                </tr>
-                <% }); %>
-              </tbody>
-            </table>
-          </div>
+          <table id="userstable" class="table table-hover table-striped" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true"
+            data-search="true" data-search-align="left" data-search-highlight="true" data-show-search-button="true">
+            <thead>
+              <tr>
+                <th data-sortable="true" data-field="name"><%=texts.NOM%></th>
+                <th data-sortable="true" data-field="usermail"><%=texts.EMAIL_ADDR%></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% siteusers.forEach(function(siteuser) { %>
+              <tr>
+                <td><%=siteuser.uname%></td>
+                <td><%=siteuser.usermail%></td>
+                <td>
+                  <a class="btn btn-sm btn-warning" href="/site/user/edit/<%=siteuser.pk%>" title="Update"><i class="bi bi-pencil"></i></a>
+                  <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=siteuser.pk%>" data-bs-toggle="modal"
+                    data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
+                </td>
+              </tr>
+              <% }); %>
+            </tbody>
+          </table>
         </div>
         <!-- ALL USERS TAB -->
         <!-- ADD USER TAB -->

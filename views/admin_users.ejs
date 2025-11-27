@@ -26,45 +26,43 @@
       <div id="users-tabs-conteneur" class="tab-content">
         <!-- ALL USERS TAB -->
         <div id="users-tabs-list" class="tab-pane fade active show" role="tabpanel" aria-labelledby="users-tabs-list-tab">
-          <div class="card p-3">
-            <table id="userstable" class="table table-hover table-striped" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
-              <thead>
-                <tr>
-                  <th data-sortable="true" data-field="name"><%=texts.NOM%></th>
-                  <th data-sortable="true" data-field="usermail"><%=texts.EMAIL_ADDR%></th>
-                  <th data-sortable="true"><%=texts.USER_RIGHTS%></th>
-                  <th data-sortable="true" data-field="nbSites"><%=texts.NBSITEOK%></th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-              <% if(users.length> 0) { %>
-                <% users.forEach(function(user) { %>
-                <tr>
-                  <td><%=user.name%></td>
-                  <td><%=user.usermail%></td>
-                  <td>
-                    <% if (user.isAdmin) { %>
-                      <i class="bi bi-gear-wide-connected"></i>&nbsp;<%=texts.USER_ADMIN%>
-                    <% } else if (user.ownedSite) { %>
-                      <i class="bi bi-ev-station"></i>&nbsp;<%=texts.USER_OWNER%>&nbsp;<%=user.s_name%>
-                    <% } else { %>
-                      <i class="bi bi-ev-front"></i>&nbsp;<%=texts.USER%>
-                    <% } %>
-                  </td>
-                  <td><%=user.nbSites%></td>
-                  <td>
-                    <a class="btn btn-sm btn-warning" href="/admin/user/edit/<%=user.user_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
-                    <% if ((user.isAdmin && nbAdmin> 1) || !user.isAdmin) { %>
-                    <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=user.user_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
-                    <% } %>
-                  </td>
-                </tr>
-                <% }); %>
-              <% } %>
-              </tbody>
-            </table>
-          </div>
+          <table id="userstable" class="table table-hover table-striped" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
+            <thead>
+              <tr>
+                <th data-sortable="true" data-field="name"><%=texts.NOM%></th>
+                <th data-sortable="true" data-field="usermail"><%=texts.EMAIL_ADDR%></th>
+                <th data-sortable="true"><%=texts.USER_RIGHTS%></th>
+                <th data-sortable="true" data-field="nbSites"><%=texts.NBSITEOK%></th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+            <% if(users.length> 0) { %>
+              <% users.forEach(function(user) { %>
+              <tr>
+                <td><%=user.name%></td>
+                <td><%=user.usermail%></td>
+                <td>
+                  <% if (user.isAdmin) { %>
+                    <i class="bi bi-gear-wide-connected"></i>&nbsp;<%=texts.USER_ADMIN%>
+                  <% } else if (user.ownedSite) { %>
+                    <i class="bi bi-ev-station"></i>&nbsp;<%=texts.USER_OWNER%>&nbsp;<%=user.s_name%>
+                  <% } else { %>
+                    <i class="bi bi-ev-front"></i>&nbsp;<%=texts.USER%>
+                  <% } %>
+                </td>
+                <td><%=user.nbSites%></td>
+                <td>
+                  <a class="btn btn-sm btn-warning" href="/admin/user/edit/<%=user.user_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
+                  <% if ((user.isAdmin && nbAdmin> 1) || !user.isAdmin) { %>
+                  <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=user.user_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
+                  <% } %>
+                </td>
+              </tr>
+              <% }); %>
+            <% } %>
+            </tbody>
+          </table>
         </div>
         <!-- ALL USERS TAB -->
         <!-- ADD USER TAB -->

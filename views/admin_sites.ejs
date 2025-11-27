@@ -26,36 +26,34 @@
         <!-- ALL SITES TAB -->
         <div id="sites-tabs-list" class="tab-pane fade active show" role="tabpanel" aria-labelledby="sites-tabs-list-tab">
           <!-- TABLE -->
-          <div class="card p-3">
-            <table id="sitestable" class="table table-striped table-hover" data-toggle="table" data-locale="<%=texts.LOCALE%>"
-              data-mobile-responsive="true" data-search="true" data-search-highlight="true" data-search-align="left">
-              <thead>
-                <tr>
-                  <th data-sortable="true" data-field="s_name"><%=texts.NOM%></th>
-                  <th data-sortable="true" data-field="s_address"><%=texts.ADDRESS%></th>
-                  <th data-sortable="true" data-field="s_codp"><%=texts.ZIPCODE%></th>
-                  <th data-sortable="true" data-field="s_ville"><%=texts.VILLE%></th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-              <% if(sites.length> 0) { %>
-                <% sites.forEach(function(site) { %>
-                <tr>
-                  <td><%=site.s_name%></td>
-                  <td><%=site.s_address%></td>
-                  <td><%=site.s_codp%></td>
-                  <td><%=site.s_ville%></td>
-                  <td>
-                    <a class="btn btn-sm btn-warning" href="/admin/site/edit/<%=site.s_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
-                    <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=site.s_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
-                  </td>
-                </tr>
-                <% }); %>
-              <% } %>
-              </tbody>
-            </table>
-          </div>
+          <table id="sitestable" class="table table-striped table-hover" data-toggle="table" data-locale="<%=texts.LOCALE%>"
+            data-mobile-responsive="true" data-search="true" data-search-highlight="true" data-search-align="left">
+            <thead>
+              <tr>
+                <th data-sortable="true" data-field="s_name"><%=texts.NOM%></th>
+                <th data-sortable="true" data-field="s_address"><%=texts.ADDRESS%></th>
+                <th data-sortable="true" data-field="s_codp"><%=texts.ZIPCODE%></th>
+                <th data-sortable="true" data-field="s_ville"><%=texts.VILLE%></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+            <% if(sites.length> 0) { %>
+              <% sites.forEach(function(site) { %>
+              <tr>
+                <td><%=site.s_name%></td>
+                <td><%=site.s_address%></td>
+                <td><%=site.s_codp%></td>
+                <td><%=site.s_ville%></td>
+                <td>
+                  <a class="btn btn-sm btn-warning" href="/admin/site/edit/<%=site.s_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
+                  <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=site.s_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
+                </td>
+              </tr>
+              <% }); %>
+            <% } %>
+            </tbody>
+          </table>
         </div>
         <!-- ALL SITES TAB -->
         <!-- ADD SITES TAB -->
