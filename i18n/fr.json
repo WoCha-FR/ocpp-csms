@@ -51,7 +51,7 @@
   "DATETIME": "Date & Heure",
   "DIRECTION": "Direction",
   "TYPE": "Type",
-  "METHOD": "Methode",
+  "METHOD": "Méthode",
   "MESSAGE": "Message",
   "PARAMETRE": "Paramètre",
   "ACTION": "Action",
@@ -167,5 +167,12 @@
   "ALL_USERS": "Tous les utilisateurs",
   "PHASE": "Phase",
   "CURRENT_OFFERED": "Courant offert",
-  "CURRENTINA": "Courant en Ampère"
+  "CURRENTINA": "Courant en Ampère",
+  "ALL_RFID_TAGS": "Tous les Tags RFID",
+  "FREE_BY_OCPP": "Charge libre OCPP",
+  "FREE_BY_CHARGER": "Charge libre Borne",
+  "OLD_USER": "Ancien utilisateur",
+  "OLD_RFID": "Ancienne carte",
+  "WEBAPP": "Application",
+  "RFIDC": "Carte RFID"
 }

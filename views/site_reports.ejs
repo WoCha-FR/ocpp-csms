@@ -6,7 +6,7 @@
     <div class="card-body">
       <div class="row mb-2">
         <div class="col-md-3">
-          <div class="input-group flatpickr">
+          <div class="input-group input-group-sm flatpickr">
             <div class="input-group-text"><%=texts.DATE%></div>
             <input type="text" class="form-control" id="dateInput" readonly="readonly" data-input>
             <span class="input-group-text" data-clear><i class="bi bi-calendar2-x"></i></span>
@@ -15,15 +15,21 @@
         <div class="col-md-7" id="myFilter">
           <div class="row">
             <div class="col">
-              <div class="input-group">
+              <div class="input-group input-group-sm">
                 <div class="input-group-text"><i class="bi bi-funnel"></i></div>
                 <select class="form-control bootstrap-table-filter-control-cb_name"><option value=""><%= texts.ALL_CHARGERS %></option></select>
               </div>
             </div>
             <div class="col">
-              <div class="input-group">
+              <div class="input-group input-group-sm">
                 <div class="input-group-text"><i class="bi bi-funnel"></i></div>
                 <select class="form-control bootstrap-table-filter-control-user"><option value=""><%= texts.ALL_USERS %></option></select>
+              </div>
+            </div>
+            <div class="col">
+              <div class="input-group input-group-sm">
+                <div class="input-group-text"><i class="bi bi-funnel"></i></div>
+                <select class="form-control bootstrap-table-filter-control-rfid"><option value=""><%= texts.ALL_RFID_TAGS %></option></select>
               </div>
             </div>
           </div>
@@ -34,11 +40,13 @@
           <button type="button" class="btn btn-secondary btn-sm" id="exportTable"><i class="bi bi-download"></i></button>
         </div>
       </div>
-      <table class="table" id="reportstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
+      <table class="table table-sm" id="reportstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
         <thead>
           <th data-field="cb_name" data-filter-control="select"><%=texts.STATION%></th>
-          <th data-field="connector_id"><%=texts.CONNECTOR%></th>
-          <th data-field="user" data-filter-control="select"><%=texts.USER%></th>
+          <th data-field="connector_id" data-formatter="connFormatter"><%=texts.CONNECTOR%></th>
+          <th data-field="user" data-formatter="usrFormatter" data-filter-control="select"><%=texts.USER%></th>
+          <th data-field="method" data-formatter="mtdFormatter"><%=texts.METHOD%></th>
+          <th data-field="rfid" data-formatter="rfidFormatter" data-filter-control="select"><%=texts.IDTAG%></th>
           <th data-field="tsStart" data-formatter="tsFormatter"><%=texts.START%></th>
           <th data-field="tsStop" data-formatter="tsFormatter"><%=texts.END%></th>
           <th data-field="tsEnergy" data-formatter="energyFormatter"><%=texts.ENERGY_CONSUMED%></th>
@@ -57,7 +65,6 @@
 <script src="/js/flatpickr-fr.min.js"></script>
 <% } %>
 <script>
-  //TODO: Afficher user
   $(document).ready(function () {
     $('#inputErrors').delay(5000).fadeOut('slow');
   });
@@ -81,6 +88,58 @@
     },
   });
   // BSTable - data-formater
+  function connFormatter(value, row) {
+    // Connector name or number
+    if (row.cname !== null) {
+      return row.cname
+    }
+    return row.connector_id
+  }
+  function usrFormatter(value, row) {
+    // Autocharge & autonomous charger & Admin Web Tag
+    if (row.upk == 0) {
+      if (row.IdToken == 'OCPPAUTOSTART') {
+        return '<%=texts.FREE_BY_OCPP%>'
+      } else if (row.IdToken.startsWith('SADM')) {
+        return row.rf_name
+      } else {
+        return '<%=texts.FREE_BY_CHARGER%>'
+      }
+    }
+    // User & Old User
+    if (row.upk !== null) {
+      if (row.uname !== null) {
+        return row.uname
+      } else {
+        return '<%=texts.FREE_BY_OCPP%>'
+      }
+    }
+  }
+  function mtdFormatter(value, row) {
+    if (row.IdToken !== null) {
+      if (row.IdToken.startsWith('SADM') || row.IdToken.startsWith('WUSR')) {
+        return '<%=texts.WEBAPP%>'
+      }
+      if (row.rfpk !== null) {
+        return '<%=texts.RFIDC%>'
+      }
+    }
+    return null
+  }
+  function rfidFormatter(value, row) {
+    // Web Tag
+    if (row.IdToken !== null && row.IdToken.startsWith('SADM')) {
+      return null
+    }
+    // RFIDS
+    if (row.rfpk !== null) {
+      if (row.rf_name !== null) {
+        return row.rf_name
+      } else {
+        return '<%=texts.OLD_RFID%>'
+      }
+    }
+  }
   function tsFormatter(value) {
     if (!value) {
       return ''

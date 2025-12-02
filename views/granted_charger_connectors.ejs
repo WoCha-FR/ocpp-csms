@@ -85,19 +85,19 @@
             <div class="col-sm-2">
               <form action="/charger/<%=station.cb_id%>/remotestart" method="post" id="btnStart<%=conn.pk%>" class="<% if(conn.status!='Available' && conn.status!='Preparing' ) { %>d-none<% } %>">
                 <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
-                <button type="submit" id="remoteStart<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq"<% if(conn.online!==1) { %> disabled<% } %>>
+                <button type="submit" id="remoteStart<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq"<% if(station.online!==1) { %> disabled<% } %>>
                   <%=texts.START_CHARGING%>
                 </button>
               </form>
-              <form action="/charger/<%=station.cb_id%>/remotestop" method="post"id="btnStop<%=conn.pk%>" class="<% if(conn.status!='Charging' && conn.status!='SuspendedEVSE' && conn.status!='SuspendedEV' ) { %>d-none<% } %>">
+              <form action="/charger/<%=station.cb_id%>/remotestop" method="post" id="btnStop<%=conn.pk%>" class="<% if(conn.status!='Charging' && conn.status!='SuspendedEVSE' && conn.status!='SuspendedEV' ) { %>d-none<% } %>">
                 <input type="hidden" id="transId<%=conn.pk%>" name="transId" value="<%if (!conn.tsStop) { %><%=conn.t_pk%><% } %>">
-                <button type="submit" id="remoteStop<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq"<% if(conn.online!==1) { %> disabled<% } %>>
+                <button type="submit" id="remoteStop<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq"<% if(station.online!==1) { %> disabled<% } %>>
                   <%=texts.STOP_CHARGING%>
                 </button>
               </form>
               <form action="/charger/<%=station.cb_id%>/unlockcon" method="post">
                 <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
-                <button type="submit" id="UnlockConn<%=conn.pk%>" class="btn btn-info btn-sm w-100 ocppReq"<% if(conn.online!==1) { %> disabled<% } %>>
+                <button type="submit" id="UnlockConn<%=conn.pk%>" class="btn btn-info btn-sm w-100 ocppReq"<% if(station.online!==1) { %> disabled<% } %>>
                   <%=texts.UNLOCK_CONN%>
                 </button>
               </form>
@@ -146,7 +146,8 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col">
-                      <span class="fw-bold"><%=texts.USER%>:&nbsp;</span><span id="transUser<%=conn.pk%>"><% if (conn.uname) { %><%= conn.uname %>&nbsp;(<%= conn.usermail %>)<% } else if (conn.rf_name) { %><%= conn.rf_name %>&nbsp;(RFID)<% } else { %><%= texts.FREE_CHARGE %>&nbsp;(<%= conn.IdToken %>)<% } %>
+                      <span class="fw-bold"><%=texts.USER%>:&nbsp;</span><span id="transUser<%=conn.pk%>">
+                        <% if (conn.uname) { %><%= conn.uname %><% } else if (conn.rf_name) { %><%= conn.rf_name %><% } else { %><%= texts.FREE_CHARGE %><% } %>
                       </span>
                     </div>
                     <div class="col"><% let date1=new Date(conn.tsStart * 1000) %>
@@ -219,7 +220,7 @@
       success: function (result) {
         for (const elem of result.data) {
           // Nouveau Connecteur ?
-          if (elem.pk && document.body.contains(document.querySelector('h5#connstatus' + elem.pk)) === false) {
+          if (elem.pk && document.body.contains(document.querySelector('#connstatus' + elem.pk)) === false) {
             location.reload();
           }
           // Online / Offline
@@ -310,11 +311,11 @@
               $('#transActiv' + elem.pk).html('oui')
               // Utilisateur
               if (elem.uname) {
-                $('#transUser' + elem.pk).html(elem.uname + ' (' + elem.usermail + ')')
+                $('#transUser' + elem.pk).html(elem.uname)
               } else if (elem.rf_name) {
-                $('#transUser' + elem.pk).html(elem.rfname + ' (RFID)')
+                $('#transUser' + elem.pk).html(elem.rfname)
               } else {
-                $('#transUser' + elem.pk).html('<%= texts.FREE_CHARGE %> (' + elem.IdToken + ')')
+                $('#transUser' + elem.pk).html('<%= texts.FREE_CHARGE %>')
               }
               // Début & Timer
               const transDeb = new Date(elem.tsStart * 1000)

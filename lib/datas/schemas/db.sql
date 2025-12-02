@@ -107,6 +107,8 @@ CREATE UNIQUE INDEX `OneConnXperCB` ON `connector_status` (`cb_pk`,`connector_id
 CREATE TABLE IF NOT EXISTS `transactions` (
 `t_pk` INTEGER PRIMARY KEY NOT NULL,
 `con_pk` INTEGER REFERENCES `connector_status` (`pk`) ON DELETE CASCADE ON UPDATE CASCADE,
+`rfpk` INTEGER DEFAULT NULL,
+`upk` INTEGER DEFAULT NULL,
 `IdToken` TEXT(20) NOT NULL COLLATE NOCASE,
 `meterStart` INTEGER NOT NULL,
 `tsStart` TIMESTAMP(11) NOT NULL,

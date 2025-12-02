@@ -84,7 +84,7 @@
   "CHARGEAUTH_MODE": "Charging authorisation",
   "FREE_CHARGE_OCPP": "Automatic start-up by OCPP",
   "FREE_CHARGE_BORNE": "Manage via the charger or its application",
-  "FREE_CHARGE": "Free charge",
+  "FREE_CHARGE": "Open charge",
   "RESTRICTED_CHARGE": "RFID / Web",
   "CONNECTOR": "Connector",
   "CONNECTORS": "Connectors",
@@ -167,5 +167,12 @@
   "ALL_USERS": "All users",
   "PHASE": "Phase",
   "CURRENT_OFFERED": "Current offered",
-  "CURRENTINA": "Current in Ampere"
+  "CURRENTINA": "Current in Ampere",
+  "ALL_RFID_TAGS": "All RFID Tags",
+  "FREE_BY_OCPP": "Open by OCPP",
+  "FREE_BY_CHARGER": "Open by charger",
+  "OLD_USER": "Old user",
+  "OLD_RFID": "Old card",
+  "WEBAPP": "Application",
+  "RFIDC": "RFID card"
 }
