@@ -28,7 +28,7 @@
               <div class="row pb-1 border-bottom">
                 <div class="col text-start"><%=texts.STATE%></div>
                 <div class="col text-end">
-                  <!--TODO: STATUS SELON CHARGE DE L'UTILISATEUR OU D'UNE AUTRE UTILISATEUR-->
+                  <!--TODO: STATUS SELON CHARGE DE L'UTILISATEUR OU D'UN AUTRE UTILISATEUR-->
                   <% if (elem.status=='Unavailable' || elem.status=='Faulted' ) { %>
                   <span class="badge text-bg-danger"><%=elem.status%></span>
                   <% } else if (elem.status=='Available' ) { %>

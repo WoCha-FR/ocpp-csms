@@ -6,7 +6,6 @@
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs" role="tablist">
         <li class="nav-item">
-          <!--TODO: Afficher infos de la session en plus des courbes -->
           <a class="nav-link active"><%=texts.TRANSAC_DETAILS%></a>
         </li>
       </ul>
@@ -14,10 +13,35 @@
     <div class="card-body">
       <div class="tab-content">
         <div class="card">
-          <div class="card-header">Header</div>
+          <div class="card-header fs-6 fw-bold"><%if (data.tsStop) { %><%=texts.TRANSAC_FINIE%><% } else { %><%=texts.TRANSAC_ENCOURS%><% } %></div>
           <div class="card-body">
-            <canvas id="myChartPE" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;"></canvas>
-            <canvas id="myChartCR" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;"></canvas>
+            <div class="row mb-2">
+              <div class="col-12 col-md-4 col-lg-2"><span class="fw-bold"><%=texts.USER%>:&nbsp;</span><span id="transUser"></span></div>
+              <div class="col-12 col-md-4 col-lg-2"><span class="fw-bold"><%=texts.METHOD%>:&nbsp;</span><span id="transMethod"></span></div>
+              <div class="col-12 col-md-4 col-lg-2"><span class="fw-bold"><%=texts.SITE%>:&nbsp;</span><span><%=data.s_name%></span></div>
+              <div class="col-12 col-md-4 col-lg-2"><span class="fw-bold"><%=texts.CHARGER%>:&nbsp;</span><span><%=data.cb_name%></span></div>
+              <div class="col-12 col-md-4 col-lg-2"><span class="fw-bold"><%=texts.CONNECTOR%>:&nbsp;</span><span><%=data.cname%>&nbsp;<%=data.connector_id%></span></div>
+              <div class="col-12 col-md-4 col-lg-2"><span class="fw-bold"><%=texts.STATUS%>:&nbsp;</span><span><%=data.tsStatus%></span></div>
+              <% let date1=new Date(data.tsStart * 1000); %>
+              <div class="col-12 col-md-4 col-lg-2"><span class="fw-bold"><%=texts.START%>:&nbsp;</span><span><%= date1.toLocaleDateString(texts.LOCALE) %>&nbsp;<%= date1.toLocaleTimeString(texts.LOCALE) %></span></div>
+              <div class="col-12 col-md-4 col-lg-2">
+                <span class="fw-bold"><%=texts.END%>:&nbsp;</span><% if (data.tsStop) { let date2=new Date(data.tsStop * 1000); %>
+                <span><%= date2.toLocaleDateString(texts.LOCALE) %>&nbsp;<%= date2.toLocaleTimeString(texts.LOCALE) %></span><% } else { %><span></span><% } %>
+              </div>
+              <div class="col-12 col-md-4 col-lg-2"><span class="fw-bold"><%=texts.DURATION%>:&nbsp;</span><span id="transTime"></span></div>
+              <div class="col-12 col-md-4 col-lg-2"><span class="fw-bold"><%=texts.REASON%>:&nbsp;</span><span><%=data.tsReason%></span></div>
+              <div class="col-12 col-md-4 col-lg-2"><span class="fw-bold"><%=texts.ENERGY_CONSUMED%>:&nbsp;</span><span><%=(data.tsEnergy /1000)%>&nbsp;<%=texts.ENERGYUNIT%></span></div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <canvas id="myChartPE" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;"></canvas>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <canvas id="myChartCR" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block;"></canvas>
+              </div>
+            </div>
           </div>
           <div class="card-footer">
             <a class="btn btn-primary" role="button" href="javascript:history.back();"><%=texts.BACK%></a>
@@ -33,26 +57,113 @@
   $(document).ready(function () {
     $('#inputErrors').delay(5000).fadeOut('slow')
   });
+  const elem = JSON.parse('<%- JSON.stringify(data) %>')
+  // UserFormater: Autocharge & autonomous charger & Admin Web Tag
+  if (elem.upk == 0) {
+    if (elem.IdToken == 'OCPPAUTOSTART') {
+      $('#transUser').html('<%=texts.FREE_BY_OCPP%>')
+    } else if (elem.IdToken.startsWith('SADM')) {
+      $('#transUser').html(elem.rf_name)
+    } else {
+      $('#transUser').html('<%=texts.FREE_BY_CHARGER%>')
+    }
+  // UserFormater: User & Old User
+  } else if (elem.upk !== null) {
+    if (elem.uname !== null) {
+      $('#transUser').html(elem.uname)
+    } else {
+      $('#transUser').html('<%=texts.OLD_USER%>')
+    }
+  }
+  // Method
+  if (elem.IdToken !== null) {
+    if (elem.IdToken.startsWith('SADM') || elem.IdToken.startsWith('WUSR')) {
+      $('#transMethod').html('<%=texts.WEBAPP%>')
+    } else {
+      if (elem.rfpk !== null) {
+        $('#transMethod').html('<%=texts.RFIDC%>')
+      }
+      if (elem.rfpk == null && elem.upk == null) {
+        $('#transMethod').html('<%=texts.RFIDC%>')
+      }
+    }
+  }
+  // Set duration
+  const transDeb = new Date(elem.tsStart * 1000)
+  // Session Terminée
+  if (elem.tsStart && elem.tsStop) {
+    const transFin = new Date(elem.tsStop * 1000)
+    const duration = ((transFin.getTime() - transDeb.getTime()) / 1000)
+    $('#transTime').html(secToString(duration))
+  }
+  // Session en Cours
+  if (elem.tsStart && !elem.tsStop) {
+    const thisTime = new Date()
+    let duration = ((thisTime.getTime() - transDeb.getTime()) / 1000)
+    $('#transTime').html(secToString(duration))
+    const timerID = setInterval(function () {
+      $('#transTime').html(secToString(++duration))
+    }, 1000)
+  }
+  // Fonctions autres
+  function pad(val) { return val > 9 ? val : "0" + val; }
+  function secToString(duration) {
+    let seconds = pad(parseInt(duration % 60));
+    let minutes = pad(parseInt(duration / 60, 10) % 60);
+    let hours = pad(parseInt(duration / 3600, 10));
+    return hours + ':' + minutes + ':' + seconds;
+  }
+  // Plugin NoData
+  const noData = {
+    id: 'noData',
+    beforeDatasetDraw: ((chart, args, options) => {
+      const { ctx, data, chartArea: { top, bottom, left, right, width, height } } = chart;
+      console.log(args.index + ' => ' + data.datasets[args.index].label)
+      if (data.datasets[args.index].data.length === 0) {
+        console.log(args.index + ' => ' + data.datasets[args.index].label)
+        data.datasets.pop()
+        chart.update()
+      }
+    }),
+    afterDatasetsDraw: ((chart, args, options) => {
+      const { ctx, data, chartArea: {top, bottom, left, right, width, height} } = chart;
+      ctx.save();
+      // Graph Vide
+      if (data.datasets.length === 0) {
+        ctx.fillStyle = 'rgba(102,102,102,0.5)';
+        ctx.fillRect(left,top,width,height);
+        ctx.font = 'bold 20px sans-serif';
+        ctx.fillStyle = 'white';
+        ctx.textAlign = 'center';
+        ctx.fillText('No Data Availbale', left + width / 2, top + height / 2);
+      }
+    })
+  }
   // CHART
   const ctx = document.getElementById('myChartPE')
   const cty = document.getElementById('myChartCR')
   const all = JSON.parse('<%- JSON.stringify(all)%>')
+
+  let energy = [], power = [], poffer = []
+  let ampl1 = [], ampl2 = [], ampl3 = [], ampoffer = []
+  // Make dict
+  all.forEach(e => {
+    if (e.energy !== null) { energy.push( {x: e.x, y: e.energy} ) }
+    if (e.power !== null) { power.push({ x: e.x, y: e.power }) }
+    if (e.poffer !== null) { poffer.push({ x: e.x, y: e.poffer }) }
+    if (e.ampl1 !== null) { ampl1.push({ x: e.x, y: e.ampl1 }) }
+    if (e.ampl2 !== null) { ampl2.push({ x: e.x, y: e.ampl2 }) }
+    if (e.ampl3 !== null) { ampl3.push({ x: e.x, y: e.ampl3 }) }
+    if (e.ampoffer !== null) { ampoffer.push({ x: e.x, y: e.ampoffer }) }
+  })
+  // Graphs
   new Chart(ctx, {
     type: 'line',
     data: {
       datasets: [
-        {
-          label: '<%=texts.ENERGY_CONSUMED%>',
-          data: all, yAxisID: 'y', parsing: { yAxisKey: 'energy' }
-        },
-        {
-          label: '<%=texts.POWER%>',
-          data: all, yAxisID: 'y1', parsing: { yAxisKey: 'power' }
-        },
-        {
-          label: '<%=texts.POWEROFFERED%>',
-          data: all, yAxisID: 'y1', parsing: { yAxisKey: 'poffer' }
-        }
+        { label: '<%=texts.ENERGY_CONSUMED%>', data: energy, yAxisID: 'y' },
+        { label: '<%=texts.POWEROFFERED%>', data: poffer, yAxisID: 'y' },
+        { label: '<%=texts.POWER%>', data: power, yAxisID: 'y' },
       ]
     },
     options: {
@@ -68,28 +179,17 @@
           title: { display: true, text: '<%=texts.POWERINKW%>' }
         }
       }
-    }
+    },
+    plugins: [noData]
   })
   new Chart(cty, {
     type: 'line',
     data: {
       datasets: [
-        {
-          label: '<%=texts.PHASE%> L1',
-          data: all, yAxisID: 'y', parsing: { yAxisKey: 'ampl1' }
-        },
-        {
-          label: '<%=texts.PHASE%> L2',
-          data: all, yAxisID: 'y', parsing: { yAxisKey: 'ampl2' }
-        },
-        {
-          label: '<%=texts.PHASE%> L3',
-          data: all, yAxisID: 'y', parsing: { yAxisKey: 'ampl3' }
-        },
-        {
-          label: '<%=texts.CURRENT_OFFERED%>',
-          data: all, yAxisID: 'y', parsing: { yAxisKey: 'ampoffer' }
-        }
+        { label: '<%=texts.PHASE%> L1', data: ampl1, yAxisID: 'y' },
+        { label: '<%=texts.PHASE%> L2', data: ampl2, yAxisID: 'y' },
+        { label: '<%=texts.PHASE%> L3', data: ampl3, yAxisID: 'y' },
+        { label: '<%=texts.CURRENT_OFFERED%>', data: ampoffer, yAxisID: 'y' }
       ]
     },
     options: {
@@ -101,7 +201,8 @@
           title: { display: true, text: '<%=texts.CURRENTINA%>' }
         }
       }
-    }
+    },
+    plugins: [noData]
   })
 </script>
 <%- include('./partials/footer.ejs') %>

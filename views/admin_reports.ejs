@@ -53,7 +53,7 @@
           <th data-field="connector" data-formatter="connFormatter"><%=texts.CONNECTOR%></th>
           <th data-field="user" data-formatter="usrFormatter" data-filter-control="select"><%=texts.USER%></th>
           <th data-field="method" data-formatter="mtdFormatter"><%=texts.METHOD%></th>
-          <th data-field="rfid" data-formatter="rfidFormatter" data-filter-control="select"><%=texts.IDTAG%></th>
+          <th data-field="IdToken" data-formatter="rfidFormatter" data-filter-control="select"><%=texts.IDTAG%></th>
           <th data-field="tsStatus"><%=texts.STATUS%></th>
           <th data-field="tsStart" data-formatter="tsFormatter"><%=texts.START%></th>
           <th data-field="tsStop" data-formatter="tsFormatter"><%=texts.END%></th>
@@ -132,22 +132,30 @@
       if (row.rfpk !== null) {
         return '<%=texts.RFIDC%>'
       }
+      if (row.rfpk == null && row.upk == null) {
+        return '<%=texts.RFIDC%>'
+      }
     }
     return null
   }
   function rfidFormatter(value, row) {
     // Web Tag
-    if (row.IdToken !== null && row.IdToken.startsWith('SADM')) {
+    if (value !== null && value.startsWith('SADM')) {
       return null
     }
-    // RFIDS
+    // RFIDS enregistrés ou ancien ?
     if (row.rfpk !== null) {
       if (row.rf_name !== null) {
         return row.rf_name
       } else {
         return '<%=texts.OLD_RFID%>'
       }
+    } else {
+      if (row.upk === null) {
+        return value
+      }
     }
+    return null
   }
   function tsFormatter(value) {
     if (!value) {

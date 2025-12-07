@@ -146,6 +146,7 @@
   "FORMAT": "Format",
   "TRANSAC_ENCOURS": "Charge en cours",
   "TRANSAC_DERNIERE": "Dernière charge",
+  "TRANSAC_FINIE": "Charge terminée",
   "ENERGY_CONSUMED": "Énergie consommée",
   "ENERGY": "Énergie",
   "POWER": "Puissance",
@@ -174,5 +175,6 @@
   "OLD_USER": "Ancien utilisateur",
   "OLD_RFID": "Ancienne carte",
   "WEBAPP": "Application",
-  "RFIDC": "Carte RFID"
+  "RFIDC": "Carte RFID",
+  "STATUS": "Status"
 }

@@ -146,6 +146,7 @@
   "FORMAT": "Format",
   "TRANSAC_ENCOURS": "Recharging in progress",
   "TRANSAC_DERNIERE": "Last charge",
+  "TRANSAC_FINIE": "Charge complete",
   "ENERGY_CONSUMED": "Energy Consumed",
   "ENERGY": "Energy",
   "POWER": "Power",
@@ -174,5 +175,6 @@
   "OLD_USER": "Old user",
   "OLD_RFID": "Old card",
   "WEBAPP": "Application",
-  "RFIDC": "RFID card"
+  "RFIDC": "RFID card",
+  "STATUS": "Status"
 }

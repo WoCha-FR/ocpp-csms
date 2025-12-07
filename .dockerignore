@@ -1,0 +1,19 @@
+# Version control
+.git/
+.github/
+.gitignore
+# Development files
+.vscode/
+dist/
+*.log
+# Documentation
+docs/
+# Dependencies (installed in container)
+node_modules/
+# Dev Resources
+datas/
+zessais/
+client.js
+config.dev.json
+eslint.config.json
+nodemon.json

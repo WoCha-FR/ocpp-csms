@@ -111,7 +111,7 @@
       if (row.uname !== null) {
         return row.uname
       } else {
-        return '<%=texts.FREE_BY_OCPP%>'
+        return '<%=texts.OLD_USER%>'
       }
     }
   }
@@ -121,6 +121,9 @@
         return '<%=texts.WEBAPP%>'
       }
       if (row.rfpk !== null) {
+        return '<%=texts.RFIDC%>'
+      }
+      if (row.rfpk == null && row.upk == null) {
         return '<%=texts.RFIDC%>'
       }
     }
@@ -138,7 +141,12 @@
       } else {
         return '<%=texts.OLD_RFID%>'
       }
+    } else {
+      if (row.upk === null) {
+        return value
+      }
     }
+    return null
   }
   function tsFormatter(value) {
     if (!value) {
