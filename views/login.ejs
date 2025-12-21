@@ -17,11 +17,11 @@
   </head>
   <body class="d-flex align-items-center py-4 bg-body-tertiary">
     <main class="form-signin w-100 m-auto">
-      <form action="/login" method="post">
+      <form action="/auth/login" method="post">
         <% if(login_errors.length> 0) { %>
           <div class="alert alert-danger" role="alert">
-            <% if(login_errors[0]=='USERNAME') { %> <%= texts.WRONGUSER %> <% } %>
-            <% if(login_errors[0]=='PASSWORD') { %> <%= texts.WRONGPASSWORD%> <% } %>
+            <% if(login_errors[0]=='USERNAME') { %><%= texts.WRONGUSER %><% } else if(login_errors[0]=='PASSWORD') { %><%= texts.WRONGPASSWORD%><% } else { %>
+            <%= login_errors[0] %><% } %>
           </div>
         <% } %>
         <div class="container">
@@ -52,6 +52,7 @@
         <button class="btn btn-primary w-100 py-2" type="submit">
           <span class="fas fa-sign-in-alt"></span>&nbsp;<%=texts.LOGIN%>
         </button>
+        <% if (withGoogle === true) { %><a href="/auth/google" class="btn btn-secondary w-100 mt-2" tabindex="-1"><i class="bi bi-google"></i>&nbsp;<%=texts.LOGIN%></a><% } %>
         <p class="mt-5 mb-3 text-body-secondary text-center">&copy;2025</p>
       </form>
     </main>

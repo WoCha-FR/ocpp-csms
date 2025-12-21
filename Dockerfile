@@ -67,6 +67,6 @@ USER nodejs
 # Expose port
 EXPOSE 8080 8887
 # Volumes
-VOLUME [ "/datas" ]
+VOLUME [ "/datas", "/logs", "/config" ]
 # Start production server
 CMD ["node", "index.js"]
