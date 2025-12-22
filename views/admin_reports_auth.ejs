@@ -6,10 +6,10 @@
     <div class="card-header">
       <ul class="nav nav-tabs card-header-tabs">
         <li class="nav-item">
-          <a class="nav-link active" href="/admin/reports/" aria-current="page"><%=texts.CHARGE_SESSION%></a>
+          <a class="nav-link" href="/admin/reports/"><%=texts.CHARGE_SESSION%></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/admin/reports/auth"><%=texts.AUTH_ERRORS%></a>
+          <a class="nav-link active" href="/admin/reports/auth" aria-current="page"><%=texts.AUTH_ERRORS%></a>
         </li>
       </ul>
     </div>
@@ -29,25 +29,25 @@
             <div class="col">
               <div class="input-group input-group-sm">
                 <div class="input-group-text"><i class="bi bi-funnel"></i></div>
-                  <select class="form-control bootstrap-table-filter-control-s_name"><option value=""><%= texts.ALL_SITES %></option></select>
+                <select class="form-control bootstrap-table-filter-control-s_name">
+                  <option value=""><%= texts.ALL_SITES %></option>
+                </select>
               </div>
             </div>
             <div class="col">
               <div class="input-group input-group-sm">
                 <div class="input-group-text"><i class="bi bi-funnel"></i></div>
-                <select class="form-control bootstrap-table-filter-control-cb_name"><option value=""><%= texts.ALL_CHARGERS %></option></select>
+                <select class="form-control bootstrap-table-filter-control-cb_name">
+                  <option value=""><%= texts.ALL_CHARGERS %></option>
+                </select>
               </div>
             </div>
             <div class="col">
               <div class="input-group input-group-sm">
                 <div class="input-group-text"><i class="bi bi-funnel"></i></div>
-                <select class="form-control bootstrap-table-filter-control-user"><option value=""><%= texts.ALL_USERS %></option></select>
-              </div>
-            </div>
-            <div class="col">
-              <div class="input-group input-group-sm">
-                <div class="input-group-text"><i class="bi bi-funnel"></i></div>
-                <select class="form-control bootstrap-table-filter-control-rfid"><option value=""><%= texts.ALL_RFID_TAGS %></option></select>
+                <select class="form-control bootstrap-table-filter-control-idtag">
+                  <option value=""><%= texts.ALL_RFID_TAGS %></option>
+                </select>
               </div>
             </div>
           </div>
@@ -58,23 +58,19 @@
           <button type="button" class="btn btn-secondary btn-sm" id="exportTable"><i class="bi bi-download"></i></button>
         </div>
       </div>
-      <table class="table table-sm" id="reportstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
+      <table class="table table-sm" id="reportstab" data-toggle="table" data-locale="<%=texts.LOCALE%>"
+        data-mobile-responsive="true">
         <thead>
           <th data-field="s_name" data-filter-control="select"><%=texts.SITE%></th>
           <th data-field="cb_name" data-filter-control="select"><%=texts.STATION%></th>
-          <th data-field="connector" data-formatter="connFormatter"><%=texts.CONNECTOR%></th>
-          <th data-field="user" data-formatter="usrFormatter" data-filter-control="select"><%=texts.USER%></th>
-          <th data-field="method" data-formatter="mtdFormatter"><%=texts.METHOD%></th>
-          <th data-field="IdToken" data-formatter="rfidFormatter" data-filter-control="select"><%=texts.IDTAG%></th>
-          <th data-field="tsStatus"><%=texts.STATUS%></th>
-          <th data-field="tsStart" data-formatter="tsFormatter"><%=texts.START%></th>
-          <th data-field="tsStop" data-formatter="tsFormatter"><%=texts.END%></th>
-          <th data-field="tsEnergy" data-formatter="energyFormatter"><%=texts.ENERGY%></th>
-          <th data-field="tsReason"><%=texts.REASON%></th>
-          <th data-field="t_pk" data-formatter="linkFormatter"></th>
+          <th data-field="method"><%=texts.METHOD%></th>
+          <th data-field="idtag" data-filter-control="select"><%=texts.IDTAG%></th>
+          <th data-field="ts" data-formatter="tsFormatter"><%=texts.DATETIME%></th>
+          <th data-field="resp"><%=texts.RESPONSE%></th>
         </thead>
       </table>
     </div>
+    <!-- CARD BODY -->
   </div>
 </main>
 <%- include('./partials/footerjs.ejs') %>
@@ -86,6 +82,7 @@
 <script src="/js/flatpickr-fr.min.js"></script>
 <% } %>
 <script>
+  // Document
   $(document).ready(function () {
     $('#inputErrors').delay(5000).fadeOut('slow');
   });
@@ -109,79 +106,9 @@
     },
   });
   // BSTable - data-formater
-  function connFormatter(value, row) {
-    // Connector name or number
-    if (row.cname !== null) {
-      return row.cname
-    }
-    return row.connector_id
-  }
-  function usrFormatter(value, row) {
-    // Autocharge & autonomous charger & Admin Web Tag
-    if (row.upk == 0) {
-      if (row.IdToken == 'OCPPAUTOSTART') {
-        return '<%=texts.FREE_BY_OCPP%>'
-      } else if (row.IdToken.startsWith('SADM')) {
-        return row.rf_name
-      } else {
-        return '<%=texts.FREE_BY_CHARGER%>'
-      }
-    }
-    // User & Old User
-    if (row.upk !== null) {
-      if (row.uname !== null) {
-        return row.uname
-      } else {
-        return '<%=texts.OLD_USER%>'
-      }
-    }
-  }
-  function mtdFormatter(value, row) {
-    if (row.IdToken !== null) {
-      if (row.IdToken.startsWith('SADM') || row.IdToken.startsWith('WUSR')) {
-        return '<%=texts.WEBAPP%>'
-      }
-      if (row.rfpk !== null) {
-        return '<%=texts.RFIDC%>'
-      }
-      if (row.rfpk == null && row.upk == null) {
-        return '<%=texts.RFIDC%>'
-      }
-    }
-    return null
-  }
-  function rfidFormatter(value, row) {
-    // Web Tag
-    if (value !== null && value.startsWith('SADM')) {
-      return null
-    }
-    // RFIDS enregistrés ou ancien ?
-    if (row.rfpk !== null) {
-      if (row.rf_name !== null) {
-        return row.rf_name
-      } else {
-        return '<%=texts.OLD_RFID%>'
-      }
-    } else {
-      if (row.upk === null) {
-        return value
-      }
-    }
-    return null
-  }
   function tsFormatter(value) {
-    if (!value) {
-      return ''
-    }
-    let jsdate = new Date((value * 1000))
+    let jsdate = new Date(value)
     return jsdate.toLocaleDateString() + ' ' + jsdate.toLocaleTimeString()
-  }
-  function energyFormatter(value) {
-    const resp = (value / 1000).toFixed(3)
-    return resp + ' <%=texts.ENERGYUNIT%>'
-  }
-  function linkFormatter(value) {
-    return '<a href="/reports/charge/' + value + '"><i class="bi bi-file-bar-graph" style="cursor: pointer;"></i></a>'
   }
   // BootstrapTable
   $(function () {
@@ -209,13 +136,13 @@
   function queryParams(params) {
     // DatePicker
     if (picker.selectedDates.length == 2) {
-      params.start = Math.round(picker.selectedDates[0].getTime()/1000)
-      params.stop = Math.round((picker.selectedDates[1].getTime() + 86399000)/1000)
+      params.start = Math.round(picker.selectedDates[0].getTime())
+      params.stop = Math.round(picker.selectedDates[1].getTime() + 86399000)
     } else {
       var d = new Date()
       d.setHours(0, 0, 0, 0)
-      params.start = Math.round(d.getTime()/1000)
-      params.stop = Math.round((params.start + 86399000)/1000)
+      params.start = Math.round(d.getTime())
+      params.stop = Math.round(params.start + 86399000)
     }
     return params
   }
@@ -223,7 +150,7 @@
   function ajaxRequest(params) {
     $.ajax({
       type: 'POST',
-      url: '/ajax/grantedreports_list',
+      url: '/ajax/grantedauthreports_list',
       data: $.param(params.data),
       dataType: 'json',
       success: function (response) {
@@ -246,7 +173,7 @@
     $('#reportstab').tableExport({
       type: 'csv',
       csvSeparator: ';',
-      fileName: 'logsExport'
+      fileName: 'logsAuthExport'
     });
   });
 </script>

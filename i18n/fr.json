@@ -176,5 +176,8 @@
   "OLD_RFID": "Ancienne carte",
   "WEBAPP": "Application",
   "RFIDC": "Carte RFID",
-  "STATUS": "Status"
+  "STATUS": "Status",
+  "CHARGE_SESSION": "Sessions de charge",
+  "AUTH_ERRORS": "Erreurs d'authentification",
+  "RESPONSE": "Réponse"
 }

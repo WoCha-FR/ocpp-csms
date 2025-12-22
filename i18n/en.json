@@ -176,5 +176,8 @@
   "OLD_RFID": "Old card",
   "WEBAPP": "Application",
   "RFIDC": "RFID card",
-  "STATUS": "Status"
+  "STATUS": "Status",
+  "CHARGE_SESSION": "Charging sessions",
+  "AUTH_ERRORS": "Authentication errors",
+  "RESPONSE": "Response"
 }
