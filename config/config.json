@@ -12,13 +12,15 @@
     "port": 8080,
     "listenip": "0.0.0.0",
     "loglvl": "info",
-    "host": ""
+    "host": "http://ocpp.fr"
   },
   "sqlite": {
     "loglvl": "error"
   },
   "email": {
     "mode": "sendmail",
+    "from": "noreply@ocpp.fr",
+    "replyTo": "admin@ocpp.fr",
     "sendmail": {
       "sendmail": true,
       "newline": "unix",
@@ -37,7 +39,7 @@
       }
     },
     "service": {
-      "name": "Gmail",
+      "service": "Gmail",
       "auth": {
         "user": "username",
         "pass": "password"

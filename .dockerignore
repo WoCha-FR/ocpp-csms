@@ -15,5 +15,5 @@ datas/
 zessais/
 client.js
 config.dev.json
-eslint.config.json
+eslint.config.js
 nodemon.json
