@@ -1,12 +1,13 @@
 <%- include('./partials/header.ejs') %>
 <main class="container-fluid">
   <%- include('./partials/ocpperrors.ejs') %>
-  <div class="card">
+  <!-- User Account Information Card -->
+  <div class="card mb-2">
     <div class="card-header fs-5 fw-bold"><%=userInfo.usermail%></div>
     <form method="post" action="/compte">
       <div class="card-body">
-        <div class="row justify-content-start mb-2">
-          <div class="col-sm-5">
+        <div class="row justify-content-start">
+          <div class="col-sm-4">
             <label for="unameInput" class="form-label fw-bold"><%=texts.USER%></label>
             <div class="input-group">
               <span class="input-group-text"><i class="bi bi-person"></i></span>
@@ -15,9 +16,7 @@
             </div>
             <div id="unameHelpBlock" class="form-text"><%=texts.USERNAME_INFOS%></div>
           </div>
-        </div>
-        <div class="row justify-content-start mb-2">
-          <div class="col-sm-5">
+          <div class="col-sm-4">
             <label for="upassInput1" class="form-label fw-bold"><%=texts.NEWPASSWORD%></label>
             <div class="input-group" id="show_hide_password1">
               <span class="input-group-text"><i class="bi bi-key"></i></span>
@@ -27,9 +26,7 @@
             </div>
             <div id="upassHelpBlock" class="form-text"><%=texts.USERPASS_INFOS%></div>
           </div>
-        </div>
-        <div class="row justify-content-start">
-          <div class="col-sm-5">
+          <div class="col-sm-4">
             <label for="upassInput2" class="form-label fw-bold"><%=texts.CONFIRMPASSWORD%></label>
             <div class="input-group" id="show_hide_password2">
               <span class="input-group-text"><i class="bi bi-key"></i></span>
@@ -41,6 +38,39 @@
       </div>
       <div class="card-footer">
         <button class="btn btn-primary" type="submit"><%=texts.SAVE%></button>
+      </div>
+    </form>
+  </div>
+  <!-- User Notifications Card -->
+  <div class="card mb-2">
+    <div class="card-header fs-5 fw-bold"><%=texts.MYNOTIFS%></div>
+    <form class="" method="post" action="/compte/notifications">
+      <div class="card-body">
+        <div class="form-check form-switch form-check-inline">
+          <input class="form-check-input" type="checkbox" id="emailNotifsSwitch" name="emailNotifs"
+            <%=userNotifs.mailEnabled ? 'checked' : '' %>>
+          <label class="form-check-label" for="emailNotifsSwitch"><%=texts.EMAILNOTIFICATIONS%></label>
+        </div>
+        <div class="form-check form-switch form-check-inline">
+          <input class="form-check-input" type="checkbox" id="pushNotifsSwitch" name="pushNotifs"
+            <%=userNotifs.pushEnabled ? 'checked' : '' %>>
+          <label class="form-check-label" for="pushNotifsSwitch"><%=texts.PUSHNOTIFICATIONS%></label>
+        </div>
+        <div class="form-check form-switch form-check-inline">
+          <input class="form-check-input" type="checkbox" id="cbOnlineSwitch" name="cbOnline"
+            <%=userNotifs.cbOnline ? 'checked' : '' %>>
+          <label class="form-check-label" for="cbOnlineSwitch"><%=texts.CBONLINE%></label>
+        </div>
+        <div class="form-check form-switch form-check-inline">
+          <input class="form-check-input" type="checkbox" id="cbOfflineSwitch" name="cbOffline"
+            <%=userNotifs.cbOffline ? 'checked' : '' %>>
+          <label class="form-check-label" for="cbOfflineSwitch"><%=texts.CBOFFLINE%></label>
+        </div>
+        <div class="form-check form-switch form-check-inline">
+          <input class="form-check-input" type="checkbox" id="conFaultedSwitch" name="conFaulted"
+            <%=userNotifs.conFaulted ? 'checked' : '' %>>
+          <label class="form-check-label" for="conFaultedSwitch"><%=texts.CONFAULTED%></label>
+        </div>
       </div>
     </form>
   </div>

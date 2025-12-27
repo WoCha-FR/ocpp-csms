@@ -179,5 +179,11 @@
   "STATUS": "Status",
   "CHARGE_SESSION": "Sessions de charge",
   "AUTH_ERRORS": "Erreurs d'authentification",
-  "RESPONSE": "Réponse"
+  "RESPONSE": "Réponse",
+  "MYNOTIFS": "Mes notifications",
+  "EMAILNOTIFICATIONS": "Notifications par email",
+  "PUSHNOTIFICATIONS": "Notifications par Pushover",
+  "CBONLINE": "Chargeur en ligne",
+  "CBOFFLINE": "Chargeur hors ligne",
+  "CONFAULTED": "Connecteur en défaut"
 }

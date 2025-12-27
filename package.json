@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/WoCha-FR/ocpp-csms#readme",
   "dependencies": {
+    "axios": "^1.13.2",
     "bcrypt": "^6.0.0",
     "better-sqlite3": "^12.5.0",
     "connect-lowdb": "^3.1.0",

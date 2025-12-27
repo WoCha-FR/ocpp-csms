@@ -15,7 +15,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 `isAdmin` INTEGER(1) DEFAULT NULL CHECK (`isAdmin` IN (NULL, 1)),
 `ownedSite` INTEGER DEFAULT NULL REFERENCES `sites` (`s_pk`) ON DELETE SET NULL,
 `idtag` TEXT(20) NOT NULL UNIQUE COLLATE NOCASE,
-`gglid` TEXT(255) DEFAULT NULL UNIQUE
+`gglid` TEXT(255) DEFAULT NULL UNIQUE,
+`fbkid` TEXT(255) DEFAULT NULL UNIQUE,
+`linid` TEXT(255) DEFAULT NULL UNIQUE
 );
 /* Users of Sites */
 CREATE TABLE IF NOT EXISTS `sites_users` (
@@ -152,6 +154,22 @@ CREATE TABLE IF NOT EXISTS `idtags_logs` (
 `idtag` TEXT (20) NOT NULL COLLATE NOCASE,
 `resp`  TEXT (12) NOT NULL COLLATE NOCASE,
 `method` TEXT (16) NOT NULL
+);
+/* Notifications */
+CREATE TABLE IF NOT EXISTS `user_notifs` (
+`pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+`user_pk` INTEGER REFERENCES `users` (`user_pk`) ON DELETE CASCADE ON UPDATE CASCADE UNIQUE,
+`mailEnabled` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`mailEnabled` IN (0, 1)),
+`pushEnabled` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`pushEnabled` IN (0, 1)),
+`pushuser` TEXT(255) DEFAULT NULL,
+`pushtokn` TEXT(255) DEFAULT NULL,
+`cbOnline` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`cbOnline` IN (0, 1)),
+`cbOffline` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`cbOffline` IN (0, 1)),
+`conUnavailable` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`conUnavailable` IN (0, 1)),
+`conFaulted` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`conFaulted` IN (0, 1)),
+`chgStart` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`chgStart` IN (0, 1)),
+`chgStop` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`chgStop` IN (0, 1)),
+`chgEvent` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`chgEvent` IN (0, 1))
 );
 /* Schema_Version in last => prevent failure */
 CREATE TABLE IF NOT EXISTS `schema_version` (
