@@ -1,0 +1,17 @@
+{
+  "ONLINE_SUB": "Online Charger - {cb_name}",
+  "ONLINE_TXT": "Charger {cb_name} is online.",
+  "ONLINE_HTM": "<p>Charger <strong>{cb_name}</strong> is online.</p>",
+  "OFFLINE_SUB": "Offline Charger - {cb_name}",
+  "OFFLINE_TXT": "Charger {cb_name} is offline.",
+  "OFFLINE_HTM": "<p>Charger <strong>{cb_name}</strong> is offline.</p>",
+  "UNAVAILABLE_SUB": "Unavailable Socket - {cb_name} {c_id}",
+  "UNAVAILABLE_TXT": "Charger: {cb_name}\\nConnector: {c_id} {c_name}",
+  "UNAVAILABLE_HTM": "<p>Charger: <b>{cb_name}</b><br>Connector: <b>{c_id} {c_name}</b></p>",
+  "FAULTED_SUB": "Faulted Socket - {cb_name} {c_id}",
+  "FAULTED_TXT": "Charger: {cb_name}\\nConnector: {c_id} {c_name}\\nError: {ecode} {einfo}\\nVendor code: {vcode}",
+  "FAULTED_HTM": "<p>Charger: <b>{cb_name}</b><br>Connector: <b>{c_id} {c_name}</b><br>Error: <b>{ecode} {einfo}</b><br>Vendor code: <b>{vcode}</b></p>",
+  "AVAILABLE_SUB": "Available Socket - {cb_name} {c_id}",
+  "AVAILABLE_TXT": "Charger: {cb_name}\\nConnector: {c_id} {c_name}\\nPrevious status: {c_status}",
+  "AVAILABLE_HTM": "<p>Charger: <b>{cb_name}</b><br>Connector: <b>{c_id} {c_name}</b><br>Previous status: <b>{c_status}</b></p>"
+}

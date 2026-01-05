@@ -157,8 +157,8 @@ CREATE TABLE IF NOT EXISTS `idtags_logs` (
 );
 /* Notifications */
 CREATE TABLE IF NOT EXISTS `user_notifs` (
-`pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-`user_pk` INTEGER REFERENCES `users` (`user_pk`) ON DELETE CASCADE ON UPDATE CASCADE UNIQUE,
+`user_pk` INTEGER REFERENCES `users` (`user_pk`) ON DELETE CASCADE ON UPDATE CASCADE PRIMARY KEY UNIQUE,
+`lng` TEXT (2) NOT NULL DEFAULT 'fr' COLLATE NOCASE,
 `mailEnabled` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`mailEnabled` IN (0, 1)),
 `pushEnabled` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`pushEnabled` IN (0, 1)),
 `pushuser` TEXT(255) DEFAULT NULL,
@@ -166,6 +166,7 @@ CREATE TABLE IF NOT EXISTS `user_notifs` (
 `cbOnline` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`cbOnline` IN (0, 1)),
 `cbOffline` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`cbOffline` IN (0, 1)),
 `conUnavailable` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`conUnavailable` IN (0, 1)),
+`conAvailable` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`conAvailable` IN (0, 1)),
 `conFaulted` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`conFaulted` IN (0, 1)),
 `chgStart` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`chgStart` IN (0, 1)),
 `chgStop` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`chgStop` IN (0, 1)),
@@ -179,7 +180,8 @@ CREATE TABLE IF NOT EXISTS `schema_version` (
 /* Initial Values */
 BEGIN TRANSACTION;
 INSERT INTO `schema_version` (`version`) VALUES ('0.1.0');
-INSERT INTO `users` (`usermail`,`password`,`name`,`isAdmin`,`idtag`) VALUES ('admin@admin.eu','$2b$10$FTdLTiTsGV81/PcjArPmB.izN7RPXT3t93O0LoIGXZDovyOf178cy','Admin',1,CONCAT('WUSR',HEX(RANDOMBLOB(6))));
+INSERT INTO `users` (`user_pk`,`usermail`,`password`,`name`,`isAdmin`,`idtag`) VALUES (1,'admin@admin.eu','$2b$10$FTdLTiTsGV81/PcjArPmB.izN7RPXT3t93O0LoIGXZDovyOf178cy','Admin',1,CONCAT('WUSR',HEX(RANDOMBLOB(6))));
+INSERT INTO `user_notifs` (`user_pk`,`lng`) VALUES (1,'fr');
 INSERT INTO `rfid_tags` (`idtag`,`rf_name`,`isparent`) VALUES (CONCAT('SADM',HEX(RANDOMBLOB(6))),'SUPERADMIN',1);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('AllowOfflineTxForUnknownId', NULL, 0, 'b', NULL);
 INSERT INTO `ocpp_default_conf` (`key`, `value`, `enabled`, `type`, `unit`) VALUES ('AuthorizeRemoteTxRequests', '', 0, 'b', NULL);

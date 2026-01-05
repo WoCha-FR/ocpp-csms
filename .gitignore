@@ -139,4 +139,5 @@ ocpp-csms*.db
 client.js
 pushtest.js
 zessais
-data/*.gz
+server*.crt
+server*.key

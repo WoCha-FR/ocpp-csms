@@ -1,0 +1,17 @@
+{
+  "ONLINE_SUB": "Chargeur En Ligne - {cb_name}",
+  "ONLINE_TXT": "Le chargeur {cb_name} est en ligne.",
+  "ONLINE_HTM": "<p>Le chargeur <strong>{cb_name}</strong> est en ligne.</p>",
+  "OFFLINE_SUB": "Chargeur Hors Ligne - {cb_name}",
+  "OFFLINE_TXT": "Le chargeur {cb_name} est hors ligne.",
+  "OFFLINE_HTM": "<p>Le chargeur <strong>{cb_name}</strong> est hors ligne.</p>",
+  "UNAVAILABLE_SUB": "Prise indisponible - {cb_name} {c_id}",
+  "UNAVAILABLE_TXT": "Chargeur: {cb_name}\\nConnecteur: {c_id} {c_name}",
+  "UNAVAILABLE_HTM": "<p>Chargeur: <b>{cb_name}</b><br>Connecteur: <b>{c_id} {c_name}</b></p>",
+  "FAULTED_SUB": "Défaut prise - {cb_name} {c_id}",
+  "FAULTED_TXT": "Chargeur: {cb_name}\\nConnecteur: {c_id} {c_name}\\nErreur: {ecode} {einfo}\\nVendor code: {vcode}",
+  "FAULTED_HTM": "<p>Chargeur: <b>{cb_name}</b><br>Connecteur: <b>{c_id} {c_name}</b><br>Erreur: <b>{ecode} {einfo}</b><br>Vendor code: <b>{vcode}</b></p>",
+  "AVAILABLE_SUB": "Prise disponible - {cb_name} {c_id}",
+  "AVAILABLE_TXT": "Chargeur: {cb_name}\\nConnecteur: {c_id} {c_name}\\nAncien status: {c_status}",
+  "AVAILABLE_HTM": "<p>Chargeur: <b>{cb_name}</b><br>Connecteur: <b>{c_id} {c_name}</b><br>Ancien status: <b>{c_status}</b></p>"
+}
