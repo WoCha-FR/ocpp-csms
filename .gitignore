@@ -137,7 +137,6 @@ sessions.json
 pendings.json
 ocpp-csms*.db
 client.js
-pushtest.js
 zessais
 server*.crt
 server*.key

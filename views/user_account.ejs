@@ -44,33 +44,105 @@
   <!-- User Notifications Card -->
   <div class="card mb-2">
     <div class="card-header fs-5 fw-bold"><%=texts.MYNOTIFS%></div>
-    <form class="" method="post" action="/compte/notifications">
+    <form method="post" action="/compte/notifications">
       <div class="card-body">
-        <div class="form-check form-switch form-check-inline">
-          <input class="form-check-input" type="checkbox" id="emailNotifsSwitch" name="emailNotifs"
-            <%=userNotifs.mailEnabled ? 'checked' : '' %>>
-          <label class="form-check-label" for="emailNotifsSwitch"><%=texts.EMAILNOTIFICATIONS%></label>
+        <div class="row mb-2 align-items-center">
+          <div class="col-12 col-sm-2">
+            <div class="form-floating">
+              <select class="form-select form-select-sm" id="langSelect" name="lang">
+                <option value="fr" <%=userNotifs.lng === 'fr' ? 'selected' : '' %>>Français</option>
+                <option value="en" <%=userNotifs.lng === 'en' ? 'selected' : '' %>>English</option>
+              </select>
+              <label for="langSelect"><%=texts.LANGUAGE%></label>
+            </div>
+          </div>
+          <div class="col-12 col-sm-2">
+            <div class="form-check form-switch form-check-inline">
+              <input class="form-check-input" type="checkbox" id="emailSwitch" value="1" name="emailNotifs"
+                <%=userNotifs.mailEnabled ? 'checked' : '' %>>
+              <label class="form-check-label" for="emailSwitch"><%=texts.EMAILNOTIFICATIONS%></label>
+            </div>
+          </div>
+          <div class="col-12 col-sm-2">
+            <div class="form-check form-switch form-check-inline">
+              <input class="form-check-input" type="checkbox" id="pushSwitch" value="1" name="pushNotifs"
+                <%=userNotifs.pushEnabled ? 'checked' : '' %>>
+              <label class="form-check-label" for="pushSwitch"><%=texts.PUSHNOTIFICATIONS%></label>
+            </div>
+          </div>
+          <div class="col-12 col-sm-3">
+            <div class="form-floating">
+              <input type="text" class="form-control form-control-sm" id="pushoverUserInput" name="pushUser" value="<%=userNotifs.pushuser%>">
+              <label for="pushoverUserInput"><%=texts.PUSHUSERKEY%></label>
+            </div>
+          </div>
+          <div class="col-12 col-sm-3">
+            <div class="form-floating">
+              <input type="text" class="form-control form-control-sm" id="pushoverTokenInput" name="pushToken" value="<%=userNotifs.pushtokn%>">
+              <label for="pushoverTokenInput"><%=texts.PUSHTOKEN%></label>
+            </div>
+          </div>
         </div>
-        <div class="form-check form-switch form-check-inline">
-          <input class="form-check-input" type="checkbox" id="pushNotifsSwitch" name="pushNotifs"
-            <%=userNotifs.pushEnabled ? 'checked' : '' %>>
-          <label class="form-check-label" for="pushNotifsSwitch"><%=texts.PUSHNOTIFICATIONS%></label>
+        <% if (userInfo.isAdmin || userInfo.isOwner) { %>
+        <div class="row mb-2">
+          <div class="col-12 col-sm-2">
+            <strong><%=texts.NOTIFSMYSTATIONS%>:</strong>
+          </div>
+          <div class="col-12 col-sm-10">
+            <div class="form-check form-switch form-check-inline">
+              <input class="form-check-input" type="checkbox" id="cbOnlineSwitch" value="1" name="cbOnline"
+                <%=userNotifs.cbOnline ? 'checked' : '' %>>
+              <label class="form-check-label" for="cbOnlineSwitch"><%=texts.CBONLINE%></label>
+            </div>
+            <div class="form-check form-switch form-check-inline">
+              <input class="form-check-input" type="checkbox" id="cbOfflineSwitch" value="1" name="cbOffline"
+                <%=userNotifs.cbOffline ? 'checked' : '' %>>
+              <label class="form-check-label" for="cbOfflineSwitch"><%=texts.CBOFFLINE%></label>
+            </div>
+            <div class="form-check form-switch form-check-inline">
+              <input class="form-check-input" type="checkbox" id="conFaultedSwitch" value="1" name="conFaulted"
+                <%=userNotifs.conFaulted ? 'checked' : '' %>>
+              <label class="form-check-label" for="conFaultedSwitch"><%=texts.CONFAULTED%></label>
+            </div>
+            <div class="form-check form-switch form-check-inline">
+              <input class="form-check-input" type="checkbox" id="conAvailableSwitch" value="1" name="conAvailable"
+                <%=userNotifs.conAvailable ? 'checked' : '' %>>
+              <label class="form-check-label" for="conAvailableSwitch"><%=texts.CONAVAILABLE%></label>
+            </div>
+            <div class="form-check form-switch form-check-inline">
+              <input class="form-check-input" type="checkbox" id="conUnavailableSwitch" value="1" name="conUnavailable"
+                <%=userNotifs.conUnavailable ? 'checked' : '' %>>
+              <label class="form-check-label" for="conUnavailableSwitch"><%=texts.CONUNAVAILABLE%></label>
+            </div>
+          </div>
         </div>
-        <div class="form-check form-switch form-check-inline">
-          <input class="form-check-input" type="checkbox" id="cbOnlineSwitch" name="cbOnline"
-            <%=userNotifs.cbOnline ? 'checked' : '' %>>
-          <label class="form-check-label" for="cbOnlineSwitch"><%=texts.CBONLINE%></label>
+        <% } %>
+        <div class="row">
+          <div class="col-12 col-sm-2">
+            <strong><%=texts.NOTIFSMYCHARGE%>:</strong>
+          </div>
+          <div class="col-12 col-sm-10">
+            <div class="form-check form-switch form-check-inline">
+              <input class="form-check-input" type="checkbox" id="chgStartSwitch" value="1" name="chgStart"
+                <%=userNotifs.chgStart ? 'checked' : '' %>>
+              <label class="form-check-label" for="chgStartSwitch"><%=texts.CHARGE_START%></label>
+            </div>
+            <div class="form-check form-switch form-check-inline">
+              <input class="form-check-input" type="checkbox" id="chgStopSwitch" value="1" name="chgStop"
+                <%=userNotifs.chgStop ? 'checked' : '' %>>
+              <label class="form-check-label" for="chgStopSwitch"><%=texts.CHARGE_STOP%></label>
+              </label>
+            </div>
+            <div class="form-check form-switch form-check-inline">
+              <input class="form-check-input" type="checkbox" id="chgEventSwitch" value="1" name="chgEvent"
+                <%=userNotifs.chgEvent ? 'checked' : '' %>>
+              <label class="form-check-label" for="chgEventSwitch"><%=texts.CHARGE_EVENTS%></label>
+            </div>
+          </div>
         </div>
-        <div class="form-check form-switch form-check-inline">
-          <input class="form-check-input" type="checkbox" id="cbOfflineSwitch" name="cbOffline"
-            <%=userNotifs.cbOffline ? 'checked' : '' %>>
-          <label class="form-check-label" for="cbOfflineSwitch"><%=texts.CBOFFLINE%></label>
-        </div>
-        <div class="form-check form-switch form-check-inline">
-          <input class="form-check-input" type="checkbox" id="conFaultedSwitch" name="conFaulted"
-            <%=userNotifs.conFaulted ? 'checked' : '' %>>
-          <label class="form-check-label" for="conFaultedSwitch"><%=texts.CONFAULTED%></label>
-        </div>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-primary" type="submit"><%=texts.SAVE%></button>
       </div>
     </form>
   </div>

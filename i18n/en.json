@@ -1,5 +1,6 @@
 {
   "LANG": "en",
+  "LANGUAGE": "Language",
   "LOCALE": "en-US",
   "LOGIN": "Sign in",
   "LOGOUT": "Logout",
@@ -183,7 +184,16 @@
   "MYNOTIFS": "My notifications",
   "EMAILNOTIFICATIONS": "Email notifications",
   "PUSHNOTIFICATIONS": "Pushover notifications",
+  "PUSHUSERKEY": "Pushover User Key",
+  "PUSHTOKEN": "Pushover API Token",
   "CBONLINE": "Online charger",
   "CBOFFLINE": "Offline charger",
-  "CONFAULTED": "Faulty connector"
+  "CONFAULTED": "Faulty connector",
+  "CONAVAILABLE": "Connector available",
+  "CONUNAVAILABLE": "Connector unavailable",
+  "CHARGE_START": "Charge start",
+  "CHARGE_STOP": "Charge stop",
+  "CHARGE_EVENTS": "Charge events",
+  "NOTIFSMYSTATIONS": "For my stations",
+  "NOTIFSMYCHARGE": "During my charges"
 }
