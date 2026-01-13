@@ -85,19 +85,19 @@
             <div class="col-sm-2">
               <form action="/charger/<%=station.cb_id%>/remotestart" method="post" id="btnStart<%=conn.pk%>" class="<% if(conn.status!='Available' && conn.status!='Preparing' ) { %>d-none<% } %>">
                 <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
-                <button type="submit" id="remoteStart<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq"<% if(station.online!==1) { %> disabled<% } %>>
+                <button type="submit" id="remoteStart<%=conn.pk%>" class="btn btn-success btn-sm mb-2 w-100 ocppReq"<% if(station.online!==1) { %> disabled<% } %>>
                   <%=texts.START_CHARGING%>
                 </button>
               </form>
               <form action="/charger/<%=station.cb_id%>/remotestop" method="post" id="btnStop<%=conn.pk%>" class="<% if(conn.status!='Charging' && conn.status!='SuspendedEVSE' && conn.status!='SuspendedEV' ) { %>d-none<% } %>">
                 <input type="hidden" id="transId<%=conn.pk%>" name="transId" value="<%if (!conn.tsStop) { %><%=conn.t_pk%><% } %>">
-                <button type="submit" id="remoteStop<%=conn.pk%>" class="btn btn-info btn-sm mb-2 w-100 ocppReq"<% if(station.online!==1) { %> disabled<% } %>>
+                <button type="submit" id="remoteStop<%=conn.pk%>" class="btn btn-danger btn-sm mb-2 w-100 ocppReq"<% if(station.online!==1) { %> disabled<% } %>>
                   <%=texts.STOP_CHARGING%>
                 </button>
               </form>
               <form action="/charger/<%=station.cb_id%>/unlockcon" method="post">
                 <input type="hidden" id="connectorId<%=conn.pk%>" name="connectorId" value="<%=conn.connector_id%>">
-                <button type="submit" id="UnlockConn<%=conn.pk%>" class="btn btn-info btn-sm w-100 ocppReq"<% if(station.online!==1) { %> disabled<% } %>>
+                <button type="submit" id="UnlockConn<%=conn.pk%>" class="btn btn-secondary btn-sm w-100 ocppReq"<% if(station.online!==1) { %> disabled<% } %>>
                   <%=texts.UNLOCK_CONN%>
                 </button>
               </form>
@@ -210,6 +210,7 @@
     }
   }
   // Refresh Connector Data
+  // TODO: Rafraichir la page si session de charge démarre/termine
   const interval1 = setInterval(reloadConnsStatus, 2500);
   function reloadConnsStatus() {
     $.ajax({
@@ -304,7 +305,7 @@
             // Nouvelle transaction ?
             $('#trans' + elem.pk).removeClass('invisible')
             if ($('#transActiv' + elem.pk).html() != 'oui') {
-              $('#transHisto' + elem.pk).prop('href', '/' + elem.t_pk)
+              $('#transHisto' + elem.pk).prop('href', '/reports/charge/' + elem.t_pk)
               $('#transId' + elem.pk).val(elem.t_pk)
               // Passage en actif & MaJ des données
               $('#transState' + elem.pk).html('<%=texts.TRANSAC_ENCOURS%>')

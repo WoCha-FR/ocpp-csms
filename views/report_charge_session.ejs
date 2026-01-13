@@ -162,8 +162,8 @@
     data: {
       datasets: [
         { label: '<%=texts.ENERGY_CONSUMED%>', data: energy, yAxisID: 'y' },
-        { label: '<%=texts.POWEROFFERED%>', data: poffer, yAxisID: 'y' },
-        { label: '<%=texts.POWER%>', data: power, yAxisID: 'y' },
+        { label: '<%=texts.POWEROFFERED%>', data: poffer, yAxisID: 'y1' },
+        { label: '<%=texts.POWER%>', data: power, yAxisID: 'y1' },
       ]
     },
     options: {
@@ -171,11 +171,11 @@
       interaction: { intersect: true, mode: 'index' },
       scales: {
         y: {
-          type: 'linear', display: true, position: 'left', beginAtZero: true, suggestedMax: 50,
+          type: 'linear', display: true, position: 'left', beginAtZero: true,
           title: { display: true, text: '<%=texts.ENERGYINKWH%>' }
         },
         y1: {
-          type: 'linear', display: true, position: 'right', beginAtZero: true, suggestedMax: 22,
+          type: 'linear', display: true, position: 'right', beginAtZero: true,
           title: { display: true, text: '<%=texts.POWERINKW%>' }
         }
       }
@@ -197,7 +197,7 @@
       interaction: { intersect: true, mode: 'index' },
       scales: {
         y: {
-          type: 'linear', display: true, position: 'left', beginAtZero: true, suggestedMax: 32,
+          type: 'linear', display: true, position: 'left', beginAtZero: true,
           title: { display: true, text: '<%=texts.CURRENTINA%>' }
         }
       }

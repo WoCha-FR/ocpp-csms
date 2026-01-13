@@ -1,0 +1,224 @@
+<%- include('./partials/header.ejs') %>
+<main class="container-fluid">
+  <%- include('./partials/ocpperrors.ejs') %>
+  <div class="card">
+    <div class="card-header fw-bold"><%=texts.CHARGE_SESSION%></div>
+    <div class="card-body">
+      <div class="row mb-2">
+        <div class="col-md-3">
+          <div class="input-group input-group-sm flatpickr">
+            <div class="input-group-text">
+              <%=texts.DATE%>
+            </div>
+            <input type="text" class="form-control" id="dateInput" readonly="readonly" data-input>
+            <span class="input-group-text" data-clear><i class="bi bi-calendar2-x"></i></span>
+          </div>
+        </div>
+        <div class="col-md-7" id="myFilter">
+          <div class="row">
+            <div class="col">
+              <div class="input-group input-group-sm">
+                <div class="input-group-text"><i class="bi bi-funnel"></i></div>
+                <select class="form-control bootstrap-table-filter-control-s_name">
+                  <option value=""><%= texts.ALL_SITES %></option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <div class="input-group input-group-sm">
+                <div class="input-group-text"><i class="bi bi-funnel"></i></div>
+                <select class="form-control bootstrap-table-filter-control-cb_name">
+                  <option value="">
+                    <%= texts.ALL_CHARGERS %>
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col">
+              <div class="input-group input-group-sm">
+                <div class="input-group-text"><i class="bi bi-funnel"></i></div>
+                <select class="form-control bootstrap-table-filter-control-IdToken">
+                  <option value="">
+                    <%= texts.ALL_RFID_TAGS %>
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 text-end">
+          <button type="button" class="btn btn-secondary btn-sm" id="refreshTable"><i
+              class="bi bi-arrow-clockwise"></i></button>
+          <button type="button" class="btn btn-secondary btn-sm" id="exportTable"><i class="bi bi-download"></i></button>
+        </div>
+      </div>
+      <table class="table table-sm" id="reportstab" data-toggle="table" data-locale="<%=texts.LOCALE%>" data-mobile-responsive="true">
+        <thead>
+          <th data-field="s_name" data-filter-control="select"><%=texts.SITE%></th>
+          <th data-field="cb_name" data-filter-control="select"><%=texts.STATION%></th>
+          <th data-field="connector_id" data-formatter="connFormatter"><%=texts.CONNECTOR%></th>
+          <th data-field="method" data-formatter="mtdFormatter"><%=texts.METHOD%></th>
+          <th data-field="IdToken" data-formatter="rfidFormatter" data-filter-control="select"><%=texts.IDTAG%></th>
+          <th data-field="tsStart" data-formatter="tsFormatter" data-sortable="true"><%=texts.START%></th>
+          <th data-field="tsStop" data-formatter="tsFormatter" data-sortable="true"><%=texts.END%></th>
+          <th data-field="tsEnergy" data-formatter="energyFormatter" data-sortable="true"><%=texts.ENERGY_CONSUMED%></th>
+          <th data-field="t_pk" data-formatter="linkFormatter"></th>
+        </thead>
+      </table>
+    </div>
+  </div>
+</main>
+<%- include('./partials/footerjs.ejs') %>
+<script src="/js/btable-filter.min.js"></script>
+<script src="/js/jquery-table-export.min.js"></script>
+<script src="/js/btable-export.min.js"></script>
+<script src="/js/flatpickr.min.js"></script>
+<% if (texts.LANG=='fr' ) { %>
+<script src="/js/flatpickr-fr.min.js"></script>
+<% } %>
+<script>
+  $(document).ready(function () {
+    $('#inputErrors').delay(5000).fadeOut('slow');
+  });
+  // Flatpickr
+  const tsnow = new Date()
+  const defaultDate = flatpickr.formatDate(tsnow, "D Y-m-d")
+  const elem = document.querySelector('div[class$="flatpickr"]');
+  const picker = flatpickr(elem, {
+    mode: "range",
+    maxDate: "today",
+    dateFormat: "D Y-m-d",
+    defaultDate: [defaultDate, defaultDate],
+    wrap: true,
+    onClose: function (selectedDates, dateStr, instance) {
+      $('#reportstab').bootstrapTable('refresh')
+    },
+    onChange: function (selectedDates, dateStr, instance) {
+      if (dateStr == '') {
+        $('#reportstab').bootstrapTable('refresh')
+      }
+    },
+  });
+  // BSTable - data-formater
+  function connFormatter(value, row) {
+    // Connector name or number
+    if (row.cname !== null) {
+      return row.cname
+    }
+    return row.connector_id
+  }
+  function mtdFormatter(value, row) {
+    if (row.IdToken !== null) {
+      if (row.IdToken.startsWith('WUSR')) {
+        return '<%=texts.WEBAPP%>'
+      }
+      if (row.rfpk !== null) {
+        return '<%=texts.RFIDC%>'
+      }
+    }
+    return null
+  }
+  function rfidFormatter(value, row) {
+    // Web Tag
+    if (value.startsWith('WUSR')) {
+      return null
+    }
+    // RFIDS
+    if (row.rfpk !== null) {
+      if (row.rf_name !== null) {
+        return `${row.rf_name} (${value})`
+      } else {
+        return '<%=texts.OLD_RFID%>'
+      }
+    }
+    return value
+  }
+  function tsFormatter(value) {
+    if (!value) {
+      return ''
+    }
+    let jsdate = new Date((value * 1000))
+    return jsdate.toLocaleDateString() + ' ' + jsdate.toLocaleTimeString()
+  }
+  function energyFormatter(value) {
+    const resp = (value / 1000).toFixed(3)
+    return resp + ' <%=texts.ENERGYUNIT%>'
+  }
+  function linkFormatter(value) {
+    return '<a href="/reports/charge/' + value + '"><i class="bi bi-file-bar-graph" style="cursor: pointer;"></i></a>'
+  }
+  // BootstrapTable
+  $(function () {
+    $('#reportstab').bootstrapTable('refreshOptions', {
+      loadingTemplate: 'loadingTemplate',
+      pagination: true,
+      //paginationVAlign: 'top',
+      pageSize: 50,
+      pageList: [50, 100, 250, 'All'],
+      ajax: "ajaxRequest",
+      queryParams: 'queryParams',
+      filterControl: true,
+      filterControlContainer: '#myFilter',
+      sortSelectOptions: true
+    })
+  })
+  // BSTable - Loading Template
+  function loadingTemplate(message) {
+    return [
+      '<div class="d-flex justify-content-center bsloading"><strong class="me-3 mt-1">',
+      message,
+      '</strong><div class="spinner-border" role="status" aria-hidden="true"></div></div>'
+    ].join('')
+  }
+  // BSTable - Ajax Query Params
+  function queryParams(params) {
+    // DatePicker
+    if (picker.selectedDates.length == 2) {
+      params.start = Math.round(picker.selectedDates[0].getTime() / 1000)
+      params.stop = Math.round((picker.selectedDates[1].getTime() + 86399000) / 1000)
+    } else {
+      var d = new Date()
+      d.setHours(0, 0, 0, 0)
+      params.start = Math.round(d.getTime() / 1000)
+      params.stop = Math.round((params.start + 86399000) / 1000)
+    }
+    return params
+  }
+  // BSTable - Ajax Query
+  function ajaxRequest(params) {
+    $.ajax({
+      type: 'POST',
+      url: '/ajax/userreports_list',
+      data: $.param(params.data),
+      dataType: 'json',
+      success: function (response) {
+        params.success(response)
+      },
+      error: function (er) {
+        params.error(er.responseText)
+        alert(er.statusText + '\n' + er.responseText)
+      }
+    });
+  }
+  // Refresh
+  $('#refreshTable').on('click', function (event) {
+    event.preventDefault()
+    $('#reportstab').bootstrapTable('refresh')
+  });
+  // Table Export
+  $('#exportTable').on('click', function (event) {
+    event.preventDefault()
+    $('#reportstab').tableExport({
+      type: 'csv',
+      csvSeparator: ';',
+      fileName: 'logsExport'
+    });
+  });
+</script>
+<% if (texts.LANG=='fr' ) { %>
+<script>
+  picker.set('locale', 'fr')
+  picker.set('dateFormat', 'D d/m/Y')
+</script>
+<% } %>
+<%- include('./partials/footer.ejs') %>
