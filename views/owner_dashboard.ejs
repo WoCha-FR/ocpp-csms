@@ -220,6 +220,9 @@
   });
   // Refresh Station Data
   var interval1 = setInterval(reloadCBStatus, 1500);
+  var interval2 = setInterval(reloadConnsStatus, 1500);
+  var interval3 = setInterval(reloadSiteCbConnTransac, 5000);
+  // Refresh Station Data
   function reloadCBStatus() {
     $.ajax({
       url: '/ajax/stations_stats',
@@ -231,12 +234,13 @@
       },
       error: function (jqXHR, textStatus, err) {
         clearInterval(interval1)
+        clearInterval(interval2)
+        clearInterval(interval3)
         alert(jqXHR.responseText)
       }
     })
   }
   // Refresh Connectors Data
-  var interval2 = setInterval(reloadConnsStatus, 1500);
   function reloadConnsStatus() {
     $.ajax({
       url: '/ajax/connectors_stats',
@@ -251,12 +255,13 @@
       },
       error: function (jqXHR, textStatus, err) {
         clearInterval(interval2)
+        clearInterval(interval1)
+        clearInterval(interval3)
         alert(jqXHR.responseText)
       }
     })
   }
   // Refresh CB/Conns/Transac Datas
-  var interval3 = setInterval(reloadSiteCbConnTransac, 5000);
   function reloadSiteCbConnTransac() {
     $.ajax({
       url: '/ajax/cbconstransac_data',
@@ -347,6 +352,8 @@
       },
       error: function (jqXHR, textStatus, err) {
         clearInterval(interval3)
+        clearInterval(interval2)
+        clearInterval(interval1)
         alert(jqXHR.responseText)
       }
     });

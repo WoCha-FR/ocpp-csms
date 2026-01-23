@@ -1,8 +1,10 @@
 {
-  "trailingComma": "es5",
+  "printWidth": 100,
   "tabWidth": 2,
   "semi": false,
   "singleQuote": true,
-  "printWidth": 100,
+  "trailingComma": "es5",
+  "objectWrap": "collapse",
+  "bracketSameLine": true,
   "useTabs": false
 }

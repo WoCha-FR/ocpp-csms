@@ -34,6 +34,7 @@
               <tr>
                 <th data-sortable="true" data-field="s_name"><%=texts.SITE%></th>
                 <th data-sortable="true" data-field="name"><%=texts.NOM%></th>
+                <th data-sortable="true" data-field="mode"><%=texts.CHARGEAUTH_MODE%></th>
                 <th data-sortable="true" data-field="ocppid"><%=texts.OCPP_ID%></th>
                 <th data-sortable="true" data-field="registration_status"><%=texts.OCPP_STATUS%></th>
                 <th data-sortable="true" data-field="online"><%=texts.ONLINE%></th>
@@ -47,6 +48,15 @@
             <tr>
               <td style="cursor: pointer;"><%- station.s_name ? station.s_name : texts.NONAFFECTE %></td>
               <td style="cursor: pointer;"><%= station.cb_name %></td>
+              <td style="cursor: pointer;">
+                <% if(station.cb_mode==1) { %>
+                  <span class="badge text-bg-secondary"><i class="bi bi-lock"></i>&nbsp;<%=texts.RESTRICTED_CHARGE%></span>
+                <% } else if(station.cb_mode==2) { %>
+                  <span class="badge text-bg-secondary"><i class="bi bi-ev-station"></i>&nbsp;<%=texts.FREE_CHARGE_BORNE%></span>
+                <% } else { %>
+                  <span class="badge text-bg-secondary"><i class="bi bi-unlock"></i>&nbsp;<%=texts.FREE_CHARGE%></span>
+                <% } %>
+              </td>
               <td style="cursor: pointer;"><%= station.cb_id %></td>
               <% if(station.registration_status=='Rejected' ) { %>
               <td data-searchable="false"><span class="badge text-bg-danger"><%=texts.REJECTEDF%></span></td>
@@ -196,7 +206,7 @@
   // Click to Station page
   $('#stationstable').on('click-cell.bs.table', function (e, field, value, row, $element) {
     cellIndex = $element[0].cellIndex;
-    if (cellIndex != 6) {
+    if (cellIndex != 7) {
       window.location.href = '/charger/' + row.ocppid;
     }
   });
@@ -234,8 +244,8 @@
         }
       },
       error: function (jqXHR, textStatus, err) {
-        alert(jqXHR.responseText)
         clearInterval(interval)
+        alert(jqXHR.responseText)
       }
     });
   }

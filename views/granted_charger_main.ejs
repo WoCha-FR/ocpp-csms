@@ -55,7 +55,7 @@
               <% if(typeof cbinfos==='undefined' || station.online==2) { %>
                 <div class="row p-1">
                   <div class="col" id="online">
-                    <span class="fw-bold"><%=texts.ONLINE%>:&nbsp;</span>
+                    <span class="fw-bold"><%=texts.ONLINE%>:</span>
                     <span class="badge text-bg-warning"><%=texts.PENDING%></span>
                   </div>
                 </div>
@@ -145,10 +145,10 @@
                 <div class="card-header fs-6 fw-bold"><%=texts.RESET%></div>
                 <div class="card-body text-center">
                   <form action="/charger/<%= station.cb_id %>/reboot" method="post">
-                    <button type="submit" name="ResetType" value="Soft" class="btn btn-success btn-sm ocppReq">
+                    <button type="submit" name="ResetType" value="Soft" class="btn btn-success btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>>
                       <%=texts.SOFT%>
                     </button>
-                    <button type="submit" name="ResetType" value="Hard" class="btn btn-danger btn-sm ocppReq">
+                    <button type="submit" name="ResetType" value="Hard" class="btn btn-danger btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>>
                       <%=texts.HARD%>
                     </button>
                   </form>
@@ -163,11 +163,11 @@
                   <form action="/charger/<%= station.cb_id %>/available" method="post">
                     <input type="hidden" id="connectorId" name="connectorId" value="0">
                     <button type="submit" name="AvailabilityType" value="Operative"
-                      class="btn btn-success btn-sm ocppReq">
+                      class="btn btn-success btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>>
                       <%=texts.OPERATIVE%>
                     </button>
                     <button type="submit" name="AvailabilityType" value="Inoperative"
-                      class="btn btn-danger btn-sm ocppReq">
+                      class="btn btn-danger btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>>
                       <%=texts.INOPERATIVE%>
                     </button>
                   </form>
@@ -188,19 +188,19 @@
               <form action="/charger/<%= station.cb_id %>/request" method="post">
                 <input type="hidden" id="connectorId" name="connectorId" value="0">
                 <button type="submit" name="requestedMessage" value="BootNotification"
-                  class="btn btn-secondary btn-sm ocppReq">BootNotification</button>
+                  class="btn btn-secondary btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>>BootNotification</button>
                 <button type="submit" name="requestedMessage" value="Heartbeat"
-                  class="btn btn-secondary btn-sm ocppReq">Heartbeat</button>
+                  class="btn btn-secondary btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>>Heartbeat</button>
                 <button type="submit" name="requestedMessage" value="StatusNotification"
-                  class="btn btn-secondary btn-sm ocppReq">StatusNotification</button>
+                  class="btn btn-secondary btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>>StatusNotification</button>
                 <button type="submit" name="requestedMessage" value="MeterValues"
-                  class="btn btn-secondary btn-sm ocppReq">MeterValues</button>
+                  class="btn btn-secondary btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>>MeterValues</button>
               </form>
               <form action="/charger/<%= station.cb_id %>/clearcache" method="post">
-                <button type="submit" class="btn btn-secondary btn-sm ocppReq">ClearCache</button>
+                <button type="submit" class="btn btn-secondary btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>>ClearCache</button>
               </form>
               <form action="/charger/<%= station.cb_id %>/getlocallist" method="post">
-                <button type="submit" class="btn btn-secondary btn-sm ocppReq">GetLocalListVersion</button>
+                <button type="submit" class="btn btn-secondary btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>>GetLocalListVersion</button>
               </form>
             </div>
           </div>
@@ -233,8 +233,8 @@
                         <div class="col-5 text-end">
                           <form action="/charger/<%= station.cb_id %>/available" method="post">
                             <input type="hidden" id="connectorId" name="connectorId" value="<%=conn.connector_id%>">
-                            <button type="submit" name="AvailabilityType" value="Operative" class="btn btn-success btn-sm ocppReq"><%=texts.OPERATIVEM%></button>
-                            <button type="submit" name="AvailabilityType" value="Inoperative" class="btn btn-danger btn-sm ocppReq"><%=texts.INOPERATIVEM%></button>
+                            <button type="submit" name="AvailabilityType" value="Operative" class="btn btn-success btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>><%=texts.OPERATIVEM%></button>
+                            <button type="submit" name="AvailabilityType" value="Inoperative" class="btn btn-danger btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>><%=texts.INOPERATIVEM%></button>
                           </form>
                         </div>
                       </div>
@@ -248,7 +248,7 @@
                           <form action="/charger/<%= station.cb_id %>/reqconnector" method="post">
                             <input type="hidden" id="connectorId" name="connectorId" value="<%= conn.connector_id %>">
                             <button type="submit" id="reqStatus" name="requestedMessage" value="StatusNotification"
-                              class="btn btn-secondary btn-sm ocppReq">StatusNotification</button>
+                              class="btn btn-secondary btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>>StatusNotification</button>
                           </form>
                         </div>
                       </div>
@@ -261,7 +261,7 @@
                           <form action="/charger/<%=station.cb_id%>/reqconnector" method="post">
                             <input type="hidden" id="connectorId" name="connectorId" value="<%= conn.connector_id %>">
                             <button type="submit" id="reqMeter" name="requestedMessage" value="MeterValues"
-                              class="btn btn-secondary btn-sm ocppReq">MeterValues</button>
+                              class="btn btn-secondary btn-sm ocppReq"<%= station.online==1 ? '' : ' disabled' %>>MeterValues</button>
                           </form>
                         </div>
                       </div>

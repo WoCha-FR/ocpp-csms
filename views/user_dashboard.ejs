@@ -16,8 +16,8 @@
         <div class="card-body p-2">
           <div class="d-flex align-items-end">
             <div class="p-1">
-              <% if (charger.online == 1) { %><span class="text-success"><i class="bi bi-circle-fill fs-5"></i>
-              <% } else { %><span class="text-secondary"><i class="bi bi-circle-fill fs-5"></i><% } %>
+              <% if (charger.online == 1) { %><span id="cb_status_<%= charger.cb_pk %>" class="text-success"><i class="bi bi-circle-fill fs-5"></i>
+              <% } else { %><span id="cb_status_<%= charger.cb_pk %>" class="text-secondary"><i class="bi bi-circle-fill fs-5"></i><% } %>
             </div>
             <div class="p-1 flex-grow-1 fs-5 fw-bold"><%= charger.cb_name %></div>
             <div class="p-1"><a href="/connectors/<%= charger.cb_id %>" class="link-secondary"><i class="bi bi-caret-right-square-fill fs-5"></i></a></div>
@@ -32,5 +32,36 @@
   $(document).ready(function () {
     $('#inputErrors').delay(5000).fadeOut('slow');
   });
+  // Refresh Station Data
+  var interval1 = setInterval(reloadCBStatus, 1500);
+  function reloadCBStatus() {
+    $.ajax({
+      url: '/ajax/upduserdashboard',
+      type: 'POST',
+      dataType: 'json',
+      success: function (result) {
+        for (const elem of result.data) {
+          // Nouveau chargeur => Refresh
+          if (document.body.contains(document.querySelector('span#cb_status_' + elem.cb_pk)) === false) {
+            location.reload();
+            return;
+          }
+          // Status Badge
+          const cbStatusElem = $('#cb_status_' + elem.cb_pk);
+          if (elem.online == 1) {
+            cbStatusElem.removeClass('text-secondary').addClass('text-success');
+          } else {
+            cbStatusElem.removeClass('text-success').addClass('text-secondary');
+          }
+          // ChargeBox Name
+          cbStatusElem.siblings('.flex-grow-1').text(elem.cb_name);
+        }
+      },
+      error: function (jqXHR, textStatus, err) {
+        clearInterval(interval1)
+        alert(jqXHR.responseText)
+      }
+    })
+  }
 </script>
 <%- include('./partials/footer.ejs') %>

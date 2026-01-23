@@ -7,17 +7,15 @@
     <% } else if(infosui.ocppResult.status=='Accepted' ) { %><div id="ocppResponse" class="alert alert-success" role="alert"><%=texts.ACCEPTEDM%></div>
     <% } else { %><div id="ocppResponse" class="alert alert-warning" role="alert"><%=infosui.ocppResult.status%></div><% } %>
   <% } %>
-  <% if (charger.online==0) { %>
-    <div class="alert alert-warning" role="alert">OFFLINE</div>
-  <% } %>
+  <div class="alert alert-warning<% if (charger.online==0) { %> d-block<% } else { %> d-none<% } %>" id="alertOffline" role="alert"><%=texts.STATION%>&nbsp;<%=texts.OFFLINE%></div>
   <div class="card">
     <div class="card-header">
       <div class="float-start"><a href="/mydashboard" class="link-secondary"><i class="bi bi-caret-left-square-fill fs-5"></i></a></div>
-      <div class="flex-grow-1 fs-5 fw-bold text-center"><%= charger.cb_name %></div>
+      <div class="flex-grow-1 fs-5 fw-bold text-center"><%= charger.cb_name %> <%= charger.cb_mode %> </div>
     </div>
-    <div class="card-body">
+    <div class="card-body<% if (charger.online==1) { %> d-block<% } else { %> d-none<% } %>" id="connsCardBody">
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4"><% connectors.forEach(function(elem) { %>
-        <div class="col">
+        <div class="col mb-2">
           <div class="card h-100">
             <div class="card-header text-center">
               <small class="d-inline-flex mb-0 px-2 py-1 fw-bold text-white bg-secondary border border-secondary rounded-2">
@@ -27,16 +25,23 @@
             <div class="card-body">
               <div class="row pb-1 border-bottom">
                 <div class="col text-start"><%=texts.STATE%></div>
-                <div class="col text-end">
-                  <!--TODO: STATUS SELON CHARGE DE L'UTILISATEUR OU D'UN AUTRE UTILISATEUR-->
-                  <% if (elem.status=='Unavailable' || elem.status=='Faulted' ) { %>
-                  <span class="badge text-bg-danger"><%=elem.status%></span>
-                  <% } else if (elem.status=='Available' ) { %>
-                  <span class="badge text-bg-success"><%=elem.status%></span>
-                  <% } else if (elem.status=='Charging' ) { %>
-                  <span class="badge text-bg-info"><%=elem.status%></span>
+                <div class="col text-end" id="connStatus<%=elem.connector_id%>">
+                  <% if (elem.status=='Available') { %>
+                  <span class="badge text-bg-success"><%=texts.AVAILABLE%></span>
+                  <% } else if (elem.status=='Unavailable' || elem.status=='Faulted') { %>
+                  <span class="badge text-bg-danger"><%=texts.UNAVAILABLE%></span>
+                  <% } else if (elem.status=='Preparing') { %>
+                  <span class="badge text-bg-warning"><%=texts.PREPARING%></span>
+                  <% } else if (elem.status=='Finishing') { %>
+                  <span class="badge text-bg-warning"><%=texts.FINISHING%></span>
+                  <% } else if (elem.status=='Charging' && elem.me==1) { %>
+                    <span class="badge text-bg-success"><%=texts.CHARGING%></span>
+                  <% } else if (elem.status=='SuspendedEV' && elem.me==1) { %>
+                  <span class="badge text-bg-warning"><%=texts.SUSPENDEDEV%></span>
+                  <% } else if (elem.status=='SuspendedEVSE' && elem.me==1) { %>
+                  <span class="badge text-bg-warning"><%=texts.SUSPENDEDEVSE%></span>
                   <% } else { %>
-                  <span class="badge text-bg-warning"><%=elem.status%></span>
+                  <span class="badge text-bg-secondary"><%=texts.OCCUPIED%></span>
                   <% } %>
                 </div>
               </div>
@@ -61,15 +66,77 @@
                 </div>
               </div>
               <!--TODO: BTN to start OR Charging status + stop BTN-->
-              <div class="row mt-2">
-                <div class="col-12 text-center">
-                  <form action="/charger/<%=elem.cb_id%>/start" method="post" id="btnStart<%=elem.pk%>" class="<% if(elem.status!='Available' && elem.status!='Preparing' ) { %>d-none<% } %>">
+              <!--TODO: STATUS SELON CHARGE DE L'UTILISATEUR OU D'UN AUTRE UTILISATEUR-->
+              <!-- Details des infos à implementer :
+              Available => on affiche + connecter véhicule
+
+              Unavailable/Faulted => on affiche rien de plus
+
+              Preparing => on affiche + bouton start (si mode RFID/WEB)
+
+              // Mode Charge Libre : sans ID utilisateur dans les transactions
+              Preparing => En mode "OCPP Autostart" ou "Gérer borne + démarrage auto dans l'application" passe en charging direct (WallBox CopperSB & Autel)
+              Preparing => En mode "OCPP Autostart" ou "Gérer borne + démarrage manuel dans l'application"  (Autel)
+              Preparing => En mode "Gérer borne + prog horaire dans l'application" passe en preparing AVEC transaction en cours (WallBox CopperSB)
+              Preparing => En mode "Gérer borne + pas demarrage auto + prog horaire dans l'app" passe en preparing SANS transaction en cours puis démarre à l'heure (AUTEL)
+
+              Charging => on affiche + bouton stop (si ma transaction)
+              Charging => on affiche "OCCUPIED" (si pas ma transaction ou mode charge libre)
+
+              SuspendedEV/SuspendedEVSE => on affiche + bouton stop (si ma transaction)
+              SuspendedEV/SuspendedEVSE => on affiche "OCCUPIED" (si pas ma transaction ou mode charge libre)
+
+              Finishing => Plus d'information d'utilisateur, on affiche "OCCUPIED" ou "deconnect car for start" pour tous...
+              app evseadmin => affiche finishing pour tous + option de démarrage pour tous.....
+            -->
+              <div class="row mt-2<% if (elem.status=='Available' || elem.status=='Preparing' || elem.status=='Finishing') { %> d-block<% } else { %> d-none<% } %>">
+                <div class="col-12 text-center" id="connPlugInfo<%=elem.connector_id%>">
+                  <!-- AVAILABLE -->
+                  <% if (elem.status=='Available') { %>
+                    <div class="alert alert-primary p-1 mb-0" role="alert"><%=texts.PLUG_IN_VEHICLE%></div>
+                  <% } %>
+                  <!-- PREPARING -->
+                  <% if (elem.status=='Preparing') { %>
+                  <div class="alert alert-success p-1 mb-0" role="alert"><%=texts.PLUGGED_IN%></div>
+                  <% } %>
+                  <!-- FINISHING -->
+                  <% if (elem.status=='Finishing') { %>
+                  <div class="alert alert-info p-1 mb-0" role="alert"><%=texts.PLUG_OUT_VEHICLE%></div>
+                  <% } %>
+                </div>
+              </div>
+              <!-- PREPARING + MODE RFID -->
+              <div class="row mt-2<% if (elem.status=='Preparing') { %> d-block<% } else { %> d-none<% } %>" id="connStartBtn<%=elem.connector_id%>">
+                <div class="col-12">
+                  <form action="/charger/<%=elem.cb_id%>/start" method="post" id="btnStart<%=elem.pk%>">
                     <input type="hidden" id="connectorId<%=elem.pk%>" name="connectorId" value="<%=elem.connector_id%>">
-                    <button type="submit" id="remoteStart<%=elem.pk%>" class="btn btn-success btn-sm w-100 ocppReq<%=elem.pk%>" <%
-                      if(charger.online!==1) { %> disabled<% } %>>
-                        <%=texts.START_CHARGING%>
-                    </button>
+                    <button type="submit" id="remoteStart<%=elem.pk%>" class="btn btn-success btn-sm w-100"><%=texts.START_CHARGING%></button>
                   </form>
+                </div>
+              </div>
+              <!-- CHARGING / SUSPENDEDEV / SUSPENDEDEVSE + ME -->
+              <div class="row mt-2">
+                <div class="col-12<% if (elem.me==1) { %> d-block<% } else { %> d-none<% } %>" id="transacInfos<%=elem.connector_id%>">
+                  <div class="row">
+                    <div class="col-12 col-sm-6"><span class="fw-bold"><%=texts.DURATION%>:</span></div>
+                    <div class="col-12 col-sm-6"><span id="transTime<%=elem.pk%>"></span></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 col-sm-6"><span class="fw-bold"><%=texts.ENERGY_CONSUMED%>:</span></div>
+                    <div class="col-12 col-sm-6"><span id="transKwh<%=elem.pk%>"></span>&nbsp;<%=texts.ENERGYUNIT%></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 col-sm-6"><span class="fw-bold"><%=texts.POWER%>:</span></div>
+                    <div class="col-12 col-sm-6"><span id="transPower<%=elem.pk%>"></span>&nbsp;<%=texts.POWERUNIT%></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12">
+                      <form action="/charger/<%=elem.cb_id%>/stop" method="post" id="btnStop<%=elem.pk%>">
+                        <input type="hidden" id="transId<%=elem.pk%>" name="transId" value="">
+                        <button type="submit" id="remoteStop<%=elem.pk%>" class="btn btn-danger btn-sm w-100"><%=texts.STOP_CHARGING%></button>
+                      </form>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -85,5 +152,134 @@
     $('#inputErrors').delay(5000).fadeOut('slow');
     $('#ocppResponse').delay(3000).fadeOut('slow');
   });
+  // Set Transaction Data
+  const connectors = JSON.parse('<%-JSON.stringify(connectors)%>');
+  for (const elem of connectors) {
+    if (elem.me==1) {
+      // Set initial duration
+      const transDeb = new Date(elem.tsStart * 1000);
+      const thisTime = new Date();
+      const duration = ((thisTime.getTime()/ 1000) - elem.tsStart );
+      const transTimeElem = $('#transTime' + elem.pk);
+      transTimeElem.text(secToString(duration));
+      // Set initial energy
+      const transKwhElem = $('#transKwh' + elem.pk);
+      let energy = (elem.tsEnergy / 1000).toFixed(2);
+      transKwhElem.text(energy);
+      // Set initial power
+      const transPowerElem = $('#transPower' + elem.pk);
+      let power = (elem.tsPower / 1000).toFixed(2);
+      transPowerElem.text(power);
+      // Set transaction Id in Stop form
+      $('#transId' + elem.pk).val(elem.t_pk);
+    }
+  }
+  // Refresh Station Data
+  var interval1 = setInterval(reloadChargerStatus, 5000);
+  function reloadChargerStatus() {
+    $.ajax({
+      url: '/ajax/upduserpage_chargerstatus',
+      type: 'POST',
+      dataType: 'json',
+      data: { ocppName: '<%=charger.cb_id%>' },
+      success: function (result) {
+        // Status Badge
+        if (result.data.online == 1) {
+          $('#alertOffline').addClass('d-none').removeClass('d-block');
+          $('#connsCardBody').addClass('d-block').removeClass('d-none');
+          updConnsStatus();
+        } else {
+          $('#alertOffline').addClass('d-block').removeClass('d-none');
+          $('#connsCardBody').addClass('d-none').removeClass('d-block');
+        }
+      },
+      error: function (jqXHR, textStatus, err) {
+        clearInterval(interval1)
+        alert(jqXHR.responseText)
+      }
+    })
+  }
+  function updConnsStatus() {
+    $.ajax({
+      url: '/ajax/upduserpage_chargerconnstatus',
+      type: 'POST',
+      dataType: 'json',
+      data: { ocppName: '<%=charger.cb_id%>' },
+      success: function (result) {
+        for (const elem of result.data) {
+          // Status Badge
+          const connStatusElem = $('#connStatus' + elem.connector_id);
+          if (elem.status=='Available') {
+            connStatusElem.html('<span class="badge text-bg-success"><%=texts.AVAILABLE%></span>');
+          } else if (elem.status=='Unavailable' || elem.status=='Faulted') {
+            connStatusElem.html('<span class="badge text-bg-danger"><%=texts.UNAVAILABLE%></span>');
+          } else if (elem.status=='Preparing') {
+            connStatusElem.html('<span class="badge text-bg-warning"><%=texts.PREPARING%></span>');
+          } else if (elem.status=='Finishing') {
+            connStatusElem.html('<span class="badge text-bg-warning"><%=texts.FINISHING%></span>');
+          } else if (elem.status=='Charging' && elem.me==1) {
+            connStatusElem.html('<span class="badge text-bg-success"><%=texts.CHARGING%></span>');
+          } else if (elem.status=='SuspendedEV' && elem.me==1) {
+            connStatusElem.html('<span class="badge text-bg-warning"><%=texts.SUSPENDEDEV%></span>');
+          } else if (elem.status=='SuspendedEVSE' && elem.me==1) {
+            connStatusElem.html('<span class="badge text-bg-warning"><%=texts.SUSPENDEDEVSE%></span>');
+          } else {
+            connStatusElem.html('<span class="badge text-bg-secondary"><%=texts.OCCUPIED%></span>');
+          }
+          // Plug Info
+          const connPlugInfoElem = $('#connPlugInfo' +  elem.connector_id);
+          $('#connStartBtn' + elem.connector_id).removeClass('d-block').addClass('d-none');
+          if (elem.status=='Available') {
+            connPlugInfoElem.html('<div class="alert alert-primary p-1 mb-0" role="alert"><%=texts.PLUG_IN_VEHICLE%></div>');
+            connPlugInfoElem.parent().removeClass('d-none').addClass('d-block');
+          } else if (elem.status=='Preparing') {
+            connPlugInfoElem.html('<div class="alert alert-success p-1 mb-0" role="alert"><%=texts.PLUGGED_IN%></div>');
+            connPlugInfoElem.parent().removeClass('d-none').addClass('d-block');
+            $('#connStartBtn' + elem.connector_id).removeClass('d-none').addClass('d-block');
+          } else if (elem.status=='Finishing') {
+            connPlugInfoElem.html('<div class="alert alert-info p-1 mb-0" role="alert"><%=texts.PLUG_OUT_VEHICLE%></div>');
+            connPlugInfoElem.parent().removeClass('d-none').addClass('d-block');
+          } else {
+            connPlugInfoElem.parent().removeClass('d-block').addClass('d-none');
+          }
+          // Transaction Infos + Stop BTN
+          const transacInfosElem = $('#transacInfos' + elem.connector_id);
+          if (elem.me==1) {
+            // Duration
+            const transTimeElem = $('#transTime' + elem.pk);
+            const thisTime = new Date()
+            const duration = ((thisTime.getTime()/ 1000) - elem.tsStart )
+            transTimeElem.text(secToString(duration));
+            // Energy
+            const transKwhElem = $('#transKwh' + elem.pk);
+            let energy = (elem.tsEnergy / 1000).toFixed(2);
+            transKwhElem.text(energy);
+            // Power
+            const transPowerElem = $('#transPower' + elem.pk);
+            let power = (elem.tsPower / 1000).toFixed(2);
+            transPowerElem.text(power);
+            transacInfosElem.removeClass('d-none').addClass('d-block');
+            // Set transaction Id in Stop form
+            $('#transId' + elem.pk).val(elem.t_pk);
+          } else {
+            transacInfosElem.removeClass('d-block').addClass('d-none');
+            $('#transId' + elem.pk).val('');
+          }
+        }
+      },
+      error: function (jqXHR, textStatus, err) {
+        clearInterval(interval1)
+        alert(jqXHR.responseText)
+      }
+    })
+  }
+  // Fonctions autres
+  function pad(val) { return val > 9 ? val : "0" + val; }
+  function secToString(duration) {
+    let seconds = pad(parseInt(duration % 60));
+    let minutes = pad(parseInt(duration / 60, 10) % 60);
+    let hours = pad(parseInt(duration / 3600, 10));
+    return hours + ':' + minutes + ':' + seconds;
+  }
 </script>
 <%- include('./partials/footer.ejs') %>

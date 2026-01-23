@@ -6,6 +6,12 @@
 .vscode/
 dist/
 *.log
+.editorconfig
+.prettierignore
+.prettierrc
+.eslintrc.json
+eslint.config.js
+config.dev.json
 # Documentation
 docs/
 # Dependencies (installed in container)
@@ -14,6 +20,4 @@ node_modules/
 datas/
 zessais/
 client.js
-config.dev.json
-eslint.config.js
 nodemon.json

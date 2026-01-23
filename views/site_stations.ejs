@@ -12,6 +12,7 @@
           <tr>
             <th data-sortable="true" data-field="ocppid" data-visible="false"><%=texts.OCPP_ID%></th>
             <th data-sortable="true" data-field="name"><%=texts.NOM%></th>
+            <th data-sortable="true" data-field="mode"><%=texts.CHARGEAUTH_MODE%></th>
             <th data-sortable="true" data-field="registration_status"><%=texts.OCPP_STATUS%></th>
             <th data-sortable="true" data-field="online"><%=texts.ONLINE%></th>
             <th data-sortable="true" data-field="nbcon"><%=texts.NBCONS%></th>
@@ -23,6 +24,15 @@
             <tr style="cursor: pointer;">
               <td data-visible="false"><%= station.cb_id %></td>
               <td><%= station.cb_name %></td>
+              <td>
+                <% if(station.cb_mode==1) { %>
+                <span class="badge text-bg-secondary"><i class="bi bi-lock"></i>&nbsp;<%=texts.RESTRICTED_CHARGE%></span>
+                <% } else if(station.cb_mode==2) { %>
+                <span class="badge text-bg-secondary"><i class="bi bi-ev-station"></i>&nbsp;<%=texts.FREE_CHARGE_BORNE%></span>
+                <% } else { %>
+                <span class="badge text-bg-secondary"><i class="bi bi-unlock"></i>&nbsp;<%=texts.FREE_CHARGE%></span>
+                <% } %>
+              </td>
               <td data-searchable="false" id="regstatus<%=station.cb_pk%>">
                 <% if(station.registration_status=='Rejected') { %>
                 <span class="badge text-bg-danger"><%=texts.REJECTEDF%></span>
@@ -101,8 +111,8 @@
         }
       },
       error: function (jqXHR, textStatus, err) {
-        alert(jqXHR.responseText)
         clearInterval(interval)
+        alert(jqXHR.responseText)
       }
     });
   }

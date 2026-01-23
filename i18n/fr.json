@@ -195,5 +195,13 @@
   "CHARGE_STOP": "Arrêt de charge",
   "CHARGE_EVENTS": "Événements de charge",
   "NOTIFSMYSTATIONS": "Pour mes stations",
-  "NOTIFSMYCHARGE": "Lors de mes recharges"
+  "NOTIFSMYCHARGE": "Lors de mes recharges",
+  "PREPARING": "Préparation",
+  "FINISHING": "Finalisation",
+  "UNAVAILABLE": "Indisponible",
+  "SUSPENDEDEV": "Suspendu par le véhicule",
+  "SUSPENDEDEVSE": "Suspendu par la borne",
+  "PLUG_IN_VEHICLE": "Brancher le véhicule",
+  "PLUG_OUT_VEHICLE": "Débrancher le véhicule",
+  "PLUGGED_IN": "Véhicule branché"
 }

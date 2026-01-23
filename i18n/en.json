@@ -195,5 +195,13 @@
   "CHARGE_STOP": "Charge stop",
   "CHARGE_EVENTS": "Charge events",
   "NOTIFSMYSTATIONS": "For my stations",
-  "NOTIFSMYCHARGE": "During my charges"
+  "NOTIFSMYCHARGE": "During my charges",
+  "PREPARING": "Preparing",
+  "FINISHING": "Finishing",
+  "UNAVAILABLE": "Unavailable",
+  "SUSPENDEDEV": "Suspended by the vehicle",
+  "SUSPENDEDEVSE": "Suspended by the charger",
+  "PLUG_IN_VEHICLE": "Plug in the vehicle",
+  "PLUG_OUT_VEHICLE": "Unplug the vehicle",
+  "PLUGGED_IN": "Vehicle plugged in"
 }
