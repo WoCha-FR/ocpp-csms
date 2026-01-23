@@ -6,7 +6,8 @@
     "autoadd": false,
     "loglvl": "info",
     "listenip": "0.0.0.0",
-    "hostws": "ws.ocpp.fr"
+    "hostws": "ws.ocpp.fr",
+    "ftpdiag": "ftp://user:password@server"
   },
   "http": { "port": 8080, "listenip": "0.0.0.0", "loglvl": "info", "host": "http://ocpp.fr" },
   "sqlite": { "loglvl": "error" },

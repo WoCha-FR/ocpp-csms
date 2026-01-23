@@ -83,9 +83,7 @@
               </td>
               <td>
                 <a class="btn btn-sm btn-warning" href="/admin/station/edit/<%=station.cb_pk%>" title="Update"><i class="bi bi-pencil"></i></a>
-                <% if(station.online==1) { %>
-                <a class="btn btn-sm btn-primary" href="/admin/station/<%=station.cb_id%>/diagnostic" id="diag<%=station.cb_pk%>" title="Diagnostics"><i class="bi bi-heart-pulse"></i></a>
-                <% } %>
+                <a class="btn btn-sm btn-primary<% if (station.online==1) { %> d-inline-block<% } else { %> d-none<% } %>" href="/admin/station/<%=station.cb_id%>/diagnostic" id="diag<%=station.cb_pk%>" title="Diagnostics"><i class="bi bi-heart-pulse"></i></a>
                 <a class="btn btn-sm btn-danger btn-delete-elem" data-form-elemid="<%=station.cb_pk%>" data-bs-toggle="modal" data-bs-target="#deleteMod" title="Delete"><i class="bi bi-trash3"></i></a>
               </td>
             </tr>
@@ -227,13 +225,13 @@
           var diag = '#diag' + elem.cb_pk
           if (elem.online == 1) {
             $(online).html('<span class="badge text-bg-success"><%=texts.ONLINE%></span>')
-            $(diag).removeClass('d-none')
+            $(diag).removeClass('d-none').addClass('d-inline-block')
           } else if (elem.online == 0) {
             $(online).html('<span class="badge text-bg-danger"><%=texts.OFFLINE%></span>')
-            $(diag).addClass('d-none')
+            $(diag).removeClass('d-inline-block').addClass('d-none')
           } else {
             $(online).html('<span class="badge text-bg-warning"><%=texts.PENDING%></span>')
-            $(diag).addClass('d-none')
+            $(diag).removeClass('d-inline-block').addClass('d-none')
           }
           var nbcons = '#nbcon' + elem.cb_pk
           if (elem.nbcon == 0) {

@@ -165,6 +165,7 @@ CREATE TABLE IF NOT EXISTS `user_notifs` (
 `pushtokn` TEXT(255) DEFAULT NULL,
 `cbOnline` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`cbOnline` IN (0, 1)),
 `cbOffline` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`cbOffline` IN (0, 1)),
+`cbDiag` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`cbDiag` IN (0, 1)),
 `conUnavailable` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`conUnavailable` IN (0, 1)),
 `conAvailable` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`conAvailable` IN (0, 1)),
 `conFaulted` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`conFaulted` IN (0, 1)),

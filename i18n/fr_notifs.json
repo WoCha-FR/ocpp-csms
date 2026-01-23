@@ -13,5 +13,8 @@
   "FAULTED_HTM": "<p>Chargeur: <b>{cb_name}</b><br>Connecteur: <b>{c_id} {c_name}</b><br>Erreur: <b>{ecode} {einfo}</b><br>Vendor code: <b>{vcode}</b></p>",
   "AVAILABLE_SUB": "Prise disponible - {cb_name} {c_id}",
   "AVAILABLE_TXT": "Chargeur: {cb_name}\\nConnecteur: {c_id} {c_name}\\nAncien status: {c_status}",
-  "AVAILABLE_HTM": "<p>Chargeur: <b>{cb_name}</b><br>Connecteur: <b>{c_id} {c_name}</b><br>Ancien status: <b>{c_status}</b></p>"
+  "AVAILABLE_HTM": "<p>Chargeur: <b>{cb_name}</b><br>Connecteur: <b>{c_id} {c_name}</b><br>Ancien status: <b>{c_status}</b></p>",
+  "DIAG_SUB": "Fichier de diagnostic - {cb_name}",
+  "DIAG_TXT": "Chargeur: {cb_name}\\nStatus: {diag_status}",
+  "DIAG_HTM": "<p>Chargeur: <strong>{cb_name}</strong><br>Status: <strong>{diag_status}</strong></p>"
 }

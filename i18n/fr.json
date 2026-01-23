@@ -203,5 +203,6 @@
   "SUSPENDEDEVSE": "Suspendu par la borne",
   "PLUG_IN_VEHICLE": "Brancher le véhicule",
   "PLUG_OUT_VEHICLE": "Débrancher le véhicule",
-  "PLUGGED_IN": "Véhicule branché"
+  "PLUGGED_IN": "Véhicule branché",
+  "CBDIAG": "Téléchargement Diagnostic du chargeur"
 }

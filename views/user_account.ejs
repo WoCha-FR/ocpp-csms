@@ -114,6 +114,11 @@
                 <%=userNotifs.conUnavailable ? 'checked' : '' %>>
               <label class="form-check-label" for="conUnavailableSwitch"><%=texts.CONUNAVAILABLE%></label>
             </div>
+            <div class="form-check form-switch form-check-inline">
+              <input class="form-check-input" type="checkbox" id="cbDiagSwitch" value="1" name="cbDiag"
+                <%=userNotifs.cbDiag ? 'checked' : '' %>>
+              <label class="form-check-label" for="cbDiagSwitch"><%=texts.CBDIAG%></label>
+            </div>
           </div>
         </div>
         <% } %>
