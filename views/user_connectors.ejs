@@ -65,30 +65,6 @@
                   <% if (elem.type==4) { %>CHAdeMO<% } %>
                 </div>
               </div>
-              <!--TODO: BTN to start OR Charging status + stop BTN-->
-              <!--TODO: STATUS SELON CHARGE DE L'UTILISATEUR OU D'UN AUTRE UTILISATEUR-->
-              <!-- Details des infos à implementer :
-              Available => on affiche + connecter véhicule
-
-              Unavailable/Faulted => on affiche rien de plus
-
-              Preparing => on affiche + bouton start (si mode RFID/WEB)
-
-              // Mode Charge Libre : sans ID utilisateur dans les transactions
-              Preparing => En mode "OCPP Autostart" ou "Gérer borne + démarrage auto dans l'application" passe en charging direct (WallBox CopperSB & Autel)
-              Preparing => En mode "OCPP Autostart" ou "Gérer borne + démarrage manuel dans l'application"  (Autel)
-              Preparing => En mode "Gérer borne + prog horaire dans l'application" passe en preparing AVEC transaction en cours (WallBox CopperSB)
-              Preparing => En mode "Gérer borne + pas demarrage auto + prog horaire dans l'app" passe en preparing SANS transaction en cours puis démarre à l'heure (AUTEL)
-
-              Charging => on affiche + bouton stop (si ma transaction)
-              Charging => on affiche "OCCUPIED" (si pas ma transaction ou mode charge libre)
-
-              SuspendedEV/SuspendedEVSE => on affiche + bouton stop (si ma transaction)
-              SuspendedEV/SuspendedEVSE => on affiche "OCCUPIED" (si pas ma transaction ou mode charge libre)
-
-              Finishing => Plus d'information d'utilisateur, on affiche "OCCUPIED" ou "deconnect car for start" pour tous...
-              app evseadmin => affiche finishing pour tous + option de démarrage pour tous.....
-            -->
               <div class="row mt-2<% if (elem.status=='Available' || elem.status=='Preparing' || elem.status=='Finishing') { %> d-block<% } else { %> d-none<% } %>">
                 <div class="col-12 text-center" id="connPlugInfo<%=elem.connector_id%>">
                   <!-- AVAILABLE -->

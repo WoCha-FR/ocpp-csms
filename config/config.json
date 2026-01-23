@@ -8,47 +8,21 @@
     "listenip": "0.0.0.0",
     "hostws": "ws.ocpp.fr"
   },
-  "http": {
-    "port": 8080,
-    "listenip": "0.0.0.0",
-    "loglvl": "info",
-    "host": "http://ocpp.fr"
-  },
-  "sqlite": {
-    "loglvl": "error"
-  },
+  "http": { "port": 8080, "listenip": "0.0.0.0", "loglvl": "info", "host": "http://ocpp.fr" },
+  "sqlite": { "loglvl": "error" },
   "email": {
     "mode": "sendmail",
     "from": "noreply@ocpp.fr",
     "replyTo": "admin@ocpp.fr",
-    "sendmail": {
-      "sendmail": true,
-      "newline": "unix",
-      "path": "/usr/sbin/sendmail"
-    },
+    "sendmail": { "sendmail": true, "newline": "unix", "path": "/usr/sbin/sendmail" },
     "smtp": {
       "host": "smtp.ocpp.fr",
       "port": 587,
       "secure": false,
-      "tls": {
-        "rejectUnauthorized": true
-      },
-      "auth": {
-        "user": "username",
-        "pass": "password"
-      }
+      "tls": { "rejectUnauthorized": true },
+      "auth": { "user": "username", "pass": "password" }
     },
-    "service": {
-      "service": "Gmail",
-      "auth": {
-        "user": "username",
-        "pass": "password"
-      }
-    }
+    "service": { "service": "Gmail", "auth": { "user": "username", "pass": "password" } }
   },
-  "authGoogle": {
-    "enabled": false,
-    "clientID": "",
-    "clientSecret": ""
-  }
+  "authGoogle": { "enabled": false, "clientID": "", "clientSecret": "" }
 }
