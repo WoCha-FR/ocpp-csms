@@ -16,5 +16,8 @@
   "AVAILABLE_HTM": "<p>Chargeur: <b>{cb_name}</b><br>Connecteur: <b>{c_id} {c_name}</b><br>Ancien status: <b>{c_status}</b></p>",
   "DIAG_SUB": "Fichier de diagnostic - {cb_name}",
   "DIAG_TXT": "Chargeur: {cb_name}\\nStatus: {diag_status}",
-  "DIAG_HTM": "<p>Chargeur: <strong>{cb_name}</strong><br>Status: <strong>{diag_status}</strong></p>"
+  "DIAG_HTM": "<p>Chargeur: <strong>{cb_name}</strong><br>Status: <strong>{diag_status}</strong></p>",
+  "NEWUSER_SUB": "Création de votre compte {webname}",
+  "NEWUSER_TXT": "Un compte utilisateur a été créé pour vous sur la plateforme {webname}.\\n\\nURL: {weburl}\\nUtilisateur: {user_mail}\\nMot de passe: {user_pwd}\\n\\nMerci de vous connecter et de changer votre mot de passe dès votre première connexion.",
+  "NEWUSER_HTM": "<p>Un compte utilisateur a été créé pour vous sur la plateforme {webname}.</p><p><strong>URL:</strong> {weburl}<br><strong>Utilisateur:</strong> {user_mail}<br><strong>Mot de passe:</strong> {user_pwd}</p><p>Merci de vous connecter et de changer votre mot de passe dès votre première connexion.</p>"
 }

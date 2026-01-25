@@ -9,7 +9,7 @@
     "hostws": "ws.ocpp.fr",
     "ftpdiag": "ftp://user:password@server"
   },
-  "http": { "port": 8080, "listenip": "0.0.0.0", "loglvl": "info", "host": "http://ocpp.fr" },
+  "http": { "port": 8080, "listenip": "0.0.0.0", "loglvl": "info", "host": "http://ocpp.fr", "title": "OCPP-CSMS" },
   "sqlite": { "loglvl": "error" },
   "email": {
     "mode": "sendmail",
