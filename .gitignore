@@ -131,7 +131,8 @@ dist
 .pnp.*
 
 # my files
-.vscode
+.vscode/sftp.json
+.devHelpers
 config.dev.json
 sessions.json
 pendings.json
