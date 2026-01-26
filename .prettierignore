@@ -3,5 +3,5 @@ build
 coverage
 web/public
 node_modules
-logs
 eslint.config.js
+package*.json

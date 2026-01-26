@@ -134,10 +134,7 @@ dist
 .vscode/sftp.json
 .devHelpers
 config.dev.json
-sessions.json
-pendings.json
-ocpp-csms*.db
-client.js
-zessais
-server*.crt
-server*.key
+datas/wsscerts/*.crt
+datas/wsscerts/*.key
+datas/*.db
+datas/*.json

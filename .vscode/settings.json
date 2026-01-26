@@ -1,8 +1,5 @@
 {
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
-  "todo-tree.filtering.excludeGlobs": [
-    "**/node_modules/*/**",
-    "bootstrap.*"
-  ]
+  "todo-tree.filtering.excludeGlobs": ["**/node_modules/*/**", "bootstrap.*"]
 }

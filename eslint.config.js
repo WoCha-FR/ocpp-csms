@@ -6,6 +6,6 @@ export default [
   pluginJs.configs.recommended,
   eslintConfigPrettier,
   {
-    ignores: ['public/js/*'],
+    ignores: ['web/public/js/*'],
   },
 ];
