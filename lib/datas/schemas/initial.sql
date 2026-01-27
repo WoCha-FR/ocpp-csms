@@ -173,14 +173,8 @@ CREATE TABLE IF NOT EXISTS `user_notifs` (
 `chgStop` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`chgStop` IN (0, 1)),
 `chgEvent` INTEGER(1) NOT NULL DEFAULT(0) CHECK (`chgEvent` IN (0, 1))
 );
-/* Schema_Version in last => prevent failure */
-CREATE TABLE IF NOT EXISTS `schema_version` (
-`schema_pk` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-`version` TEXT(10)
-);
 /* Initial Values */
 BEGIN TRANSACTION;
-INSERT INTO `schema_version` (`version`) VALUES ('0.1.0');
 INSERT INTO `users` (`user_pk`,`usermail`,`password`,`name`,`isAdmin`,`idtag`) VALUES (1,'admin@admin.eu','$2b$10$FTdLTiTsGV81/PcjArPmB.izN7RPXT3t93O0LoIGXZDovyOf178cy','Admin',1,CONCAT('WUSR',HEX(RANDOMBLOB(6))));
 INSERT INTO `user_notifs` (`user_pk`,`lng`) VALUES (1,'fr');
 INSERT INTO `rfid_tags` (`idtag`,`rf_name`,`isparent`) VALUES (CONCAT('SADM',HEX(RANDOMBLOB(6))),'SUPERADMIN',1);
