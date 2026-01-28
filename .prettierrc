@@ -6,5 +6,6 @@
   "trailingComma": "es5",
   "objectWrap": "collapse",
   "bracketSameLine": true,
-  "useTabs": false
+  "useTabs": false,
+  "overrides": [{ "files": ["*.json5"], "options": { "parser": "json5", "singleQuote": false, "objectWrap": "preserve" } }]
 }

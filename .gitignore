@@ -42,7 +42,7 @@ jspm_packages/
 # my files
 .vscode/sftp.json
 .devHelpers
-config.dev.json
+config/development.json5
 datas/applogs/*.json
 datas/httplogs/*.json
 datas/wsscerts/*.crt

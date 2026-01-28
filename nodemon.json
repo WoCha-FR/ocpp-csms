@@ -2,6 +2,6 @@
   "ext": "js,json5",
   "watch": ["index.js", "lib/"],
   "ignore": [".git", "node_modules/"],
-  "signal": "SIGUSR2",
+  "signal": "SIGTERM",
   "env": { "NODE_ENV": "development" }
 }
