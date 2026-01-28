@@ -9,7 +9,7 @@
     "fixlint": "eslint --fix .",
     "prettier": "prettier . --check",
     "devstart": "nodemon index.js",
-    "start": "node index.js"
+    "start": "cross-env NODE_ENV=production node index.js"
   },
   "repository": {
     "type": "git",
@@ -53,10 +53,12 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
-    "rotating-file-stream": "^3.2.7"
+    "winston": "^3.19.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
+    "cross-env": "^10.1.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.2.0",
