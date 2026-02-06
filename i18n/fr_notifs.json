@@ -18,6 +18,15 @@
   "DIAG_TXT": "Chargeur: {cb_name}\\nStatus: {diag_status}",
   "DIAG_HTM": "<p>Chargeur: <strong>{cb_name}</strong><br>Status: <strong>{diag_status}</strong></p>",
   "NEWUSER_SUB": "Création de votre compte {webname}",
-  "NEWUSER_TXT": "Un compte utilisateur a été créé pour vous sur la plateforme {webname}.\\n\\nURL: {weburl}\\nUtilisateur: {user_mail}\\nMot de passe: {user_pwd}\\n\\nMerci de vous connecter et de changer votre mot de passe dès votre première connexion.",
-  "NEWUSER_HTM": "<p>Un compte utilisateur a été créé pour vous sur la plateforme {webname}.</p><p><strong>URL:</strong> {weburl}<br><strong>Utilisateur:</strong> {user_mail}<br><strong>Mot de passe:</strong> {user_pwd}</p><p>Merci de vous connecter et de changer votre mot de passe dès votre première connexion.</p>"
+  "NEWUSER_TXT": "Un compte utilisateur à été créé pour vous sur la plateforme {webname}.\\n\\nURL: {weburl}\\nUtilisateur: {user_mail}\\nMot de passe: {user_pwd}\\n\\nMerci de vous connecter et de changer votre mot de passe dès votre première connexion.",
+  "NEWUSER_HTM": "<p>Un compte utilisateur à été créé pour vous sur la plateforme {webname}.</p><p><strong>URL:</strong> {weburl}<br><strong>Utilisateur:</strong> {user_mail}<br><strong>Mot de passe:</strong> {user_pwd}</p><p>Merci de vous connecter et de changer votre mot de passe dès votre première connexion.</p>",
+  "CHARGING_SUB": "Début de charge - {cb_name}",
+  "CHARGING_TXT": "Véhicule en charge\\nChargeur: {cb_name}\\nConnecteur: {c_id} {c_name}",
+  "CHARGING_HTM": "<p>Véhicule en charge<br>Chargeur: <b>{cb_name}</b><br>Connecteur: <b>{c_id} {c_name}</b></p>",
+  "SUSPENDEV_SUB": "Suspension par le VE - {cb_name}",
+  "SUSPENDEV_TXT": "Le véhicule à suspendu la charge\\nChargeur: {cb_name}\\nConnecteur: {c_id} {c_name}",
+  "SUSPENDEV_HTM": "<p>Le véhicule à suspendu la charge<br>Chargeur: <b>{cb_name}</b><br>Connecteur: <b>{c_id} {c_name}</b></p>",
+  "SUSPENDEVSE_SUB": "Suspension par le chargeur - {cb_name}",
+  "SUSPENDEVSE_TXT": "Le chargeur à suspendu la charge\\nChargeur: {cb_name}\\nConnecteur: {c_id} {c_name}",
+  "SUSPENDEVSE_HTM": "<p>Le chargeur à suspendu la charge<br>Chargeur: <b>{cb_name}</b><br>Connecteur: <b>{c_id} {c_name}</b></p>"
 }

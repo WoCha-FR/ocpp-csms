@@ -19,5 +19,14 @@
   "DIAG_HTM": "<p>Charger: <strong>{cb_name}</strong><br>Status: <strong>{diag_status}</strong></p>",
   "NEWUSER_SUB": "Your account creation {webname}",
   "NEWUSER_TXT": "A user account has been created for you on the {webname} platform.\\n\\nURL: {weburl}\\nUsername: {user_mail}\\nPassword: {user_pwd}\\n\\nPlease log in and change your password upon your first connection.",
-  "NEWUSER_HTM": "<p>A user account has been created for you on the {webname} platform.</p><p><strong>URL:</strong> {weburl}<br><strong>Username:</strong> {user_mail}<br><strong>Password:</strong> {user_pwd}</p><p>Please log in and change your password upon your first connection.</p>"
+  "NEWUSER_HTM": "<p>A user account has been created for you on the {webname} platform.</p><p><strong>URL:</strong> {weburl}<br><strong>Username:</strong> {user_mail}<br><strong>Password:</strong> {user_pwd}</p><p>Please log in and change your password upon your first connection.</p>",
+  "CHARGING_SUB": "Charge started - {cb_name}",
+  "CHARGING_TXT": "Vehicle charging\\nCharger: {cb_name}\\nConnector: {c_id} {c_name}",
+  "CHARGING_HTM": "<p>Charging in progress<br>Charger: <b>{cb_name}</b><br>Connector: <b>{c_id} {c_name}</b></p>",
+  "SUSPENDEV_SUB": "Charge suspended by EV - {cb_name}",
+  "SUSPENDEV_TXT": "The vehicle has suspended the charge\\nCharger: {cb_name}\\nConnector: {c_id} {c_name}",
+  "SUSPENDEV_HTM": "<p>The vehicle has suspended the charge<br>Charger: <b>{cb_name}</b><br>Connector: <b>{c_id} {c_name}</b></p>",
+  "SUSPENDEVSE_SUB": "Charge suspended by charger - {cb_name}",
+  "SUSPENDEVSE_TXT": "The charger has suspended the charge\\nCharger: {cb_name}\\nConnector: {c_id} {c_name}",
+  "SUSPENDEVSE_HTM": "<p>The charger has suspended the charge<br>Charger: <b>{cb_name}</b><br>Connector: <b>{c_id} {c_name}</b></p>"
 }
