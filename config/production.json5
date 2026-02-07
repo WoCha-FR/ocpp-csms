@@ -12,7 +12,7 @@
     port: 8080,
     listenip: "0.0.0.0",
     host: "http://ocpp.fr",
-    title: "OCPP-CSMS"
+    title: "OCPP-CSMS",
   },
   email: {
     mode: "sendmail",
@@ -21,7 +21,7 @@
     sendmail: {
       sendmail: true,
       newline: "unix",
-      path: "/usr/sbin/sendmail"
+      path: "/usr/sbin/sendmail",
     },
     smtp: {
       host: "smtp.ocpp.fr",
@@ -34,13 +34,13 @@
       service: "Gmail",
       auth: {
         user: "username",
-        pass: "password"
-      }
+        pass: "password",
+      },
     },
   },
   authGoogle: {
     enabled: false,
     clientID: "",
-    clientSecret: ""
-  }
+    clientSecret: "",
+  },
 }
