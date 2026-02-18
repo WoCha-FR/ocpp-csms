@@ -6,6 +6,7 @@ export class OCPPCSMS {
   private stations: Map<string, ChargingStation> = new Map();
   private wsToStationId: WeakMap<WebSocket, string> = new WeakMap();
   private config: CSMSConfig;
+  private transactionIdCounter: number = 1;
 
   constructor(config: Partial<CSMSConfig> = {}) {
     this.config = {
@@ -102,8 +103,6 @@ export class OCPPCSMS {
         station.lastSeen = new Date();
       }
     });
-
-    this.sendBootNotificationResponse(ws, stationId);
   }
 
   private async handleMessage(
@@ -190,7 +189,7 @@ export class OCPPCSMS {
           idTagInfo: {
             status: 'Accepted',
           },
-          transactionId: Math.floor(Math.random() * 1000000),
+          transactionId: this.transactionIdCounter++,
         });
         break;
 
@@ -235,10 +234,6 @@ export class OCPPCSMS {
   ): void {
     const response = [4, '', errorCode, errorDescription, {}];
     ws.send(JSON.stringify(response));
-  }
-
-  private sendBootNotificationResponse(ws: WebSocket, stationId: string): void {
-    console.log(`Sending boot notification response to ${stationId}`);
   }
 
   public getConnectedStations(): ChargingStation[] {
